@@ -1,0 +1,203 @@
+<div class="container">
+  <div class="form-section">
+    <form [formGroup]="employeeForm" class="example-form" (ngSubmit)="onSubmit()">
+
+      <mat-form-field class="full-width">
+        <mat-label>Full Name</mat-label>
+        <input matInput placeholder="Full name" formControlName="fullName">
+      </mat-form-field>
+    
+      <mat-form-field class="full-width">
+        <mat-label>Calling Name</mat-label>
+        <input matInput placeholder="Calling Name" formControlName="callingName">
+      </mat-form-field>
+    
+      <mat-form-field class="full-width">
+        <mat-label>Nic Number</mat-label>
+        <input matInput placeholder="Nic Number" formControlName="nic">
+      </mat-form-field>
+    
+      <mat-form-field class="full-width">
+        <mat-label>Birth Date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="dob">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field><br><br>
+    
+      <mat-radio-group aria-label="Select an option" formControlName="gender">
+        <mat-label class="gender-label">Gender</mat-label>
+        <mat-radio-button value="male">Male</mat-radio-button>
+        <mat-radio-button value="female">Female</mat-radio-button>
+      </mat-radio-group><br><br>
+    
+      <mat-form-field class="full-width">
+        <mat-label>Address</mat-label>
+        <textarea matInput placeholder="Address" formControlName="address"></textarea>
+      </mat-form-field>
+    
+      <mat-form-field class="full-width">
+        <mat-label>Telephone</mat-label>
+        <span matTextPrefix>+94 &nbsp;</span>
+        <input type="tel" matInput placeholder="55-555-1234" formControlName="phoneNumber">
+        <mat-icon matSuffix>phone</mat-icon>
+      </mat-form-field>
+    
+      <mat-form-field class="full-width">
+        <mat-label>Emergency Phone Number</mat-label>
+        <span matTextPrefix>+94 &nbsp;</span>
+        <input type="tel" matInput placeholder="55-555-1234" formControlName="emergencyPhoneNumber">
+        <mat-icon matSuffix>phone</mat-icon>
+      </mat-form-field>
+    
+      <mat-form-field class="full-width">
+        <mat-label>Blood Group</mat-label>
+        <mat-select formControlName="bloodGroup">
+          <mat-option value="O positive">O positive</mat-option>
+          <mat-option value="O negative">O negative</mat-option>
+          <mat-option value="A positive">A positive</mat-option>
+          <mat-option value="A negative">A negative</mat-option>
+          <mat-option value="B positive">B positive</mat-option>
+          <mat-option value="B negative">B negative</mat-option>
+          <mat-option value="AB positive">AB positive</mat-option>
+          <mat-option value="AB negative">AB negative</mat-option>
+        </mat-select>
+      </mat-form-field>
+    
+      <mat-form-field class="full-width">
+        <mat-label>Employment Type</mat-label>
+        <mat-select formControlName="employmentType">
+          <mat-option value="Permenent">Permenent</mat-option>
+          <mat-option value="Contract">Contract</mat-option>
+          <mat-option value="Intern">Intern</mat-option>
+        </mat-select>
+      </mat-form-field>
+    
+      <mat-form-field class="full-width">
+        <mat-label>Employee Status</mat-label>
+        <mat-select formControlName="employeeStatus">
+          <mat-option value="Active">Active</mat-option>
+          <mat-option value="Inactive">Inactive</mat-option>
+          <mat-option value="Delete">Delete</mat-option>
+        </mat-select>
+      </mat-form-field>
+    
+      <mat-form-field class="full-width">
+        <mat-label>Job Title</mat-label>
+        <mat-select formControlName="jobTitle">
+          <mat-option value="Manager">Manager</mat-option>
+          <mat-option value="Supervisor">Supervisor</mat-option>
+          <mat-option value="Receptionist">Receptionist</mat-option>
+          <mat-option value="Driver">Driver</mat-option>
+          <mat-option value="Technician">Technician</mat-option>
+        </mat-select>
+      </mat-form-field><br><br>
+    
+      <button type="submit" mat-raised-button color="primary" class="form-button" [disabled]="isButtonDisable">{{saveButtonLabel}}</button>
+      <button type="button" mat-raised-button color="secondary" (click)="resetData()">Reset</button>
+    
+    </form>
+  </div>
+  <div class="table-section">
+    
+    <div class="refresh-button-filter-section">
+      <div class="refresh-button">
+        <button mat-icon-button color="primary" (click)="refreshData()">
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
+      <mat-form-field>
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+      </mat-form-field>
+    </div>
+    
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+      <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+    
+      <!-- Position Column -->
+      <ng-container matColumnDef="fullName">
+        <th mat-header-cell *matHeaderCellDef> Full Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.fullName}} </td>
+      </ng-container>
+    
+      <!-- Name Column -->
+      <ng-container matColumnDef="callingName">
+        <th mat-header-cell *matHeaderCellDef> Calling Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.callingName}} </td>
+      </ng-container>
+    
+      <!-- Weight Column -->
+      <ng-container matColumnDef="nic">
+        <th mat-header-cell *matHeaderCellDef> Nic Number </th>
+        <td mat-cell *matCellDef="let element"> {{element.nic}} </td>
+      </ng-container>
+    
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="dob">
+        <th mat-header-cell *matHeaderCellDef> Birth Date </th>
+        <td mat-cell *matCellDef="let element"> {{element.dob}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="gender">
+        <th mat-header-cell *matHeaderCellDef> Gender </th>
+        <td mat-cell *matCellDef="let element"> {{element.gender}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="address">
+        <th mat-header-cell *matHeaderCellDef> Address </th>
+        <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="phoneNumber">
+        <th mat-header-cell *matHeaderCellDef> Phone Number </th>
+        <td mat-cell *matCellDef="let element"> {{element.phoneNumber}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="emergencyPhoneNumber">
+        <th mat-header-cell *matHeaderCellDef> Energency Phone Number </th>
+        <td mat-cell *matCellDef="let element"> {{element.emergencyPhoneNumber}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="bloodGroup">
+        <th mat-header-cell *matHeaderCellDef> Blood Group </th>
+        <td mat-cell *matCellDef="let element"> {{element.bloodGroup}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="employmentType">
+        <th mat-header-cell *matHeaderCellDef> Employeement Type </th>
+        <td mat-cell *matCellDef="let element"> {{element.employmentType}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="employeeStatus">
+        <th mat-header-cell *matHeaderCellDef> Employee Status </th>
+        <td mat-cell *matCellDef="let element"> {{element.employeeStatus}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="jobTitle">
+        <th mat-header-cell *matHeaderCellDef> Job Title </th>
+        <td mat-cell *matCellDef="let element"> {{element.jobTitle}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef> Action </th>
+        <td mat-cell *matCellDef="let element"> 
+          <button mat-icon-button color="warn" (click)="editData(element)" matTooltip="Edit">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteData(element)" matTooltip="Delete">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+    
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+    
+  </div>
+</div>
+
