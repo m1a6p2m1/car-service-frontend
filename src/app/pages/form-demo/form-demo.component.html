@@ -5,7 +5,8 @@
                 <mat-label>First Name</mat-label>
                 <input matInput placeholder="First Name" formControlName="firstName">
                 <span class="text-danger" *ngIf="(demoForm.get('firstName')?.touched || submitted) && 
-                demoForm.get('firstName')?.errors
+                demoForm.get('firstName')?.errors &&
+                demoForm.get('firstName')?.errors!['required']
                 " >
                   First Name is Required....!
                 </span>

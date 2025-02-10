@@ -110,7 +110,7 @@ export class FormDemoComponent implements OnInit {
     this.saveButtonLabel ="Save";
     this.demoForm.enable();
     this.isButtonDisabled = 'false';
-    //this.demoForm.setErrors = null;
+    this.demoForm.setErrors = null!;
     this.demoForm.updateValueAndValidity();
     this.submitted = 'false';
     this.ngOnInit();
