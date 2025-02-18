@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -18,7 +18,9 @@ export class EmployeeComponent implements OnInit {
 
   employeeForm: FormGroup;
 
-  displayedColumns: string[] = ['fullName', 'callingName', 'nic', 'dob', 'gender', 'address', 'phoneNumber', 'emergencyPhoneNumber', 'bloodGroup', 'employmentType', 'employeeStatus', 'jobTitle', 'action'];
+  displayedColumns: string[] = ['callingName', 'nic', 'gender', 'phoneNumber', 'employeeStatus', 'jobTitle', 'action'];
+  
+  // displayedColumns: string[] = ['fullName', 'callingName', 'nic', 'dob', 'gender', 'address', 'phoneNumber', 'emergencyPhoneNumber', 'bloodGroup', 'employmentType', 'employeeStatus', 'jobTitle', 'action'];
   dataSource!: MatTableDataSource<any>;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -26,7 +28,8 @@ export class EmployeeComponent implements OnInit {
   saveButtonLabel = 'Save';
   mode = 'add';
   selectedData!: { empNumber: number; };
-  isButtonDisable = 'false';
+  isButtonDisable = false;
+  submitted = false;
 
   constructor (
     private fb:FormBuilder, 
@@ -35,15 +38,15 @@ export class EmployeeComponent implements OnInit {
   ){
     this.employeeForm = this.fb.group({
 
-      fullName: new FormControl(''),
+      fullName: new FormControl('', [Validators.required]),
       callingName: new FormControl(''),
-      nic: new FormControl(''),
+      nic: new FormControl('', [Validators.pattern('^([0-9]{9}[x|X|v|V]|[0-9]{12})$')]),
       dob: new FormControl(''),
       gender: new FormControl(''),
-      address: new FormControl(''),
-      phoneNumber: new FormControl(''),
-      emergencyPhoneNumber: new FormControl(''),
-      bloodGroup: new FormControl(''),
+      address: new FormControl('', [Validators.required]),
+      phoneNumber: new FormControl('', [Validators.pattern('^(\\+94|0)[1-9]{2}[0-9]{7}$|^(\\+94|0)?7[0-9]{8}$')]),
+      emergencyPhoneNumber: new FormControl('', [Validators.pattern('^(\\+94|0)[1-9]{2}[0-9]{7}$|^(\\+94|0)?7[0-9]{8}$')]),
+      bloodGroup: new FormControl('', [Validators.required]),
       employmentType: new FormControl(''),
       employeeStatus: new FormControl(''),
       jobTitle: new FormControl('')
@@ -57,6 +60,10 @@ export class EmployeeComponent implements OnInit {
     console.log(this.employeeForm.value);
 
     try {
+      this.submitted = true;
+      if (this.employeeForm.invalid) {
+        return;
+      }
       if(this.mode === 'add'){
         console.log("Mode "+ this.mode);
         // this.registrationService.serviceCall(this.employeeForm.value).subscribe((response)=>{
@@ -106,7 +113,7 @@ export class EmployeeComponent implements OnInit {
         });
       }
       this.employeeForm.disable();
-      this.isButtonDisable = 'true';
+      this.isButtonDisable = true;
     } catch (error) {
       this.messageService.showError('Action Failed with Error :'+ error);
     }
@@ -190,7 +197,11 @@ export class EmployeeComponent implements OnInit {
     this.employeeForm.reset();
     this.saveButtonLabel ="Save";
     this.employeeForm.enable();
-    this.isButtonDisable = 'false';
+    this.isButtonDisable = false;
+    this.employeeForm.setErrors = null!;
+    this.employeeForm.updateValueAndValidity();
+    this.submitted = false;
+    this.ngOnInit();
   }
 
   public refreshData(): void{

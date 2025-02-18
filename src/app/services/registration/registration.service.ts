@@ -11,7 +11,6 @@ export class RegistrationService {
     private http:HttpClient,
     private httpService:HttpService
   ) {}
-
   serviceCall(form_details: any){
     // console.log('In the Service');
      const requestUrl = environment.baseUrl + '/employee';

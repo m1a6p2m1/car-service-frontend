@@ -1,1 +1,197 @@
-<p>customer works!</p>
+<div class="container">
+    <div class="form-section">
+      <form [formGroup]="customerForm" class="example-form" (ngSubmit)="onSubmit()">
+  
+        <mat-form-field class="full-width">
+          <mat-label>First Name</mat-label>
+          <input matInput placeholder="First Name" formControlName="firstName">
+          <span class="text-danger" *ngIf="
+              (customerForm.get('firstName')?.touched || submitted) && 
+              customerForm.get('firstName')?.errors && 
+              customerForm.get('firstName')?.errors!['required']">
+            First Name Is Required......
+          </span>
+        </mat-form-field>
+      
+        <mat-form-field class="full-width">
+          <mat-label>Last Name</mat-label>
+          <input matInput placeholder="Last Name" formControlName="lastName">
+          <span class="text-danger" *ngIf="
+              (customerForm.get('lastName')?.touched || submitted) && 
+              customerForm.get('lastName')?.errors && 
+              customerForm.get('lastName')?.errors!['required']">
+            First Name Is Required......
+          </span>
+        </mat-form-field>
+      
+        <mat-form-field class="full-width">
+          <mat-label>Nic Number</mat-label>
+          <input matInput placeholder="Nic Number" formControlName="nic">
+          <span class="text-danger" *ngIf="
+              (customerForm.get('nic')?.touched || submitted) && 
+              customerForm.get('nic')?.errors && 
+              customerForm.get('nic')?.errors!['pattern']">
+            Please Insert a Valid NIC Number......
+          </span>
+        </mat-form-field>
+      
+        <mat-form-field class="full-width">
+            <mat-label>Email</mat-label>
+            <input matInput placeholder="Email" formControlName="email">
+            <span class="text-danger" *ngIf="
+              (customerForm.get('email')?.touched || submitted) && 
+              customerForm.get('email')?.errors && 
+              customerForm.get('email')?.errors!['email']">
+            Please Insert a Valid Email Address......
+          </span>
+        </mat-form-field><br><br>
+      
+        <mat-radio-group aria-label="Select an option" formControlName="gender">
+          <mat-label class="gender-label">Gender</mat-label>
+          <mat-radio-button value="male">Male</mat-radio-button>
+          <mat-radio-button value="female">Female</mat-radio-button>
+        </mat-radio-group><br><br>
+      
+        <mat-form-field class="full-width">
+          <mat-label>Address</mat-label>
+          <textarea matInput placeholder="Address" formControlName="address"></textarea>
+        </mat-form-field>
+      
+        <mat-form-field class="full-width">
+          <mat-label>Telephone</mat-label>
+          <!-- <span matTextPrefix>+94 &nbsp;</span> -->
+          <input type="tel" matInput placeholder="+94 55-555-1234 OR 055-555-1234" formControlName="phoneNumber">
+          <span class="text-danger" *ngIf="
+              (customerForm.get('phoneNumber')?.touched || submitted) && 
+              customerForm.get('phoneNumber')?.errors && 
+              customerForm.get('phoneNumber')?.errors!['pattern']">
+            Please Insert a Valid Phone Number......
+          </span>
+          <mat-icon matSuffix>phone</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Licence Plate</mat-label>
+          <input type="tel" matInput placeholder="Licence Plate Number" formControlName="licencePlate">
+        </mat-form-field>
+      
+        <mat-form-field class="full-width">
+          <mat-label>Vehicle Type</mat-label>
+          <mat-select formControlName="vehicleType">
+            <mat-option value="Car">Car</mat-option>
+            <mat-option value="Jeep">Jeep</mat-option>
+            <mat-option value="Van">Van</mat-option>
+            <mat-option value="Other">Other</mat-option>
+          </mat-select>
+        </mat-form-field>
+      
+        <mat-form-field class="full-width">
+          <mat-label>Vehicle Model</mat-label>
+          <mat-select formControlName="vehicleModel">
+            <mat-option value="Toyota">Toyota</mat-option>
+            <mat-option value="Honda">Honda</mat-option>
+            <mat-option value="Suzuki">Suzuki</mat-option>
+          </mat-select>
+        </mat-form-field><br><br>
+      
+        <button type="submit" mat-raised-button color="primary" class="form-button" [disabled]="isButtonDisable">{{saveButtonLabel}}</button>
+        <button type="button" mat-raised-button color="secondary" (click)="resetData()">Reset</button>
+      
+      </form>
+    </div>
+
+    <div class="table-section">
+
+      <div class="refresh-button-filter-section">
+        <div class="refresh-button">
+          <button mat-icon-button color="primary" (click)="refreshData()">
+            <mat-icon>refresh</mat-icon>
+          </button>
+        </div>
+        <mat-form-field>
+          <mat-label>Filter</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+        </mat-form-field>
+      </div>
+
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+        <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+      
+        <!-- Position Column -->
+        <ng-container matColumnDef="firstName">
+          <th mat-header-cell *matHeaderCellDef>First Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.firstName}} </td>
+        </ng-container>
+      
+        <!-- Name Column -->
+        <ng-container matColumnDef="lastName">
+          <th mat-header-cell *matHeaderCellDef>Last Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
+        </ng-container>
+      
+        <!-- Weight Column -->
+        <ng-container matColumnDef="nic">
+          <th mat-header-cell *matHeaderCellDef> Nic Number </th>
+          <td mat-cell *matCellDef="let element"> {{element.nic}} </td>
+        </ng-container>
+      
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef> Email </th>
+          <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="gender">
+          <th mat-header-cell *matHeaderCellDef> Gender </th>
+          <td mat-cell *matCellDef="let element"> {{element.gender}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="address">
+          <th mat-header-cell *matHeaderCellDef> Address </th>
+          <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="phoneNumber">
+          <th mat-header-cell *matHeaderCellDef> Phone Number </th>
+          <td mat-cell *matCellDef="let element"> {{element.phoneNumber}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="licencePlate">
+          <th mat-header-cell *matHeaderCellDef> Licence Plate Number </th>
+          <td mat-cell *matCellDef="let element"> {{element.licencePlate}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="vehicleType">
+          <th mat-header-cell *matHeaderCellDef> Vehicle Type </th>
+          <td mat-cell *matCellDef="let element"> {{element.vehicleType}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="vehicleModel">
+          <th mat-header-cell *matHeaderCellDef> Vehicle Model </th>
+          <td mat-cell *matCellDef="let element"> {{element.vehicleModel}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef> Action </th>
+          <td mat-cell *matCellDef="let element"> 
+            <button mat-icon-button color="warn" (click)="editData(element)" matTooltip="Edit">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteData(element)" matTooltip="Delete">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table> 
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+
+    </div>
+   
+</div>
+  
+  

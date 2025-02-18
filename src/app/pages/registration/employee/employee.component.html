@@ -5,6 +5,10 @@
       <mat-form-field class="full-width">
         <mat-label>Full Name</mat-label>
         <input matInput placeholder="Full name" formControlName="fullName">
+       <!-- required validation -->
+       <span class="text-danger" *ngIf="(employeeForm.get('fullName')?.touched || submitted) && employeeForm.get('fullName')?.errors && employeeForm.get('fullName')?.errors!['required']">
+        Full Name is Required....!
+      </span>
       </mat-form-field>
     
       <mat-form-field class="full-width">
@@ -15,6 +19,11 @@
       <mat-form-field class="full-width">
         <mat-label>Nic Number</mat-label>
         <input matInput placeholder="Nic Number" formControlName="nic">
+
+        <!-- pattern validation -->
+       <span class="text-danger" *ngIf="(employeeForm.get('nic')?.touched || submitted) && employeeForm.get('nic')?.errors && employeeForm.get('nic')?.errors!['pattern']">
+        Please Insert a Valid NIC Number
+      </span>
       </mat-form-field>
     
       <mat-form-field class="full-width">
@@ -34,19 +43,35 @@
       <mat-form-field class="full-width">
         <mat-label>Address</mat-label>
         <textarea matInput placeholder="Address" formControlName="address"></textarea>
+        <!-- required validation -->
+       <span class="text-danger" *ngIf="(employeeForm.get('address')?.touched || submitted) && employeeForm.get('address')?.errors && employeeForm.get('address')?.errors!['required']">
+        Address is Required....!
+      </span>
       </mat-form-field>
     
       <mat-form-field class="full-width">
         <mat-label>Telephone</mat-label>
-        <span matTextPrefix>+94 &nbsp;</span>
-        <input type="tel" matInput placeholder="55-555-1234" formControlName="phoneNumber">
+        <!-- <span matTextPrefix>+94 &nbsp;</span> -->
+        <input type="tel" matInput placeholder="+94 55-555-1234 OR 055-555-1234" formControlName="phoneNumber">
+        <span class="text-danger" *ngIf="
+              (employeeForm.get('phoneNumber')?.touched || submitted) && 
+              employeeForm.get('phoneNumber')?.errors && 
+              employeeForm.get('phoneNumber')?.errors!['pattern']">
+            Please Insert a Valid Phone Number......
+          </span>
         <mat-icon matSuffix>phone</mat-icon>
       </mat-form-field>
     
       <mat-form-field class="full-width">
         <mat-label>Emergency Phone Number</mat-label>
-        <span matTextPrefix>+94 &nbsp;</span>
-        <input type="tel" matInput placeholder="55-555-1234" formControlName="emergencyPhoneNumber">
+        <!-- <span matTextPrefix>+94 &nbsp;</span> -->
+        <input type="tel" matInput placeholder="+94 55-555-1234 OR 055-555-1234" formControlName="emergencyPhoneNumber">
+        <span class="text-danger" *ngIf="
+              (employeeForm.get('emergencyPhoneNumber')?.touched || submitted) && 
+              employeeForm.get('emergencyPhoneNumber')?.errors && 
+              employeeForm.get('emergencyPhoneNumber')?.errors!['pattern']">
+            Please Insert a Valid Phone Number......
+          </span>
         <mat-icon matSuffix>phone</mat-icon>
       </mat-form-field>
     
@@ -62,6 +87,10 @@
           <mat-option value="AB positive">AB positive</mat-option>
           <mat-option value="AB negative">AB negative</mat-option>
         </mat-select>
+        <!-- required validation -->
+       <span class="text-danger" *ngIf="(employeeForm.get('bloodGroup')?.touched || submitted) && employeeForm.get('bloodGroup')?.errors && employeeForm.get('bloodGroup')?.errors!['required']">
+        Blood Group is Required....!
+      </span>
       </mat-form-field>
     
       <mat-form-field class="full-width">

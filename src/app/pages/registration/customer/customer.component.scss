@@ -1,0 +1,25 @@
+.container{
+  display: flex;
+  flex-direction: row;
+  gap: 25px;
+}
+.form-section{
+  flex: 2;
+  width: 100%;
+  padding: 50px;
+  border-right: 1px solid #ccc;
+}
+.table-section{
+  flex: 2;
+}
+.form-button{
+  margin-right: 20px;
+}
+.refresh-button-filter-section {
+  display: flex;
+  flex-direction: row;
+}
+
+.refresh-button{
+  margin: 1%;
+}

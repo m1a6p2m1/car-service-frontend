@@ -1,3 +1,4 @@
+import { V } from '@angular/cdk/keycodes';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder,FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
@@ -28,8 +29,8 @@ export class FormDemoComponent implements OnInit {
   saveButtonLabel = 'Save';
   mode = 'add';
   selectedData!: { id: number; };
-  isButtonDisabled = 'false';
-  submitted = 'false';
+  isButtonDisabled = false;
+  submitted = false ;
 
   constructor(
     private fb: FormBuilder , 
@@ -38,9 +39,9 @@ export class FormDemoComponent implements OnInit {
   ){
     this.demoForm = this.fb.group({
       firstName: new FormControl('', [Validators.required]),//
-      lastName: new FormControl(''),
-      age: new FormControl(''),
-      email: new FormControl('')
+      lastName: new FormControl('', [Validators.minLength(3), Validators.maxLength(8)]),
+      age: new FormControl('', [Validators.min(1), Validators.max(120)]),
+      email: new FormControl('', [Validators.email])
     });
   }
 
@@ -50,6 +51,8 @@ export class FormDemoComponent implements OnInit {
     console.log(this.demoForm.value);
 
     try {
+
+      this.submitted = true;
       if (this.demoForm.invalid) {
         return;
       }
@@ -98,7 +101,7 @@ export class FormDemoComponent implements OnInit {
         });
       }
       this.demoForm.disable();
-      this.isButtonDisabled = 'true';
+      this.isButtonDisabled = true;
     } catch (error) {
       this.messageService.showError('Action Failed with Error :'+ error);
     }
@@ -109,10 +112,10 @@ export class FormDemoComponent implements OnInit {
     this.demoForm.reset();
     this.saveButtonLabel ="Save";
     this.demoForm.enable();
-    this.isButtonDisabled = 'false';
+    this.isButtonDisabled = false;
     this.demoForm.setErrors = null!;
     this.demoForm.updateValueAndValidity();
-    this.submitted = 'false';
+    this.submitted = false;
     this.ngOnInit();
   }
 

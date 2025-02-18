@@ -13,12 +13,14 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { DemoMaterialModule } from 'src/app/demo-material-module';
-
+import { CustomerComponent } from './customer/customer.component';
 
 
 @NgModule({
   declarations: [
     EmployeeComponent,
+    CustomerComponent,
+
   ],
   imports: [
     CommonModule,
