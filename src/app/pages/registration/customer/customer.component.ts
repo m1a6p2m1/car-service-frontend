@@ -62,10 +62,9 @@ export class CustomerComponent implements OnInit{
           next:(response)=>{
             if (this.dataSource && this.dataSource.data && this.dataSource.data.length > 0) {
               this.dataSource = new MatTableDataSource([response, ...this.dataSource.data]);
+              this.messageService.showSuccess('Data Saved Successfully !');
             }
-            this.dataSource = new MatTableDataSource([response]);
-            console.log('server response: ',response);
-            this.messageService.showSuccess('Data Saved Successfully !');
+            this.dataSource = new MatTableDataSource([response]);       
           },
           error:(error) => {
             this.messageService.showError('Action Failed with Error :'+ error); 
@@ -100,7 +99,11 @@ export class CustomerComponent implements OnInit{
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         console.log('server response: ',response);
-      });
+      },
+      (error)=>{
+        this.messageService.showError('Action Failed with Error :'+ error);
+      }
+    );
     } catch (error) {
       this.messageService.showError('Action Failed with Error :'+ error); 
     }
@@ -128,7 +131,12 @@ export class CustomerComponent implements OnInit{
       const cusId = data.cusId;
       this.customerService.deleteData(cusId).subscribe({
         next:(response: any) => {
-          console.log('server response for delete:' ,response);
+          const index = this.dataSource.data.findIndex((element) => element.cusId === cusId);
+  
+          if(index !== -1){
+            this.dataSource.data.splice(index, 1);
+          }
+          this.dataSource = new MatTableDataSource(this.dataSource.data);
           this.messageService.showSuccess('Data Deleted Successfully !');
         },
         error:(error) => {
@@ -146,6 +154,8 @@ export class CustomerComponent implements OnInit{
     this.saveButtonLabel = 'Save';
     this.isButtonDisable = false;
     this.customerForm.enable();
+    this.customerForm.setErrors = null!;
+    this.customerForm.updateValueAndValidity();
     this.submitted = false;
   }
 

@@ -69,10 +69,9 @@ export class FormDemoComponent implements OnInit {
           next: (response: any) =>{
             if (this.dataSource && this.dataSource.data && this.dataSource.data.length>0) {
                   this.dataSource = new MatTableDataSource([response, ...this.dataSource.data]);
+                  this.messageService.showSuccess('Data saved Successfully !');
                 }
-                this.dataSource = new MatTableDataSource([response]);
-      
-                this.messageService.showSuccess('Data saved Successfully !');
+                this.dataSource = new MatTableDataSource([response]);            
             },
             error: (error)=>{
               this.messageService.showError('Action Failed with Error :'+ error);
@@ -116,7 +115,6 @@ export class FormDemoComponent implements OnInit {
     this.demoForm.setErrors = null!;
     this.demoForm.updateValueAndValidity();
     this.submitted = false;
-    this.ngOnInit();
   }
 
   ngOnInit(): void{

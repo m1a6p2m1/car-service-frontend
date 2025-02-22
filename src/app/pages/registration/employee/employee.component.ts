@@ -78,10 +78,9 @@ export class EmployeeComponent implements OnInit {
           next: (response: any) => {
           if (this.dataSource && this.dataSource.data && this.dataSource.data.length>0) {
             this.dataSource = new MatTableDataSource([response, ...this.dataSource.data]);
+            this.messageService.showSuccess('Data saved Successfully !');
           }
           this.dataSource = new MatTableDataSource([response]);
-
-          this.messageService.showSuccess('Data saved Successfully !');
           },
           error: (error)=>{
             this.messageService.showError('Action Failed with Error :'+ error);
@@ -201,7 +200,6 @@ export class EmployeeComponent implements OnInit {
     this.employeeForm.setErrors = null!;
     this.employeeForm.updateValueAndValidity();
     this.submitted = false;
-    this.ngOnInit();
   }
 
   public refreshData(): void{

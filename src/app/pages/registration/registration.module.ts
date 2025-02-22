@@ -14,13 +14,15 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { DemoMaterialModule } from 'src/app/demo-material-module';
 import { CustomerComponent } from './customer/customer.component';
+import { SupplierComponent } from './supplier/supplier.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 @NgModule({
   declarations: [
     EmployeeComponent,
     CustomerComponent,
-
+    SupplierComponent
   ],
   imports: [
     CommonModule,
@@ -36,7 +38,8 @@ import { CustomerComponent } from './customer/customer.component';
     MatIconModule,
     MatOptionModule,
     MatSelectModule,
-    MatButtonModule
+    MatButtonModule,
+    MatCheckboxModule
   ]
 })
 export class RegistrationModule { }
