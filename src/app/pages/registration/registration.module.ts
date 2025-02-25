@@ -16,13 +16,15 @@ import { DemoMaterialModule } from 'src/app/demo-material-module';
 import { CustomerComponent } from './customer/customer.component';
 import { SupplierComponent } from './supplier/supplier.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ItemComponent } from './item/item.component';
 
 
 @NgModule({
   declarations: [
     EmployeeComponent,
     CustomerComponent,
-    SupplierComponent
+    SupplierComponent,
+    ItemComponent
   ],
   imports: [
     CommonModule,
