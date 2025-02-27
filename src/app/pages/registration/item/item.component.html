@@ -28,23 +28,7 @@
               <mat-option value="Maintaince Tools">Maintaince Tools</mat-option>
             </mat-select>
         </mat-form-field>
-
-        <!-- <mat-form-field class="size-selection">
-          <mat-label>Size</mat-label>
-          <mat-select formControlName="size">
-            <mat-option value=" Size "> Size </mat-option>
-            <mat-option value="Volume">Volume</mat-option>
-            <mat-option value="Category">Category</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="full-width">
-          <mat-label>Size Input</mat-label>
-          <input matInput placeholder="Brand Name" formControlName="sizeInput">
-        </mat-form-field>
-        <mat-card appearance="outlined">
-          <mat-card-content></mat-card-content>
-        </mat-card>         -->
-          
+        
         <mat-form-field class="full-width">
           <mat-label>Supplier Name</mat-label>
           <input matInput placeholder="Supplier Name" formControlName="supplierName">
@@ -57,7 +41,19 @@
           <mat-label>Description</mat-label>
           <textarea matInput placeholder="Description" formControlName="description"></textarea>
         </mat-form-field>
-      
+
+        <div>
+          <label for="input-file" id="drop-area">
+            <input type="file" (change)="onFileSelected($event)" id="input-file" accept="image/*" formControlName="itemImage" hidden>
+            <div id="image-view">
+                <img src="assests/images/item/uploadicon.png">
+                <p>Drag and Drop or Click here<br>to Upload Image</p>
+              <!-- <img *ngIf="imagePreview" [src]="imagePreview" alt="Selected Image"> -->
+            </div>
+          </label>
+        </div>
+        
+              
         <button type="submit" mat-raised-button color="primary" class="form-button" [disabled]="isButtonDisable">{{saveButtonLabel}}</button>
         <button type="reset" mat-raised-button color="secondary" (click)="resetData()">Reset</button>
       

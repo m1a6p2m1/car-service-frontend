@@ -18,6 +18,7 @@ import { ItemService } from 'src/app/services/registration/item.service';
 })
 export class ItemComponent implements OnInit{
 
+
   itemForm: FormGroup;
   displayedColumns: string[] = ['itemCode', 'itemName', 'itemCategory', 'supplierName', 'brandName', 'action'];
   dataSource!: MatTableDataSource<any>;
@@ -29,6 +30,7 @@ export class ItemComponent implements OnInit{
   selectData!: {itemId: number};
   isButtonDisable = false;
   submitted = false;
+  imagePreview!: string;
 
   constructor(
     private fb: FormBuilder,
@@ -42,11 +44,11 @@ export class ItemComponent implements OnInit{
       itemCategory: new FormControl(''),
       supplierName: new FormControl('', [Validators.required]),
       brandName: new FormControl(''),
-      description: new FormControl('')
+      description: new FormControl(''),
       // size: new FormControl(''),
       // sizeInput: new FormControl(''),
       // sizeLabel: new FormControl(''),
-      // itemImage: new FormControl(''),
+      itemImage: new FormControl(null)
 
     });
   }
@@ -68,6 +70,23 @@ export class ItemComponent implements OnInit{
     }
   }
 
+  onFileSelected(event: Event) {
+    // const file = (event.target as HTMLInputElement).files?.[0];
+  
+    // if (file) {
+    //   this.itemForm.patchValue({ itemImage: file });
+    //   this.itemForm.get('itemImage')?.updateValueAndValidity();
+
+    //   // Read and preview the image
+    //   const reader = new FileReader();
+    //   reader.onload = () => {
+    //     this.imagePreview = reader.result as string; // Store the image preview URL
+    //   };
+    //   reader.readAsDataURL(file);
+    // }
+  }
+  
+
   onSubmit(){
     // console.log('form submited');
     // console.log('this.itemForm.value');
@@ -76,9 +95,10 @@ export class ItemComponent implements OnInit{
       if (this.itemForm.invalid) {
         return;
       }
+
       if (this.mode === 'add') {
         console.log("Mode:"+ this.mode);
-        this.itemService.serviceCall(this.itemForm.value).subscribe({
+        this.itemService.serviceCall(this.itemForm.value).subscribe({ 
           next:(response)=>{
             if (this.dataSource && this.dataSource.data && this.dataSource.data.length>0) {
               this.dataSource = new MatTableDataSource([response,...this.dataSource.data]);
@@ -92,7 +112,7 @@ export class ItemComponent implements OnInit{
         });
       } else if (this.mode === 'edit'){
         console.log("Mode:"+ this.mode);
-        this.itemService.editData(this.selectData.itemId, this.itemForm.value).subscribe({
+        this.itemService.editData(this.selectData.itemId, this.itemForm.value).subscribe({  
           next:(response)=>{
             let elementIndex = this.dataSource.data.findIndex((element)=> element.itemId === this.selectData?.itemId);
             this.dataSource.data[elementIndex] = response;
