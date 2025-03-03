@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { elementAt } from 'rxjs';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
 import { ItemService } from 'src/app/services/registration/item.service';
 
@@ -24,18 +24,21 @@ export class ItemComponent implements OnInit{
   dataSource!: MatTableDataSource<any>;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-    @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatSort) sort!: MatSort;
   saveButtonLabel = 'Save';
   mode = 'add';
   selectData!: {itemId: number};
   isButtonDisable = false;
   submitted = false;
-  imagePreview!: string;
+  selectedImageUrl!: SafeUrl | null;
+  isFileSelected = false;
+  fileButtonDisable = false;//<----
 
   constructor(
     private fb: FormBuilder,
     private itemService: ItemService,
-    private messageService: MessageServiceService
+    private messageService: MessageServiceService,
+    private sanitizer: DomSanitizer
   ){
     this.itemForm = this.fb.group({
 
@@ -45,16 +48,19 @@ export class ItemComponent implements OnInit{
       supplierName: new FormControl('', [Validators.required]),
       brandName: new FormControl(''),
       description: new FormControl(''),
-      // size: new FormControl(''),
-      // sizeInput: new FormControl(''),
-      // sizeLabel: new FormControl(''),
-      itemImage: new FormControl(null)
+      image: new FormControl('', [Validators.required]),
+      imageName: new FormControl(''),
+      imageType: new FormControl('')
 
     });
   }
 
   ngOnInit():void{
     this.populateData();
+  }
+
+  get formControl() {
+    return this.itemForm?.controls;
   }
 
   public populateData(): void{
@@ -70,20 +76,31 @@ export class ItemComponent implements OnInit{
     }
   }
 
-  onFileSelected(event: Event) {
-    // const file = (event.target as HTMLInputElement).files?.[0];
-  
-    // if (file) {
-    //   this.itemForm.patchValue({ itemImage: file });
-    //   this.itemForm.get('itemImage')?.updateValueAndValidity();
+  public prepareItemData(): FormData {
+    const itemFormData = new FormData();
+    // demoFormData.append('demoForm', this.demoForm.value);
+    itemFormData.append('itemForm', new Blob([JSON.stringify(this.itemForm.value)], { type: 'application/json' }));
 
-    //   // Read and preview the image
-    //   const reader = new FileReader();
-    //   reader.onload = () => {
-    //     this.imagePreview = reader.result as string; // Store the image preview URL
-    //   };
-    //   reader.readAsDataURL(file);
-    // }
+    if (this.isFileSelected) {
+      itemFormData.append('image', this.itemForm.get('image')?.value, this.itemForm.get('image')?.value.name);
+    } else if(!this.isFileSelected){
+      this.fileButtonDisable = false;
+    }else {
+      const imageBlob = this.base64ToBlob(this.itemForm.get('image')?.value, this.itemForm.get('imageType')?.value);
+      const file = new File([imageBlob], this.itemForm.get('imageName')?.value, { type: this.itemForm.get('imageType')?.value });
+      itemFormData.append('image', file, file.name);
+    }
+    return itemFormData;
+  }
+
+  base64ToBlob(base64: string, mimeType: string): Blob {
+    const byteCharacters = atob(base64);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    return new Blob([byteArray], { type: mimeType });
   }
   
 
@@ -98,7 +115,7 @@ export class ItemComponent implements OnInit{
 
       if (this.mode === 'add') {
         console.log("Mode:"+ this.mode);
-        this.itemService.serviceCall(this.itemForm.value).subscribe({ 
+        this.itemService.serviceCall(this.prepareItemData()).subscribe({ 
           next:(response)=>{
             if (this.dataSource && this.dataSource.data && this.dataSource.data.length>0) {
               this.dataSource = new MatTableDataSource([response,...this.dataSource.data]);
@@ -112,7 +129,7 @@ export class ItemComponent implements OnInit{
         });
       } else if (this.mode === 'edit'){
         console.log("Mode:"+ this.mode);
-        this.itemService.editData(this.selectData.itemId, this.itemForm.value).subscribe({  
+        this.itemService.editData(this.selectData.itemId, this.prepareItemData()).subscribe({  
           next:(response)=>{
             let elementIndex = this.dataSource.data.findIndex((element)=> element.itemId === this.selectData?.itemId);
             this.dataSource.data[elementIndex] = response;
@@ -126,6 +143,7 @@ export class ItemComponent implements OnInit{
       }
       this.itemForm.disable();
       this.isButtonDisable = true;
+      this.fileButtonDisable = true;
     }catch(error){
       this.messageService.showError('Action Failed with Error:' + error);
     }
@@ -146,16 +164,36 @@ export class ItemComponent implements OnInit{
     this.saveButtonLabel = 'Save';
     this.itemForm.enable();
     this.isButtonDisable = false;
+    this.fileButtonDisable = false;
     this.itemForm.setErrors = null!;
     this.itemForm.updateValueAndValidity();
     this.submitted = false;
+
+    this.selectedImageUrl = null;
+    this.isFileSelected = false;
   }
+
+  public onFileSelected(event:any): void {
+    if (event.target.files) {
+      const file = event.target.files[0];
+      const url = this.sanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(file));
+      this.selectedImageUrl = url;
+      this.isFileSelected = true;
+      this.itemForm.get('image')?.setValue(file);
+    }
+  }
+
+  
 
   public editData(data:any): void{
     this.itemForm.patchValue(data);
     this.saveButtonLabel = 'Edit';
     this.mode = 'edit';
     this.selectData = data;
+
+    const file = data.image;
+    const imageType = data.imageType;
+    this.selectedImageUrl = `data:${imageType};base64,${file}`;
 
   }
 

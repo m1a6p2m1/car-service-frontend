@@ -42,16 +42,15 @@
           <textarea matInput placeholder="Description" formControlName="description"></textarea>
         </mat-form-field>
 
+        <button [disabled]="fileButtonDisable" type="button" mat-raised-button (click)="fileInput.click()" class="mb-2">Choose File</button>
         <div>
-          <label for="input-file" id="drop-area">
-            <input type="file" (change)="onFileSelected($event)" id="input-file" accept="image/*" formControlName="itemImage" hidden>
-            <div id="image-view">
-                <img src="assests/images/item/uploadicon.png">
-                <p>Drag and Drop or Click here<br>to Upload Image</p>
-              <!-- <img *ngIf="imagePreview" [src]="imagePreview" alt="Selected Image"> -->
-            </div>
-          </label>
+          <img [src]="selectedImageUrl ? selectedImageUrl : 'assets/images/item/uploadicon.png'" width="100px" height="100px" />
         </div>
+        <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file" />
+        <span class="text-danger" *ngIf="submitted && formControl['image'].errors && formControl['image'].errors['required']">
+          Image is required
+        </span>
+        <br />
         
               
         <button type="submit" mat-raised-button color="primary" class="form-button" [disabled]="isButtonDisable">{{saveButtonLabel}}</button>
