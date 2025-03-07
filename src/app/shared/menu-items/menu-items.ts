@@ -91,6 +91,15 @@ const MENUITEMS = [
     auth: authenticationEnum.Home_Dashboard,
   },
   {
+    state: 'task-management',
+    childState: 'task-assign',
+    name: 'Task Assign Form',
+    type: 'link',
+    icon: 'av_timer',
+    isVisible: false,
+    auth: authenticationEnum.Home_Dashboard,
+  },
+  {
     state: 'button',
     type: 'link',
     name: 'Buttons',

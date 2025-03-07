@@ -64,6 +64,16 @@ export const AppRoutes: Routes = [
             (m) => m.RegistrationModule
           ),
       },
+
+      //task-managenent module
+      {
+        path: 'task-management',
+        loadChildren: () =>
+          import('./pages/task-management/task-management.module').then(
+            (m) => m.TaskManagementModule
+          ),
+      },
+
     ],
   },
 ];
