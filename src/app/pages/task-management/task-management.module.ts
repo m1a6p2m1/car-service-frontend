@@ -10,12 +10,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { DemoMaterialModule } from 'src/app/demo-material-module';
+import { AllTaskComponent } from './all-task/all-task.component';
 
 
 
 @NgModule({
   declarations: [
-    TaskAssignComponent
+    TaskAssignComponent,
+    AllTaskComponent
   ],
   imports: [
     CommonModule,

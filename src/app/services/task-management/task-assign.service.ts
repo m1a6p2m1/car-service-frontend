@@ -14,7 +14,7 @@ export class TaskAssignService {
   ) { }
 
   serviceCall(form_details: any) {
-      console.log('In the Service');
+      // console.log('In the Service');
       const requestUrl = environment.baseUrl + '/task-assign';
       
            let headers = {};
@@ -29,7 +29,7 @@ export class TaskAssignService {
   }
 
   getData(){
-    console.log('In the Service');
+    // console.log('In the Service');
       const requestUrl = environment.baseUrl + '/task-assign';
       
            let headers = {};
