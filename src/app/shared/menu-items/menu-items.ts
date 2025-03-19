@@ -44,7 +44,7 @@ const MENUITEMS = [
     isVisible: false,
     auth: authenticationEnum.Home_Dashboard,
   },
-  
+
   {
     state: 'pages',
     childState: 'form-demo',
@@ -85,6 +85,15 @@ const MENUITEMS = [
     state: 'registration',
     childState: 'item',
     name: 'Item Form',
+    type: 'link',
+    icon: 'av_timer',
+    isVisible: false,
+    auth: authenticationEnum.Home_Dashboard,
+  },
+  {
+    state: 'registration',
+    childState: 'task',
+    name: 'Task Form',
     type: 'link',
     icon: 'av_timer',
     isVisible: false,
