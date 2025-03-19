@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
 import { RegistrationService } from 'src/app/services/registration/registration.service';
 
@@ -30,11 +31,15 @@ export class EmployeeComponent implements OnInit {
   selectedData!: { empNumber: number; };
   isButtonDisable = false;
   submitted = false;
+  selectedImageUrl!: SafeUrl | null;
+  isFileSelected = false;
+  fileButtonDisable = false;
 
   constructor (
     private fb:FormBuilder, 
     private registrationService: RegistrationService,
-    private messageService: MessageServiceService
+    private messageService: MessageServiceService,
+    private sanitizer: DomSanitizer
   ){
     this.employeeForm = this.fb.group({
 
@@ -49,16 +54,59 @@ export class EmployeeComponent implements OnInit {
       bloodGroup: new FormControl('', [Validators.required]),
       employmentType: new FormControl(''),
       employeeStatus: new FormControl(''),
-      jobTitle: new FormControl('')
+      jobTitle: new FormControl(''),
+      image: new FormControl('', [Validators.required]),
+      imageName: new FormControl(''),
+      imageType: new FormControl('')
     });
   }
 
-  
+  ngOnInit(): void {
+    this.populateData();
+  }
+
+  get formControl() {
+    return this.employeeForm?.controls;
+  }
+
+  public prepareEmployeeData(): FormData {
+    const employeeFormData = new FormData();
+    // demoFormData.append('demoForm', this.demoForm.value);
+    employeeFormData.append('employeeForm', new Blob([JSON.stringify(this.employeeForm.value)], { type: 'application/json' }));
+
+    if (this.isFileSelected) {
+      employeeFormData.append('image', this.employeeForm.get('image')?.value, this.employeeForm.get('image')?.value.name);
+    } else if(!this.isFileSelected){
+      this.fileButtonDisable = false;
+    }else {
+      const imageBlob = this.base64ToBlob(this.employeeForm.get('image')?.value, this.employeeForm.get('imageType')?.value);
+      const file = new File([imageBlob], this.employeeForm.get('imageName')?.value, { type: this.employeeForm.get('imageType')?.value });
+      employeeFormData.append('image', file, file.name);
+    }
+    return employeeFormData;
+  }
+
+  base64ToBlob(base64: string, mimeType: string): Blob {
+    const byteCharacters = atob(base64);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    return new Blob([byteArray], { type: mimeType });
+  }
+
+  public onFileSelected(event:any): void {
+    if (event.target.files) {
+      const file = event.target.files[0];
+      const url = this.sanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(file));
+      this.selectedImageUrl = url;
+      this.isFileSelected = true;
+      this.employeeForm.get('image')?.setValue(file);
+    }
+  }  
 
   onSubmit(){
-    console.log('form submited');
-    console.log(this.employeeForm.value);
-
     try {
       this.submitted = true;
       if (this.employeeForm.invalid) {
@@ -66,21 +114,13 @@ export class EmployeeComponent implements OnInit {
       }
       if(this.mode === 'add'){
         console.log("Mode "+ this.mode);
-        // this.registrationService.serviceCall(this.employeeForm.value).subscribe((response)=>{
-        //   if (this.dataSource && this.dataSource.data && this.dataSource.data.length>0) {
-        //     this.dataSource = new MatTableDataSource([response, ...this.dataSource.data]);
-        //   }
-        //   this.dataSource = new MatTableDataSource([response]);
-
-        //   this.messageService.showSuccess('Data saved Successfully !');
-        // });
-        this.registrationService.serviceCall(this.employeeForm.value).subscribe({
+        this.registrationService.serviceCall(this.prepareEmployeeData()).subscribe({
           next: (response: any) => {
           if (this.dataSource && this.dataSource.data && this.dataSource.data.length>0) {
             this.dataSource = new MatTableDataSource([response, ...this.dataSource.data]);
-            this.messageService.showSuccess('Data saved Successfully !');
           }
           this.dataSource = new MatTableDataSource([response]);
+          this.messageService.showSuccess('Data saved Successfully !');
           },
           error: (error)=>{
             this.messageService.showError('Action Failed with Error :'+ error);
@@ -89,16 +129,7 @@ export class EmployeeComponent implements OnInit {
   
       }else if (this.mode === 'edit') {
         console.log("Mode "+ this.mode);
-        // this.registrationService.editData(this.selectedData.empNumber, this.employeeForm.value).subscribe((response)=>{
-  
-        //   let elementIndex = this.dataSource.data.findIndex((element)=> element.empNumber === this.selectedData?.empNumber);
-        //   this.dataSource.data[elementIndex] = response;
-        //   this.dataSource = new MatTableDataSource(this.dataSource.data);
-
-        //   this.messageService.showSuccess('Data Edited Successfully !');
-  
-        // });
-        this.registrationService.editData(this.selectedData.empNumber, this.employeeForm.value).subscribe({
+        this.registrationService.editData(this.selectedData.empNumber, this.prepareEmployeeData()).subscribe({
           next: (response: any) =>{
             let elementIndex = this.dataSource.data.findIndex((element)=> element.empNumber === this.selectedData?.empNumber);
             this.dataSource.data[elementIndex] = response;
@@ -113,17 +144,14 @@ export class EmployeeComponent implements OnInit {
       }
       this.employeeForm.disable();
       this.isButtonDisable = true;
+      this.fileButtonDisable = true;
     } catch (error) {
       this.messageService.showError('Action Failed with Error :'+ error);
     }
     
   }
 
-  ngOnInit(): void {
-      console.log('oninit');
 
-      this.populateData();
-  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -157,6 +185,10 @@ export class EmployeeComponent implements OnInit {
     this.mode = 'edit';
     console.log("Mode "+ this.mode);
     this.selectedData = data;
+
+    const file = data.image;
+    const imageType = data.imageType;
+    this.selectedImageUrl = `data:${imageType};base64,${file}`;
   }
 
   public deleteData(data:any): void{
@@ -164,15 +196,6 @@ export class EmployeeComponent implements OnInit {
     const empNumber = data.empNumber;
     
     try {
-      // this.registrationService.deleteData(empNumber).subscribe((response: any)=> {
-      //   const index = this.dataSource.data.findIndex((element) => element.empNumber === empNumber);
-  
-      //   if(index !== -1){
-      //     this.dataSource.data.splice(index, 1);
-      //   }
-      //   this.dataSource = new MatTableDataSource(this.dataSource.data);
-      //   this.messageService.showSuccess('Data Deleted Successfully !');
-      // });
       this.registrationService.deleteData(empNumber).subscribe({
         next: (response: any) =>{
           const index = this.dataSource.data.findIndex((element) => element.empNumber === empNumber);
@@ -200,6 +223,10 @@ export class EmployeeComponent implements OnInit {
     this.employeeForm.setErrors = null!;
     this.employeeForm.updateValueAndValidity();
     this.submitted = false;
+
+    this.fileButtonDisable = false;
+    this.selectedImageUrl = null;
+    this.isFileSelected = false;
   }
 
   public refreshData(): void{

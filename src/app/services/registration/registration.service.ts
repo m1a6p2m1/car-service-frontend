@@ -12,7 +12,7 @@ export class RegistrationService {
     private httpService:HttpService
   ) {}
   serviceCall(form_details: any){
-    // console.log('In the Service');
+     console.log('In the Service 1');
      const requestUrl = environment.baseUrl + '/employee';
 
      let headers = {};
@@ -27,7 +27,7 @@ export class RegistrationService {
   }
 
   getData(){
-    console.log('In the Service');
+    console.log('In the Service 2');
      const requestUrl = environment.baseUrl + '/employee';
 
      let headers = {};

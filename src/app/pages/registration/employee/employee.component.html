@@ -121,6 +121,16 @@
           <mat-option value="Technician">Technician</mat-option>
         </mat-select>
       </mat-form-field><br><br>
+
+      <button [disabled]="fileButtonDisable" type="button" mat-raised-button (click)="fileInput.click()" class="mb-2">Choose File</button>
+        <div>
+          <img [src]="selectedImageUrl ? selectedImageUrl : 'assets/images/item/uploadicon.png'" width="100px" height="100px" />
+        </div>
+        <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file" />
+        <span class="text-danger" *ngIf="submitted && formControl['image'].errors && formControl['image'].errors['required']">
+          Image is required
+        </span>
+        <br />
     
       <button type="submit" mat-raised-button color="primary" class="form-button" [disabled]="isButtonDisable">{{saveButtonLabel}}</button>
       <button type="reset" mat-raised-button color="secondary" (click)="resetData()">Reset</button>
