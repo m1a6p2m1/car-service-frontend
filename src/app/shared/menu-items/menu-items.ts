@@ -108,7 +108,17 @@ const MENUITEMS = [
     isVisible: false,
     auth: authenticationEnum.Home_Dashboard,
   },
+
   {
+    state: 'registration',
+    childState: 'task',
+    name: 'Task Assign Form CM',
+    type: 'link',
+    icon: 'av_timer',
+    isVisible: false,
+    auth: authenticationEnum.Home_Dashboard,
+  },
+  /*{
     state: 'button',
     type: 'link',
     name: 'Buttons',
@@ -213,7 +223,7 @@ const MENUITEMS = [
     name: 'Slide Toggle',
     icon: 'all_inclusive',
     isVisible: false,
-  },
+  },*/
 ];
 
 @Injectable()
