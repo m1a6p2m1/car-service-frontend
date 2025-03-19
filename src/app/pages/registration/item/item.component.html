@@ -21,96 +21,21 @@
         </span>
       </mat-form-field>
 
-      <mat-form-field class="full-width">
-        <mat-label>Brand Name</mat-label>
-        <input matInput placeholder="Brand Name" formControlName="brandName" />
-      </mat-form-field>
-
-      <mat-form-field class="full-width">
-        <mat-label>Category</mat-label>
-        <mat-select formControlName="itemCategory">
-          <mat-option value=" Cleaning Supplies"> Cleaning Supplies</mat-option>
-          <mat-option value="Spare Parts">Spare Parts</mat-option>
-          <mat-option value="Maintaince Tools">Maintaince Tools</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field class="full-width">
-        <mat-label>Supplier Name</mat-label>
-        <input
-          matInput
-          placeholder="Supplier Name"
-          formControlName="supplierName"
-        />
-        <span
-          class="text-danger"
-          *ngIf="
-            (itemForm.get('supplierName')?.touched || submitted) &&
-            itemForm.get('supplierName')?.errors &&
-            (itemForm.get('supplierName')?.errors)!['required']
-          "
-        >
-          Supplier Name is Required....!
+        <button [disabled]="fileButtonDisable" type="button" mat-raised-button (click)="fileInput.click()" class="mb-2">Choose File</button>
+        <div>
+          <img [src]="selectedImageUrl ? selectedImageUrl : 'assets/images/item/uploadicon.png'" width="100px" height="100px" />
+        </div>
+        <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file" />
+        <span class="text-danger" *ngIf="submitted && formControl['image'].errors && formControl['image'].errors['required']">
+          Image is required
         </span>
-      </mat-form-field>
-
-      <mat-form-field class="full-width">
-        <mat-label>Description</mat-label>
-        <textarea
-          matInput
-          placeholder="Description"
-          formControlName="description"
-        ></textarea>
-      </mat-form-field>
-
-      <div>
-        <label for="input-file" id="drop-area">
-          <input
-            type="file"
-            (change)="onFileSelected($event)"
-            id="input-file"
-            accept="image/*"
-            hidden
-          />
-          <div id="image-view">
-            <img [src]="imageData" />
-            <br />
-            <p>Drag and Drop or Click here<br />to Upload Image</p>
-            <!-- <img *ngIf="imagePreview" [src]="imagePreview" alt="Selected Image"> -->
-          </div>
-        </label>
-      </div>
-
-      <button
-        type="submit"
-        mat-raised-button
-        color="primary"
-        class="form-button"
-        [disabled]="isButtonDisable"
-      >
-        {{ saveButtonLabel }}
-      </button>
-      <button
-        type="reset"
-        mat-raised-button
-        color="secondary"
-        (click)="resetData()"
-      >
-        Reset
-      </button>
-    </form>
-  </div>
-  <div class="table-section">
-    <div class="refresh-button-filter-section">
-      <div class="refresh-button">
-        <button mat-icon-button color="primary" (click)="refreshData()">
-          <mat-icon>refresh</mat-icon>
-        </button>
-      </div>
-      <mat-form-field>
-        <mat-label>Filter</mat-label>
-        <input matInput (keyup)="applyFilter($event)" placeholder="" #input />
-      </mat-form-field>
+        <br />
+        
+              
+        <button type="submit" mat-raised-button color="primary" class="form-button" [disabled]="isButtonDisable">{{saveButtonLabel}}</button>
+        <button type="reset" mat-raised-button color="secondary" (click)="resetData()">Reset</button>
+      
+      </form>
     </div>
 
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
