@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, FormControl, FormArray } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { HttpService } from 'src/app/services/http.service';
 import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
 import { TaskAssignService } from 'src/app/services/task-management/task-assign.service';
 
@@ -39,7 +40,8 @@ export class TaskAssignComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private taskAssignService: TaskAssignService,
-    private messageService: MessageServiceService
+    private messageService: MessageServiceService,
+    private httpService: HttpService
   ) {
     this.taskAssignForm = this.fb.group({
       taskName: new FormControl(''),
@@ -112,6 +114,7 @@ export class TaskAssignComponent implements OnInit {
   ngOnInit(): void {
     this.populateData();
     this.getDefinedTasks();
+    this.setCreatedByValue();
 
     this.taskAssignForm
       .get('taskName')
@@ -119,6 +122,13 @@ export class TaskAssignComponent implements OnInit {
         this.updateSubtasks(selectedTask);
       });
   }
+
+  public setCreatedByValue(): void {
+    this.taskAssignForm.patchValue({
+      taskCreatedBy: this.httpService.getLoginNameFromCache(),
+    });
+  }
+
   updateSubtasks(selectedTask: string) {
     const task = this.tasks.find((t) => t.taskName === selectedTask);
     // this.selectedSubtasks = task ? task.taskName : [];
