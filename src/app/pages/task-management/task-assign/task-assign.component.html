@@ -35,6 +35,53 @@
         <input matInput formControlName="status" />
       </mat-form-field>
 
+      <!-- <mat-list
+        role="list"
+        *ngIf="selectedSubtasks.length > 0"
+        class="subtask-list"
+      >
+        <mat-list-item *ngFor="let subtask of selectedSubtasks">{{
+          subtask.subTaskName
+        }}</mat-list-item>
+      </mat-list> -->
+
+      <div formArrayName="subTasks">
+        <div
+          *ngFor="let subTask of subTasks.controls; let i = index"
+          class="subtask-row"
+          [formGroupName]="i"
+        >
+          <mat-form-field class="full-width">
+            <input
+              matInput
+              placeholder="Sub Task"
+              formControlName="description"
+              placeholder="Sub Task Description"
+            />
+          </mat-form-field>
+          <!-- <input
+            [formControlName]="i"
+            class="form-control subtask-input"
+            placeholder="Sub Task"
+          /> -->
+          <button
+            type="button"
+            class="btn btn-danger remove-button"
+            (click)="removeSubTask(i)"
+            [disabled]="subTask.disabled"
+          >
+            -
+          </button>
+        </div>
+        <button
+          type="button"
+          class="btn btn-primary mt-2 mb-4"
+          (click)="addSubTask()"
+        >
+          +
+        </button>
+      </div>
+
       <button
         type="submit"
         mat-raised-button
@@ -61,15 +108,6 @@
             </li>
         </ul>
       </div> -->
-      <mat-list
-        role="list"
-        *ngIf="selectedSubtasks.length > 0"
-        class="subtask-list"
-      >
-        <mat-list-item *ngFor="let subtask of selectedSubtasks">{{
-          subtask.subTaskName
-        }}</mat-list-item>
-      </mat-list>
     </form>
   </div>
   <div class="table-section">

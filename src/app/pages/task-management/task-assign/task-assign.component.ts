@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, FormArray } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -123,6 +123,38 @@ export class TaskAssignComponent implements OnInit {
     const task = this.tasks.find((t) => t.taskName === selectedTask);
     // this.selectedSubtasks = task ? task.taskName : [];
     if (task) this.selectedSubtasks = task.definedSubTaskDtos;
+
+    const subTasksFormArray = this.subTasks;
+
+    while (subTasksFormArray.length !== 0) {
+      subTasksFormArray.removeAt(0);
+    }
+
+    this.selectedSubtasks.forEach((item) => {
+      subTasksFormArray.push(this.createSubTasksFormGroup(item));
+    });
+  }
+
+  public createSubTasksFormGroup(item: any): FormGroup {
+    return this.fb.group({
+      description: { disabled: true, value: item.subTaskName },
+    });
+  }
+
+  get subTasks() {
+    return this.taskAssignForm.get('subTasks') as FormArray;
+  }
+
+  addSubTask() {
+    this.subTasks.push(
+      this.fb.group({
+        description: [''],
+      })
+    );
+  }
+
+  removeSubTask(index: number) {
+    this.subTasks.removeAt(index);
   }
 
   public populateData(): void {
@@ -181,6 +213,11 @@ export class TaskAssignComponent implements OnInit {
   }
 
   public resetData() {
+    const subTasksFormArray = this.subTasks;
+
+    while (subTasksFormArray.length !== 0) {
+      subTasksFormArray.removeAt(0);
+    }
     this.taskAssignForm.reset();
     this.saveButtonLabel = 'Save';
     this.taskAssignForm.enable();
