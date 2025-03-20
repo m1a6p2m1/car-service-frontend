@@ -7,9 +7,9 @@ import { MessageServiceService } from 'src/app/services/message-service/message-
 import { TaskAssignService } from 'src/app/services/task-management/task-assign.service';
 
 interface Task {
-  subtasks: any;
-  value: string;
-  viewValue: string;
+  id: any;
+  taskName: string;
+  definedSubTaskDtos: any;
 }
 interface Customer {
   value: string;
@@ -34,7 +34,7 @@ export class TaskAssignComponent implements OnInit {
   selectData!: { taskId: number };
   isButtonDisable = false;
 
-  selectedSubtasks: string[] = [];
+  selectedSubtasks: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -50,46 +50,7 @@ export class TaskAssignComponent implements OnInit {
     });
   }
 
-  tasks: Task[] = [
-    {
-      value: 'Normal_Car_Wash',
-      viewValue: 'Normal Car Wash',
-      subtasks: [
-        'Assign Washing Bay',
-        'Wash the Vehicle',
-        'Complete the Washing Process',
-      ],
-    },
-    {
-      value: 'Pick-up_and_Drop-off_Car_wash',
-      viewValue: 'Pick-up/Drop-off Car wash',
-      subtasks: [
-        'Pick-up Vehicle to the Service Center',
-        'Assign Washing Bay',
-        'Wash the Vehicle',
-        'Complete the Washing Process',
-        'Drop-off the vehicle',
-      ],
-    },
-    {
-      value: 'Remote_Car_Wash',
-      viewValue: 'Remote Car Wash',
-      subtasks: [
-        'Assign Washing Bay',
-        'Wash the Vehicle',
-        'Complete the Washing Process',
-      ],
-    },
-    {
-      value: 'Remote_Maintain_Service',
-      viewValue: 'Remote Maintain Service',
-      subtasks: [
-        'Assign Washing Bay',
-        'Wash the Vehicle',
-        'Complete the Washing Process',
-      ],
-    },
-  ];
+  tasks: Task[] = [];
 
   customers: Customer[] = [
     { value: 'Ruwan', viewValue: 'Ruwan' },
@@ -150,6 +111,7 @@ export class TaskAssignComponent implements OnInit {
 
   ngOnInit(): void {
     this.populateData();
+    this.getDefinedTasks();
 
     this.taskAssignForm
       .get('taskName')
@@ -158,8 +120,9 @@ export class TaskAssignComponent implements OnInit {
       });
   }
   updateSubtasks(selectedTask: string) {
-    const task = this.tasks.find((t) => t.value === selectedTask);
-    this.selectedSubtasks = task ? task.subtasks : [];
+    const task = this.tasks.find((t) => t.taskName === selectedTask);
+    // this.selectedSubtasks = task ? task.taskName : [];
+    if (task) this.selectedSubtasks = task.definedSubTaskDtos;
   }
 
   public populateData(): void {
@@ -167,6 +130,14 @@ export class TaskAssignComponent implements OnInit {
       this.dataSource = new MatTableDataSource(response);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+    });
+  }
+
+  public getDefinedTasks(): void {
+    this.taskAssignService.getDefinedTasks().subscribe((response: any) => {
+      if (response) {
+        this.tasks = response;
+      }
     });
   }
 
