@@ -70,17 +70,18 @@ export class TaskAssignComponent implements OnInit{
       let formData = this.taskAssignForm.getRawValue();
       formData.status = 'Start';
       if (this.mode === 'add') {
-        this.taskAssignService.serviceCall(formData).subscribe((response) =>{
-          if (this.dataSource && this.dataSource.data && this.dataSource.data.length>0) {
-            this.dataSource = new MatTableDataSource([response,...this.dataSource.data]);
+        this.taskAssignService.serviceCall(formData).subscribe({
+          next:(response) =>{
+            if (this.dataSource && this.dataSource.data && this.dataSource.data.length>0) {
+              this.dataSource = new MatTableDataSource([response,...this.dataSource.data]);
+            }
+            this.dataSource = new MatTableDataSource([response]);
+            this.messageService.showSuccess('Data Saved Successfully !');
+          },
+          error:(error) =>{
+          this.messageService.showError('Action Failed with Error :'+ error);
           }
-          this.dataSource = new MatTableDataSource([response]);
-          this.messageService.showSuccess('Data Saved Successfully !');
-        },
-        (error) =>{
-        this.messageService.showError('Action Failed with Error :'+ error);
-        }
-        );
+        });
       } else if(this.mode === 'edit') {
         this.taskAssignService.editData(this.selectData.taskId, formData).subscribe({
           next:(response:any)=>{

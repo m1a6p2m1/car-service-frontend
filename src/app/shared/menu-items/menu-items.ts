@@ -109,6 +109,15 @@ const MENUITEMS = [
     auth: authenticationEnum.Home_Dashboard,
   },
   {
+    state: 'attendance',
+    childState: 'attendance-mark',
+    name: 'Attendance Mark Form',
+    type: 'link',
+    icon: 'av_timer',
+    isVisible: false,
+    auth: authenticationEnum.Home_Dashboard,
+  },
+  {
     state: 'button',
     type: 'link',
     name: 'Buttons',
