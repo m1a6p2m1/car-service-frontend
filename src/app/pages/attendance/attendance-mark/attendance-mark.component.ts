@@ -1,5 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  FormControl,
+  FormBuilder,
+  Validators,
+} from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -16,9 +21,9 @@ interface Status {
   selector: 'app-attendance-mark',
   standalone: false,
   templateUrl: './attendance-mark.component.html',
-  styleUrl: './attendance-mark.component.scss'
+  styleUrl: './attendance-mark.component.scss',
 })
-export class AttendanceMarkComponent implements OnInit{
+export class AttendanceMarkComponent implements OnInit {
   attendanceMarkForm: FormGroup;
   displayedColumns: string[] = ['empId', 'employeeName', 'status'];
   dataSource!: MatTableDataSource<any>;
@@ -31,26 +36,26 @@ export class AttendanceMarkComponent implements OnInit{
   fileButtonDisable = false;
   isButtonDisable = false;
 
-  constructor (
+  constructor(
     private fb: FormBuilder,
     private sanitizer: DomSanitizer,
     private attendanceMarkService: AttendanceMarkService,
     private messageService: MessageServiceService
-  ){
+  ) {
     this.attendanceMarkForm = this.fb.group({
-      empId: new FormControl({ value: '', disabled: true }),//
+      empId: new FormControl({ value: '', disabled: true }), //
       employeeName: new FormControl({ value: '', disabled: true }),
       image: new FormControl('', [Validators.required]),
       imageName: new FormControl(''),
       imageType: new FormControl(''),
-      status: new FormControl('', [Validators.required])
+      status: new FormControl('', [Validators.required]),
     });
   }
 
   statuses: Status[] = [
-    {value: 'Present', viewValue: 'Present'},
-    {value: 'Absent', viewValue: 'Absent'},
-    {value: 'Onleave', viewValue: 'Onleave'}
+    { value: 'Present', viewValue: 'Present' },
+    { value: 'Absent', viewValue: 'Absent' },
+    { value: 'Onleave', viewValue: 'Onleave' },
   ];
 
   get formControl() {
@@ -61,8 +66,8 @@ export class AttendanceMarkComponent implements OnInit{
     this.populateData();
   }
 
-  public populateData(): void{
-    this.attendanceMarkService.getData().subscribe((response: any)=>{
+  public populateData(): void {
+    this.attendanceMarkService.getData().subscribe((response: any) => {
       this.dataSource = new MatTableDataSource(response);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -73,15 +78,31 @@ export class AttendanceMarkComponent implements OnInit{
   public prepareAttendanceMarkData(): FormData {
     const attendanceMarkFormData = new FormData();
     // demoFormData.append('demoForm', this.demoForm.value);
-    attendanceMarkFormData.append('attendanceMarkForm', new Blob([JSON.stringify(this.attendanceMarkForm.value)], { type: 'application/json' }));
+    attendanceMarkFormData.append(
+      'attendanceMarkForm',
+      new Blob([JSON.stringify(this.attendanceMarkForm.value)], {
+        type: 'application/json',
+      })
+    );
 
     if (this.isFileSelected) {
-      attendanceMarkFormData.append('image', this.attendanceMarkForm.get('image')?.value, this.attendanceMarkForm.get('image')?.value.name);
-    } else if(!this.isFileSelected){
+      attendanceMarkFormData.append(
+        'image',
+        this.attendanceMarkForm.get('image')?.value,
+        this.attendanceMarkForm.get('image')?.value.name
+      );
+    } else if (!this.isFileSelected) {
       this.fileButtonDisable = false;
-    }else {
-      const imageBlob = this.base64ToBlob(this.attendanceMarkForm.get('image')?.value, this.attendanceMarkForm.get('imageType')?.value);
-      const file = new File([imageBlob], this.attendanceMarkForm.get('imageName')?.value, { type: this.attendanceMarkForm.get('imageType')?.value });
+    } else {
+      const imageBlob = this.base64ToBlob(
+        this.attendanceMarkForm.get('image')?.value,
+        this.attendanceMarkForm.get('imageType')?.value
+      );
+      const file = new File(
+        [imageBlob],
+        this.attendanceMarkForm.get('imageName')?.value,
+        { type: this.attendanceMarkForm.get('imageType')?.value }
+      );
       attendanceMarkFormData.append('image', file, file.name);
     }
     return attendanceMarkFormData;
@@ -97,35 +118,46 @@ export class AttendanceMarkComponent implements OnInit{
     return new Blob([byteArray], { type: mimeType });
   }
 
-  public onFileSelected(event:any): void {
+  public onFileSelected(event: any): void {
     if (event.target.files) {
       const file = event.target.files[0];
-      const url = this.sanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(file));
+      const url = this.sanitizer.bypassSecurityTrustUrl(
+        window.URL.createObjectURL(file)
+      );
       this.selectedImageUrl = url;
       this.isFileSelected = true;
       this.attendanceMarkForm.get('image')?.setValue(file);
     }
   }
 
-  onSubmit(){
-    try{
-      this.attendanceMarkService.serviceCall(this.attendanceMarkForm.value).subscribe({
-        next:(response)=>{
-          if (this.dataSource && this.dataSource.data && this.dataSource.data.length>0) {
-            this.dataSource = new MatTableDataSource([response,...this.dataSource.data]);
-          }
-          this.dataSource = new MatTableDataSource([response]);
-          this.messageService.showSuccess('Data Saved Successfully !');
-          console.log('server response:', response);
-        },
-        error: (error)=>{
-          this.messageService.showError('Action Failed with Error :'+ error);
-        }
-      });
+  onSubmit() {
+    try {
+      this.attendanceMarkService
+        .serviceCall(this.attendanceMarkForm.value)
+        .subscribe({
+          next: (response) => {
+            if (
+              this.dataSource &&
+              this.dataSource.data &&
+              this.dataSource.data.length > 0
+            ) {
+              this.dataSource = new MatTableDataSource([
+                response,
+                ...this.dataSource.data,
+              ]);
+            }
+            this.dataSource = new MatTableDataSource([response]);
+            this.messageService.showSuccess('Data Saved Successfully !');
+            console.log('server response:', response);
+          },
+          error: (error) => {
+            this.messageService.showError('Action Failed with Error :' + error);
+          },
+        });
       this.attendanceMarkForm.disable();
       this.isButtonDisable = true;
       this.fileButtonDisable = true;
-    }catch(error){
+    } catch (error) {
       this.messageService.showError('Action Failed with Error:' + error);
     }
   }
@@ -139,7 +171,7 @@ export class AttendanceMarkComponent implements OnInit{
     }
   }
 
-  public resetData():void{
+  public resetData(): void {
     this.attendanceMarkForm.reset();
     this.attendanceMarkForm.enable();
     this.attendanceMarkForm.get('empId')?.disable();
@@ -154,8 +186,7 @@ export class AttendanceMarkComponent implements OnInit{
     this.isFileSelected = false;
   }
 
-  public refreshData(): void{
+  public refreshData(): void {
     this.populateData();
   }
-
 }
