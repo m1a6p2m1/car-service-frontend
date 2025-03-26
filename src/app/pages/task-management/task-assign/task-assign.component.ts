@@ -32,7 +32,7 @@ export class TaskAssignComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
   mode = 'add';
   saveButtonLabel = 'Save';
-  selectData!: { taskId: number };
+  selectData: any;
   isButtonDisable = false;
 
   selectedSubtasks: any[] = [];
@@ -87,7 +87,7 @@ export class TaskAssignComponent implements OnInit {
         );
       } else if (this.mode === 'edit') {
         this.taskAssignService
-          .editData(this.selectData.taskId, formData)
+          .editData(this.selectData.id, formData)
           .subscribe({
             next: (response: any) => {
               let elementIndex = this.dataSource.data.findIndex(
@@ -130,19 +130,21 @@ export class TaskAssignComponent implements OnInit {
   }
 
   updateSubtasks(selectedTask: string) {
-    const task = this.tasks.find((t) => t.taskName === selectedTask);
-    // this.selectedSubtasks = task ? task.taskName : [];
-    if (task) this.selectedSubtasks = task.definedSubTaskDtos;
+    if (this.mode === 'add') {
+      const task = this.tasks.find((t) => t.taskName === selectedTask);
+      // this.selectedSubtasks = task ? task.taskName : [];
+      if (task) this.selectedSubtasks = task.definedSubTaskDtos;
 
-    const subTasksFormArray = this.subTasks;
+      const subTasksFormArray = this.subTasks;
 
-    while (subTasksFormArray.length !== 0) {
-      subTasksFormArray.removeAt(0);
+      while (subTasksFormArray.length !== 0) {
+        subTasksFormArray.removeAt(0);
+      }
+
+      this.selectedSubtasks.forEach((item) => {
+        subTasksFormArray.push(this.createSubTasksFormGroup(item));
+      });
     }
-
-    this.selectedSubtasks.forEach((item) => {
-      subTasksFormArray.push(this.createSubTasksFormGroup(item));
-    });
   }
 
   public createSubTasksFormGroup(item: any): FormGroup {
@@ -158,6 +160,7 @@ export class TaskAssignComponent implements OnInit {
   addSubTask() {
     this.subTasks.push(
       this.fb.group({
+        id: [null],
         description: [''],
       })
     );
@@ -193,14 +196,25 @@ export class TaskAssignComponent implements OnInit {
   }
 
   public editData(data: any) {
-    this.taskAssignForm.patchValue(data);
+    this.resetData();
     this.mode = 'edit';
+    this.taskAssignForm.patchValue(data);
+
+    data.subTasks.forEach((subTask: any) => {
+      this.subTasks.push(
+        this.fb.group({
+          id: [subTask.id],
+          description: [subTask.description],
+        })
+      );
+    });
+
     this.selectData = data;
     this.saveButtonLabel = 'Edit';
   }
 
   public deleteData(data: any) {
-    const taskId = data.taskId;
+    const taskId = data.id;
     try {
       this.taskAssignService.deleteData(taskId).subscribe({
         next: (response: any) => {
