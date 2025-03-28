@@ -1,0 +1,149 @@
+<!-- task.component.html -->
+<div class="container">
+  <div class="row">
+    <!-- Left Side Form -->
+    <div class="col-md-6">
+      <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <mat-form-field appearance="fill">
+            <mat-label>Task Name</mat-label>
+            <mat-select formControlName="taskName">
+              <mat-option *ngFor="let task of taskNames" [value]="task">
+                {{ task }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- <label>Task Name</label>
+          <select class="form-control" formControlName="taskName">
+            <option *ngFor="let task of taskNames" [value]="task">
+              {{ task }}
+            </option>
+          </select> -->
+        </div>
+
+        <div class="form-group">
+          <mat-form-field class="full-width">
+            <mat-label>Created By</mat-label>
+            <input
+              matInput
+              placeholder="Created By"
+              formControlName="createdBy"
+            />
+          </mat-form-field>
+          <!-- <label>Created By</label>
+          <input type="text" class="form-control" formControlName="createdBy" /> -->
+        </div>
+
+        <div class="form-group">
+          <mat-form-field appearance="fill">
+            <mat-label>Customer Name</mat-label>
+            <mat-select formControlName="customerName">
+              <mat-option *ngFor="let customer of customers" [value]="customer">
+                {{ customer }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <!-- <label>Customer Name</label>
+          <select class="form-control" formControlName="customerName">
+            <option *ngFor="let customer of customers" [value]="customer">
+              {{ customer }}
+            </option>
+          </select> -->
+        </div>
+
+        <div formArrayName="subTasks">
+          <div
+            *ngFor="let subTask of subTasks.controls; let i = index"
+            class="subtask-row"
+            [formGroupName]="i"
+          >
+            <mat-form-field class="full-width">
+              <input
+                matInput
+                placeholder="Sub Task"
+                formControlName="description"
+                placeholder="Sub Task Description"
+              />
+            </mat-form-field>
+            <!-- <input
+              [formControlName]="i"
+              class="form-control subtask-input"
+              placeholder="Sub Task"
+            /> -->
+            <button
+              type="button"
+              class="btn btn-danger remove-button"
+              (click)="removeSubTask(i)"
+            >
+              -
+            </button>
+          </div>
+          <button
+            type="button"
+            class="btn btn-primary mt-2"
+            (click)="addSubTask()"
+          >
+            +
+          </button>
+        </div>
+
+        <button type="submit" class="btn btn-success mt-3">Submit</button>
+      </form>
+    </div>
+
+    <!-- Right Side Table -->
+    <div class="col-md-6">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Task Name</th>
+            <th>Progress</th>
+            <th>Current State</th>
+            <th>Customer</th>
+            <th>Assigned</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let task of tasks">
+            <td>{{ task.taskName }}</td>
+            <td>{{ task.progress }}%</td>
+            <td>
+              <select
+                [(ngModel)]="task.currentState"
+                (change)="updateTask(task)"
+              >
+                <option *ngFor="let state of states" [value]="state">
+                  {{ state }}
+                </option>
+              </select>
+            </td>
+            <td>{{ task.customerName }}</td>
+            <td>
+              <select
+                [(ngModel)]="task.assignedEmployee"
+                (change)="updateTask(task)"
+              >
+                <option *ngFor="let emp of employees" [value]="emp">
+                  {{ emp }}
+                </option>
+              </select>
+            </td>
+            <td>
+              <button class="btn btn-success" (click)="completeTask(task)">
+                Complete
+              </button>
+              <button class="btn btn-primary" (click)="editTask(task)">
+                Edit
+              </button>
+              <button class="btn btn-danger" (click)="deleteTask(12)">
+                Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
