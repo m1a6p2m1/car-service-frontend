@@ -44,7 +44,7 @@ const MENUITEMS = [
     isVisible: false,
     auth: authenticationEnum.Home_Dashboard,
   },
-  
+
   {
     state: 'pages',
     childState: 'form-demo',
@@ -108,16 +108,27 @@ const MENUITEMS = [
     isVisible: false,
     auth: authenticationEnum.Home_Dashboard,
   },
+
   {
-    state: 'attendance',
-    childState: 'attendance-mark',
-    name: 'Attendance Mark Form',
+    state: 'registration',
+    childState: 'task',
+    name: 'Task Assign Form CM',
     type: 'link',
     icon: 'av_timer',
     isVisible: false,
     auth: authenticationEnum.Home_Dashboard,
   },
+
   {
+    state: 'attendance',
+    childState: 'attendance-mark',
+    name: 'Attendance Mark',
+    type: 'link',
+    icon: 'av_timer',
+    isVisible: false,
+    auth: authenticationEnum.Home_Dashboard,
+  },
+  /*{
     state: 'button',
     type: 'link',
     name: 'Buttons',
@@ -222,7 +233,7 @@ const MENUITEMS = [
     name: 'Slide Toggle',
     icon: 'all_inclusive',
     isVisible: false,
-  },
+  },*/
 ];
 
 @Injectable()

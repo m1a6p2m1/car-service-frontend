@@ -17,14 +17,15 @@ import { CustomerComponent } from './customer/customer.component';
 import { SupplierComponent } from './supplier/supplier.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ItemComponent } from './item/item.component';
-
+import { TaskComponent } from './task/task.component';
 
 @NgModule({
   declarations: [
     EmployeeComponent,
     CustomerComponent,
     SupplierComponent,
-    ItemComponent
+    ItemComponent,
+    TaskComponent,
   ],
   imports: [
     CommonModule,
@@ -32,7 +33,7 @@ import { ItemComponent } from './item/item.component';
     ReactiveFormsModule,
     DemoMaterialModule,
     MatFormFieldModule,
-    FormsModule, 
+    FormsModule,
     MatInputModule,
     MatDatepickerModule,
     MatRadioGroup,
@@ -41,7 +42,7 @@ import { ItemComponent } from './item/item.component';
     MatOptionModule,
     MatSelectModule,
     MatButtonModule,
-    MatCheckboxModule
-  ]
+    MatCheckboxModule,
+  ],
 })
-export class RegistrationModule { }
+export class RegistrationModule {}

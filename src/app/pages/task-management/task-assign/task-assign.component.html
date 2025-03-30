@@ -1,36 +1,104 @@
 <div class="container">
-    <div class="form-section">
-      <form [formGroup]="taskAssignForm" class="example-form" (ngSubmit)="onSubmit()">
+  <div class="form-section">
+    <form
+      [formGroup]="taskAssignForm"
+      class="example-form"
+      (ngSubmit)="onSubmit()"
+    >
+      <mat-form-field appearance="fill">
+        <mat-label>Task Name</mat-label>
+        <mat-select formControlName="taskName">
+          <mat-option *ngFor="let task of tasks" [value]="task.taskName">
+            {{ task.taskName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+        <mat-label>Task Created By</mat-label>
+        <input matInput formControlName="taskCreatedBy" />
+      </mat-form-field>
 
-        <mat-form-field appearance="fill">
-            <mat-label>Task Name</mat-label>
-            <mat-select formControlName="taskName" >
-              <mat-option *ngFor="let task of tasks" [value]="task.value">
-                {{task.viewValue}}
-              </mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field class="example-full-width">
-          <mat-label>Task Created By</mat-label>
-          <input matInput formControlName="taskCreatedBy">
-        </mat-form-field>
-
-        <mat-form-field appearance="fill">
-          <mat-label>Customer Name</mat-label>
-          <mat-select formControlName="customerName">
-            <mat-option *ngFor="let customer of customers" [value]="customer.value">
-              {{customer.viewValue}}
-            </mat-option>
-          </mat-select>
+      <mat-form-field appearance="fill">
+        <mat-label>Customer Name</mat-label>
+        <mat-select formControlName="customerName">
+          <mat-option
+            *ngFor="let customer of customers"
+            [value]="customer.value"
+          >
+            {{ customer.viewValue }}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
 
       <mat-form-field class="example-full-width">
         <mat-label>Status</mat-label>
-        <input matInput formControlName="status">
+        <input matInput formControlName="status" />
       </mat-form-field>
 
-      <button type="submit" mat-raised-button color="primary"  class="form-button">{{saveButtonLabel}}</button>  <!--[disabled]="isButtonDisable" -->
-      <button type="reset" mat-raised-button color="secondary" (click)="resetData()">Reset</button> 
+      <!-- <mat-list
+        role="list"
+        *ngIf="selectedSubtasks.length > 0"
+        class="subtask-list"
+      >
+        <mat-list-item *ngFor="let subtask of selectedSubtasks">{{
+          subtask.subTaskName
+        }}</mat-list-item>
+      </mat-list> -->
+
+      <div formArrayName="subTasks">
+        <div
+          *ngFor="let subTask of subTasks.controls; let i = index"
+          class="subtask-row"
+          [formGroupName]="i"
+        >
+          <mat-form-field class="full-width">
+            <input
+              matInput
+              placeholder="Sub Task"
+              formControlName="description"
+              placeholder="Sub Task Description"
+            />
+          </mat-form-field>
+          <!-- <input
+            [formControlName]="i"
+            class="form-control subtask-input"
+            placeholder="Sub Task"
+          /> -->
+          <button
+            type="button"
+            class="btn btn-danger remove-button"
+            (click)="removeSubTask(i)"
+            [disabled]="subTask.disabled"
+          >
+            -
+          </button>
+        </div>
+        <button
+          type="button"
+          class="btn btn-primary mt-2 mb-4"
+          (click)="addSubTask()"
+        >
+          +
+        </button>
+      </div>
+
+      <button
+        type="submit"
+        mat-raised-button
+        color="primary"
+        class="form-button"
+      >
+        {{ saveButtonLabel }}
+      </button>
+      <!--[disabled]="isButtonDisable" -->
+      <button
+        type="reset"
+        mat-raised-button
+        color="secondary"
+        (click)="resetData()"
+      >
+        Reset
+      </button>
 
       <!-- <div *ngIf="selectedSubtasks.length > 0" class="subtask-list">
         <h3>Subtasks:</h3>
@@ -40,74 +108,78 @@
             </li>
         </ul>
       </div> -->
-      <mat-list role="list" *ngIf="selectedSubtasks.length > 0" class="subtask-list">
-        <mat-list-item *ngFor="let subtask of selectedSubtasks">{{ subtask }}</mat-list-item>
-      </mat-list>
-      
-      </form>
-    </div>
-    <div class="table-section">
-    
-      <div class="refresh-button-filter-section">
-        <div class="refresh-button">
-          <button mat-icon-button color="primary" (click)="refreshData()">
-            <mat-icon>refresh</mat-icon>
-          </button>
-        </div>
-        <mat-form-field>
-          <mat-label>Filter</mat-label>
-          <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
-        </mat-form-field>
+    </form>
+  </div>
+  <div class="table-section">
+    <div class="refresh-button-filter-section">
+      <div class="refresh-button">
+        <button mat-icon-button color="primary" (click)="refreshData()">
+          <mat-icon>refresh</mat-icon>
+        </button>
       </div>
-      
-      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-  
-        
-        <ng-container matColumnDef="taskName">
-          <th mat-header-cell *matHeaderCellDef> Task Name </th>
-          <td mat-cell *matCellDef="let element"> {{element.taskName}} </td>
-        </ng-container>
-      
-        <!-- Name Column -->
-        <!-- <ng-container matColumnDef="progress">
+      <mat-form-field>
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="" #input />
+      </mat-form-field>
+    </div>
+
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <ng-container matColumnDef="taskName">
+        <th mat-header-cell *matHeaderCellDef>Task Name</th>
+        <td mat-cell *matCellDef="let element">{{ element.taskName }}</td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <!-- <ng-container matColumnDef="progress">
           <th mat-header-cell *matHeaderCellDef> Progress </th>
           <td mat-cell *matCellDef="let element"> {{element.progress}} </td>
         </ng-container> -->
-      
-        <!-- Weight Column -->
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef> Current State </th>
-          <td mat-cell *matCellDef="let element"> {{element.status}} </td>
-        </ng-container>
-      
-        <!-- Symbol Column -->
-        <ng-container matColumnDef="customerName">
-          <th mat-header-cell *matHeaderCellDef> Customer Name </th>
-          <td mat-cell *matCellDef="let element"> {{element.customerName}} </td>
-        </ng-container>
-  
-        <!-- <ng-container matColumnDef="assignEmployee">
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Current State</th>
+        <td mat-cell *matCellDef="let element">{{ element.status }}</td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="customerName">
+        <th mat-header-cell *matHeaderCellDef>Customer Name</th>
+        <td mat-cell *matCellDef="let element">{{ element.customerName }}</td>
+      </ng-container>
+
+      <!-- <ng-container matColumnDef="assignEmployee">
           <th mat-header-cell *matHeaderCellDef> Assign Employee </th>
           <td mat-cell *matCellDef="let element"> {{element.assignEmployee}} </td>
         </ng-container> -->
-    
-        <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef> Action </th>
-          <td mat-cell *matCellDef="let element"> 
-            <button mat-icon-button color="warn" (click)="editData(element)" matTooltip="Edit">
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button mat-icon-button color="warn" (click)="deleteData(element)" matTooltip="Delete">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </td>
-        </ng-container>
-      
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>  
-      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>    
-    </div>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>Action</th>
+        <td mat-cell *matCellDef="let element">
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="editData(element)"
+            matTooltip="Edit"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="deleteData(element)"
+            matTooltip="Delete"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <mat-paginator
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      aria-label="Select page of users"
+    ></mat-paginator>
+  </div>
 </div>
-
-
