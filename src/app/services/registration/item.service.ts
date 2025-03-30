@@ -14,7 +14,7 @@ export class ItemService {
   ) {}
 
   serviceCall(form_details: any){
-    // console.log('In the service');
+    console.log('In the service service call');
     const requestUrl = environment.baseUrl + '/item';
     let headers = {};
         
@@ -29,7 +29,7 @@ export class ItemService {
   }
 
   getData(){
-    // console.log('In the service');
+    console.log('In the service get');
     const requestUrl = environment.baseUrl + '/item';
     let headers = {};
         
@@ -44,7 +44,7 @@ export class ItemService {
   }
 
   editData(itemId:number, form_details: any){
-    // console.log('In the service');
+    console.log('In the service edit');
     const requestUrl = environment.baseUrl + '/item/'+ itemId.toString();
     let headers = {};
         
@@ -59,7 +59,7 @@ export class ItemService {
   }
 
   deleteData(itemId:number){
-    console.log('In the service');
+    // console.log('In the service');
     const requestUrl = environment.baseUrl + '/item/'+ itemId.toString();
     let headers = {};
         

@@ -74,6 +74,15 @@ export const AppRoutes: Routes = [
           ),
       },
 
+      //attendance module
+      {
+        path: 'attendance',
+        loadChildren: () =>
+          import('./pages/attendance/attendance.module').then(
+            (m) => m.AttendanceModule
+          ),
+      },
+
     ],
   },
 ];
