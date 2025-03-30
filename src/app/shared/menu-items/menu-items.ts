@@ -24,7 +24,7 @@ const MENUITEMS = [
     type: 'link',
     icon: 'av_timer',
     isVisible: false,
-    auth: authenticationEnum.Home_Dashboard,
+    auth: authenticationEnum.Privileges,
   },
   {
     state: 'privileges',
@@ -33,7 +33,7 @@ const MENUITEMS = [
     type: 'link',
     icon: 'av_timer',
     isVisible: false,
-    auth: authenticationEnum.Home_Dashboard,
+    auth: authenticationEnum.Privilege_Groups,
   },
   {
     state: 'privileges',
@@ -42,7 +42,7 @@ const MENUITEMS = [
     type: 'link',
     icon: 'av_timer',
     isVisible: false,
-    auth: authenticationEnum.Home_Dashboard,
+    auth: authenticationEnum.Test,
   },
 
   {
@@ -52,7 +52,7 @@ const MENUITEMS = [
     type: 'link',
     icon: 'av_timer',
     isVisible: false,
-    auth: authenticationEnum.Home_Dashboard,
+    auth: authenticationEnum.FormDemo,
   },
   {
     state: 'registration',
@@ -61,7 +61,7 @@ const MENUITEMS = [
     type: 'link',
     icon: 'av_timer',
     isVisible: false,
-    auth: authenticationEnum.Home_Dashboard,
+    auth: authenticationEnum.Employee,
   },
   {
     state: 'registration',
@@ -70,7 +70,7 @@ const MENUITEMS = [
     type: 'link',
     icon: 'av_timer',
     isVisible: false,
-    auth: authenticationEnum.Home_Dashboard,
+    auth: authenticationEnum.Customer,
   },
   {
     state: 'registration',
@@ -79,7 +79,7 @@ const MENUITEMS = [
     type: 'link',
     icon: 'av_timer',
     isVisible: false,
-    auth: authenticationEnum.Home_Dashboard,
+    auth: authenticationEnum.Supplier,
   },
   {
     state: 'registration',
@@ -88,7 +88,7 @@ const MENUITEMS = [
     type: 'link',
     icon: 'av_timer',
     isVisible: false,
-    auth: authenticationEnum.Home_Dashboard,
+    auth: authenticationEnum.Item,
   },
   {
     state: 'task-management',
@@ -97,7 +97,7 @@ const MENUITEMS = [
     type: 'link',
     icon: 'av_timer',
     isVisible: false,
-    auth: authenticationEnum.Home_Dashboard,
+    auth: authenticationEnum.Task_Assign,
   },
   {
     state: 'task-management',
@@ -106,7 +106,7 @@ const MENUITEMS = [
     type: 'link',
     icon: 'av_timer',
     isVisible: false,
-    auth: authenticationEnum.Home_Dashboard,
+    auth: authenticationEnum.All_Tasks,
   },
 
   {
@@ -116,7 +116,6 @@ const MENUITEMS = [
     type: 'link',
     icon: 'av_timer',
     isVisible: false,
-    auth: authenticationEnum.Home_Dashboard,
   },
   /*{
     state: 'button',

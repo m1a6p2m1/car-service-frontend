@@ -14,5 +14,12 @@ export enum authenticationEnum {
   Privilege_Groups = 9,
   Users = 10,
   Test = 11,
-  FormDemo = 12
+  FormDemo = 12,
+  Employee = 13,
+  Employee_Login = 14,
+  Customer = 15,
+  Item = 16,
+  Task_Assign = 17,
+  All_Tasks = 18,
+  Supplier = 19,
 }
