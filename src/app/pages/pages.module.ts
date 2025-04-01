@@ -6,9 +6,17 @@ import { DemoMaterialModule } from '../demo-material-module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { FormDemoComponent } from './form-demo/form-demo.component';
+import { EmployeeLoginComponent } from './employee-login/employee-login.component';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
-  declarations: [FormDemoComponent],
+  declarations: [
+    FormDemoComponent,
+    EmployeeLoginComponent
+  ],
   imports: [
     CommonModule,
     DemoMaterialModule,
@@ -16,6 +24,10 @@ import { FormDemoComponent } from './form-demo/form-demo.component';
     ReactiveFormsModule,
     NgApexchartsModule,
     RouterModule.forChild(PagesRoutes),
+    MatInputModule,
+    MatIconModule,
+    MatSelectModule,
+    MatButtonModule,
   ],
   exports: [],
 })
