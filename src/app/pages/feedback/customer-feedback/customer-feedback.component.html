@@ -1,0 +1,152 @@
+<div class="container">
+    <div class="form-section">
+      <form [formGroup]="customerFeedbackForm" class="example-form" (ngSubmit)="onSubmit()">
+  
+        <mat-form-field class="full-width">
+          <mat-label>User Name</mat-label>
+          <input matInput placeholder="User Name" formControlName="userName">
+        </mat-form-field>
+      
+        <mat-form-field class="full-width">
+          <mat-label>Task Number</mat-label>
+          <input matInput placeholder="Task Number" formControlName="taskNumber">
+        </mat-form-field>
+      
+        <mat-form-field class="full-width">
+          <mat-label>Service Type</mat-label>
+          <input matInput placeholder="Service Type" formControlName="serviceType">
+        </mat-form-field>
+      
+        <mat-form-field class="full-width">
+          <mat-label>Service Date</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="serviceDate">
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field><br><br>
+
+        <mat-label class="recommendation-label">Was your vehicle serviced properly and on time ?</mat-label><br><br>
+        <button
+          mat-icon-button
+          [color]="color"
+          *ngFor="let ratingId of ratingArr; index as i"
+          [id]="'star_' + i"
+          (click)="onClick(i + 1)"
+          [attr.aria-label]="'Rate ' + (i + 1) + ' stars'"
+          [title]="'Rate ' + (i + 1) + ' stars'"
+          [disabled]="isButtonDisable"
+          >
+          <mat-icon >
+            {{ showIcon(i) }}
+          </mat-icon>
+        </button><br>
+        <p class="body-2">
+          Your rated <span class="body-2">{{ rating }}</span> /
+          <span class="body-2">{{ starCount }}</span> _   
+          <span *ngIf="rating > 0" class="rating-label">
+            {{ ratingLabels[rating] }}
+          </span>
+        </p>
+        <br>
+      
+        <mat-radio-group aria-label="Select an option" formControlName="recommendation">
+          <mat-label class="recommendation-label">Would You Recommended Us?</mat-label>
+          <mat-radio-button value="Yes">Yes</mat-radio-button>
+          <mat-radio-button value="No">No</mat-radio-button>
+        </mat-radio-group><br><br>
+      
+        <mat-form-field class="full-width">
+          <mat-label>Suggesions/ Complaint</mat-label>
+          <textarea matInput placeholder="Suggesions/ Complaint" formControlName="complaint"></textarea>
+        </mat-form-field>
+
+        <div>
+          <mat-label class="recommendation-label">Contact:</mat-label><br><br>
+          <mat-label class="recommendation-label">Email: namalvehicleservice&#64;gmail.com</mat-label><br><br>
+          <mat-label class="recommendation-label">Phone Number: 0777 256 256</mat-label>
+        </div><br><br>
+      
+        <button type="submit" mat-raised-button color="primary" class="form-button" [disabled]="isButtonDisable">{{saveButtonLabel}}</button>
+        <button type="reset" mat-raised-button color="secondary" (click)="resetData()">Reset</button>
+      
+      </form>
+    </div>
+    <div class="table-section">
+      
+      <div class="refresh-button-filter-section">
+        <div class="refresh-button">
+          <button mat-icon-button color="primary" (click)="refreshData()">
+            <mat-icon>refresh</mat-icon>
+          </button>
+        </div>
+        <mat-form-field>
+          <mat-label>Filter</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+        </mat-form-field>
+      </div>
+      
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      
+        <ng-container matColumnDef="userName">
+          <th mat-header-cell *matHeaderCellDef> User Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.userName}} </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="taskNumber">
+          <th mat-header-cell *matHeaderCellDef> Task Number </th>
+          <td mat-cell *matCellDef="let element"> {{element.taskNumber}} </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="serviceType">
+          <th mat-header-cell *matHeaderCellDef> Service Type </th>
+          <td mat-cell *matCellDef="let element"> {{element.serviceType}} </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="serviceDate">
+          <th mat-header-cell *matHeaderCellDef> Service Date </th>
+          <td mat-cell *matCellDef="let element"> {{element.serviceDate}} </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="serviceQuality">
+          <th mat-header-cell *matHeaderCellDef> Service Quality </th>
+          <td mat-cell *matCellDef="let element"> {{element.serviceQuality}} </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="recommendation">
+          <th mat-header-cell *matHeaderCellDef> Address </th>
+          <td mat-cell *matCellDef="let element"> {{element.recommendation}} </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="phoneNumber">
+          <th mat-header-cell *matHeaderCellDef> User Recommendation </th>
+          <td mat-cell *matCellDef="let element"> {{element.phoneNumber}} </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="complaint">
+          <th mat-header-cell *matHeaderCellDef> Suggetions or Complaint </th>
+          <td mat-cell *matCellDef="let element"> {{element.complaint}} </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef> Action </th>
+          <td mat-cell *matCellDef="let element"> 
+            <button mat-icon-button color="warn" (click)="editData(element)" matTooltip="Edit">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteData(element)" matTooltip="Delete">
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="viewData(element)" matTooltip="View">
+              <mat-icon>visibility</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+      
+    </div>
+  </div>
+  
+  

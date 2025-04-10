@@ -11,11 +11,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 
 @NgModule({
   declarations: [
     FormDemoComponent,
-    EmployeeLoginComponent
+    EmployeeLoginComponent,
   ],
   imports: [
     CommonModule,
@@ -27,7 +29,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatInputModule,
     MatIconModule,
     MatSelectModule,
-    MatButtonModule,
+    MatButtonModule
   ],
   exports: [],
 })

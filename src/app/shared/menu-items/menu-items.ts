@@ -135,6 +135,16 @@ const MENUITEMS = [
     type: 'link',
     icon: 'av_timer',
     isVisible: false,
+    auth: authenticationEnum.Employee_Login,
+  },
+
+  {
+    state: 'feedback',
+    childState: 'customer-feedback',
+    name: 'Customer Feedback',
+    type: 'link',
+    icon: 'av_timer',
+    isVisible: false,
     auth: authenticationEnum.Home_Dashboard,
   },
   /*{

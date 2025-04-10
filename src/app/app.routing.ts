@@ -83,6 +83,15 @@ export const AppRoutes: Routes = [
           ),
       },
 
+      //feedback module  
+      {
+        path: 'feedback',
+        loadChildren: () =>
+          import('./pages/feedback/feedback.module').then(
+            (m) => m.FeedbackModule
+          ),
+      },
+
     ],
   },
 ];
