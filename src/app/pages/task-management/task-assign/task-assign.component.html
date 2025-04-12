@@ -20,12 +20,14 @@
 
       <mat-form-field appearance="fill">
         <mat-label>Customer Name</mat-label>
-        <mat-select formControlName="customerName">
-          <mat-option
-            *ngFor="let customer of customers"
-            [value]="customer.value"
-          >
-            {{ customer.viewValue }}
+        <mat-select
+          formControlName="customerId"
+          (selectionChange)="onCustomerChange($event)"
+        >
+          <mat-option *ngFor="let customer of customers" [value]="customer.id">
+            {{
+              customer.id + " " + customer.firstName + " " + customer.lastName
+            }}
           </mat-option>
         </mat-select>
       </mat-form-field>

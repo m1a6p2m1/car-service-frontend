@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -15,6 +15,7 @@ interface Task {
 interface Customer {
   value: string;
   viewValue: string;
+  id: number;
 }
 
 @Component({
@@ -47,6 +48,7 @@ export class TaskAssignComponent implements OnInit {
       taskName: new FormControl(''),
       taskCreatedBy: new FormControl({ value: '', disabled: true }), //
       customerName: new FormControl(''),
+      customerId: new FormControl(''),
       status: new FormControl({ value: 'Start', disabled: true }), //
       subTasks: this.fb.array([]),
     });
@@ -54,12 +56,14 @@ export class TaskAssignComponent implements OnInit {
 
   tasks: Task[] = [];
 
-  customers: Customer[] = [
-    { value: 'Ruwan', viewValue: 'Ruwan' },
-    { value: 'Kamal', viewValue: 'Kamal' },
-    { value: 'Amal', viewValue: 'Amal' },
-    { value: 'Doty', viewValue: 'Doty' },
-  ];
+  customers: any;
+
+  // : Customer[] = [
+  //   { value: 'Ruwan', viewValue: 'Ruwan', id: 1 },
+  //   { value: 'Kamal', viewValue: 'Kamal', id: 2 },
+  //   { value: 'Amal', viewValue: 'Amal', id: 3 },
+  //   { value: 'Doty', viewValue: 'Doty', id: 4 },
+  // ];
 
   onSubmit() {
     try {
@@ -115,6 +119,7 @@ export class TaskAssignComponent implements OnInit {
     this.populateData();
     this.getDefinedTasks();
     this.setCreatedByValue();
+    this.loadCustomerList();
 
     this.taskAssignForm
       .get('taskName')
@@ -126,6 +131,14 @@ export class TaskAssignComponent implements OnInit {
   public setCreatedByValue(): void {
     this.taskAssignForm.patchValue({
       taskCreatedBy: this.httpService.getLoginNameFromCache(),
+    });
+  }
+
+  public loadCustomerList(): void {
+    this.taskAssignService.getCustomersList().subscribe((response: any) => {
+      if (response) {
+        this.customers = response;
+      }
     });
   }
 
@@ -251,11 +264,21 @@ export class TaskAssignComponent implements OnInit {
 
   public resetFormManually() {
     this.taskAssignForm.get('taskName')?.reset({}, { emitEvent: false });
-    this.taskAssignForm.get('customerName')?.reset();
+    this.taskAssignForm.get('customerId')?.reset();
   }
 
   public enableFormManually() {
     this.taskAssignForm.get('taskName')?.enable({ emitEvent: false });
-    this.taskAssignForm.get('customerName')?.enable();
+    this.taskAssignForm.get('customerId')?.enable();
+  }
+
+  public onCustomerChange(inputId: any) {
+    const customerName = this.customers.find(
+      (customer: any) => customer.id === inputId.value
+    ).firstName;
+
+    this.taskAssignForm.patchValue({
+      customerName,
+    });
   }
 }

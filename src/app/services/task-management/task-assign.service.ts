@@ -84,4 +84,18 @@ export class TaskAssignService {
 
     return this.http.delete(requestUrl, { headers: headers });
   }
+
+  getCustomersList() {
+    const requestUrl = environment.baseUrl + '/customer/task-list-customers';
+
+    let headers = {};
+
+    if (this.httpService.getAuthToken() !== null) {
+      headers = {
+        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+      };
+    }
+
+    return this.http.get(requestUrl, headers);
+  }
 }
