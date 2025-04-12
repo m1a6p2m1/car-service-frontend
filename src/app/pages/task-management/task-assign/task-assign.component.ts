@@ -238,20 +238,24 @@ export class TaskAssignComponent implements OnInit {
 
   public resetData() {
     const subTasksFormArray = this.subTasks;
-
-    while (subTasksFormArray.length !== 0) {
-      subTasksFormArray.removeAt(0);
-    }
-    this.taskAssignForm.reset();
+    subTasksFormArray.clear();
+    this.resetFormManually();
     this.saveButtonLabel = 'Save';
-    this.taskAssignForm.enable();
-    this.taskAssignForm.get('status')?.disable();
-    this.taskAssignForm.get('taskCreatedBy')?.disable();
     this.isButtonDisable = false;
-    this.populateData();
+    this.enableFormManually();
   }
 
   public refreshData(): void {
     this.populateData();
+  }
+
+  public resetFormManually() {
+    this.taskAssignForm.get('taskName')?.reset({}, { emitEvent: false });
+    this.taskAssignForm.get('customerName')?.reset();
+  }
+
+  public enableFormManually() {
+    this.taskAssignForm.get('taskName')?.enable();
+    this.taskAssignForm.get('customerName')?.enable();
   }
 }
