@@ -58,6 +58,8 @@ export class TaskAssignComponent implements OnInit {
 
   customers: any = [];
 
+  selectedCustomers: any = [];
+
   // : Customer[] = [
   //   { value: 'Ruwan', viewValue: 'Ruwan', id: 1 },
   //   { value: 'Kamal', viewValue: 'Kamal', id: 2 },
@@ -151,6 +153,8 @@ export class TaskAssignComponent implements OnInit {
     };
 
     this.customers.unshift(commonCustomer);
+
+    this.selectedCustomers = this.customers;
   }
 
   updateSubtasks(selectedTask: string) {
@@ -291,5 +295,19 @@ export class TaskAssignComponent implements OnInit {
     this.taskAssignForm.patchValue({
       customerName,
     });
+  }
+
+  onCustomerFilterKeyPress(eventTarget: any) {
+    this.selectedCustomers = this.search(eventTarget.value);
+  }
+
+  search(value: string) {
+    let filter = value.toLowerCase();
+    return this.customers.filter(
+      (option: any) =>
+        option.firstName.toLowerCase().startsWith(filter) ||
+        option.lastName.toLowerCase().startsWith(filter) ||
+        option.id.toString().toLowerCase().startsWith(filter)
+    );
   }
 }

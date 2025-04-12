@@ -24,7 +24,18 @@
           formControlName="customerId"
           (selectionChange)="onCustomerChange($event)"
         >
-          <mat-option *ngFor="let customer of customers" [value]="customer.id">
+          <mat-form-field>
+            <input
+              matInput
+              (keyup)="onCustomerFilterKeyPress($event.target)"
+              placeholder="Search for Customer Here..."
+            />
+          </mat-form-field>
+          <mat-option>None</mat-option>
+          <mat-option
+            *ngFor="let customer of selectedCustomers"
+            [value]="customer.id"
+          >
             {{
               customer.id + " " + customer.firstName + " " + customer.lastName
             }}
