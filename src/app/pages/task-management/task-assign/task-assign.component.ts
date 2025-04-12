@@ -255,7 +255,7 @@ export class TaskAssignComponent implements OnInit {
   }
 
   public enableFormManually() {
-    this.taskAssignForm.get('taskName')?.enable();
+    this.taskAssignForm.get('taskName')?.enable({ emitEvent: false });
     this.taskAssignForm.get('customerName')?.enable();
   }
 }
