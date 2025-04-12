@@ -56,7 +56,7 @@ export class TaskAssignComponent implements OnInit {
 
   tasks: Task[] = [];
 
-  customers: any;
+  customers: any = [];
 
   // : Customer[] = [
   //   { value: 'Ruwan', viewValue: 'Ruwan', id: 1 },
@@ -138,8 +138,19 @@ export class TaskAssignComponent implements OnInit {
     this.taskAssignService.getCustomersList().subscribe((response: any) => {
       if (response) {
         this.customers = response;
+        this.addCommonCustomer();
       }
     });
+  }
+
+  public addCommonCustomer(): void {
+    const commonCustomer = {
+      id: 0,
+      firstName: 'Common',
+      lastName: 'Customer',
+    };
+
+    this.customers.unshift(commonCustomer);
   }
 
   updateSubtasks(selectedTask: string) {
