@@ -5,14 +5,36 @@
       class="example-form"
       (ngSubmit)="onSubmit()"
     >
+
+    <!-- <mat-form-field appearance="fill">
+      <mat-label>Task Name</mat-label>
+      <mat-select formControlName="taskName">
+        <mat-option *ngFor="let task of tasks" [value]="task.taskName">
+          {{ task.taskName }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field> -->
+
       <mat-form-field appearance="fill">
         <mat-label>Task Name</mat-label>
         <mat-select formControlName="taskName">
-          <mat-option *ngFor="let task of tasks" [value]="task.taskName">
+
+          <mat-form-field>
+            <input
+              matInput
+              (keyup)="onTaskFilterKeyPress($event.target)"
+              placeholder="Search for Task Here..."
+            />
+          </mat-form-field>
+
+          <mat-option 
+          *ngFor="let task of tasks" 
+          [value]="task.taskName">
             {{ task.taskName }}
           </mat-option>
         </mat-select>
       </mat-form-field>
+
       <mat-form-field class="example-full-width">
         <mat-label>Task Created By</mat-label>
         <input matInput formControlName="taskCreatedBy" />
@@ -41,6 +63,11 @@
             }}
           </mat-option>
         </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Description</mat-label>
+        <textarea matInput placeholder="Description" formControlName="description"></textarea>
       </mat-form-field>
 
       <mat-form-field class="example-full-width">

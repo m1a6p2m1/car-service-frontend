@@ -49,6 +49,7 @@ export class TaskAssignComponent implements OnInit {
       taskCreatedBy: new FormControl({ value: '', disabled: true }), //
       customerName: new FormControl(''),
       customerId: new FormControl(''),
+      description: new FormControl(''),
       status: new FormControl({ value: 'Start', disabled: true }), //
       subTasks: this.fb.array([]),
     });
@@ -297,6 +298,18 @@ export class TaskAssignComponent implements OnInit {
     });
   }
 
+  onTaskFilterKeyPress(eventTarget: any) {
+    this.tasks = this.searchTasks(eventTarget.value);
+  }
+
+  searchTasks(value: String){
+    let filter = value.toLowerCase();
+    return this.tasks.filter(
+        (option: any) =>
+          option.taskName.toLowerCase().includes(filter)
+    );
+  }
+
   onCustomerFilterKeyPress(eventTarget: any) {
     this.selectedCustomers = this.search(eventTarget.value);
   }
@@ -309,5 +322,24 @@ export class TaskAssignComponent implements OnInit {
         option.lastName.toLowerCase().startsWith(filter) ||
         option.id.toString().toLowerCase().startsWith(filter)
     );
+
+    // const filteredCustomers = this.customers.filter((option: any) =>
+    //   option.firstName.toLowerCase().startsWith(filter) ||
+    //   option.lastName.toLowerCase().startsWith(filter) ||
+    //   option.id.toString().toLowerCase().startsWith(filter)
+    // );
+  
+    // const filteredTasks = this.tasks.filter((task: any) =>
+    //   task.taskName.toLowerCase().includes(filter)
+    //   // option.id.toString().toLowerCase().includes(filter)
+    // );
+  
+    // return {
+    //   customers: filteredCustomers,
+    //   tasks: filteredTasks
+    // };
+    
   }
+
+  
 }
