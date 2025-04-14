@@ -32,8 +32,8 @@ export interface ChartOptions {
 
 @Component({
   selector: "app-sales-overview",
-  standalone: true,
-  imports: [NgApexchartsModule, DemoMaterialModule],
+  standalone: false,
+  // imports: [NgApexchartsModule, DemoMaterialModule],
   templateUrl: "./sales-overview.component.html"
 })
 export class SalesOverviewComponent implements OnInit {

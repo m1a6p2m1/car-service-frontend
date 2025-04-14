@@ -4,11 +4,12 @@ import { OurVisiterComponent } from './dashboard-components/our-visiter/our-visi
 import { ProfileComponent } from './dashboard-components/profile/profile.component';
 import { ContactsComponent } from './dashboard-components/contacts/contacts.component';
 import { ActivityTimelineComponent } from './dashboard-components/activity-timeline/activity-timeline.component';
+import { AssignedTasksComponent } from './dashboard-components/assigned-tasks/assigned-tasks.component';
 
 @Component({
 	selector: 'app-dashboard',
-	standalone: true,
-	imports: [SalesOverviewComponent, OurVisiterComponent, ProfileComponent, ContactsComponent, ActivityTimelineComponent],
+	standalone: false,
+	// imports: [SalesOverviewComponent, OurVisiterComponent, ProfileComponent, ContactsComponent, ActivityTimelineComponent ],
 	templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent implements AfterViewInit {

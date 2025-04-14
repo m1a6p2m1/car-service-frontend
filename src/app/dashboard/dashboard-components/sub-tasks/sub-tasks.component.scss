@@ -1,0 +1,7 @@
+.tasks-card{
+    // display: flex;
+    // flex-direction: row;
+    display: grid;
+    grid-template-columns: 100% 100% 100% 100%;
+    gap: 25px;
+}

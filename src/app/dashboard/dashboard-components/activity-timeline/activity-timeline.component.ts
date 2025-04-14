@@ -5,8 +5,8 @@ import { NgFor, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-activity-timeline',
-  standalone: true,
-  imports: [DemoMaterialModule, NgIf, NgFor],
+  standalone: false,
+  // imports: [DemoMaterialModule, NgIf, NgFor],
   templateUrl: './activity-timeline.component.html'
 })
 export class ActivityTimelineComponent implements OnInit {

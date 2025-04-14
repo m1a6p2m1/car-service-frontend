@@ -5,8 +5,8 @@ import { NgFor } from '@angular/common';
 
 @Component({
   selector: 'app-contacts',
-  standalone: true,
-  imports: [DemoMaterialModule, NgFor],
+  standalone: false,
+  // imports: [DemoMaterialModule, NgFor],
   templateUrl: './contacts.component.html'
 })
 export class ContactsComponent implements OnInit {

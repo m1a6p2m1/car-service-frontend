@@ -27,8 +27,8 @@ export interface VisitorChartOptions {
 
 @Component({
   selector: "app-our-visiter",
-  standalone: true,
-  imports: [NgApexchartsModule, DemoMaterialModule],
+  standalone: false,
+  // imports: [NgApexchartsModule, DemoMaterialModule],
   templateUrl: "./our-visiter.component.html"
 })
 export class OurVisiterComponent {
