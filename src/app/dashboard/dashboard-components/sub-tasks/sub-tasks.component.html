@@ -1,7 +1,8 @@
-<div class="tasks-card" *ngFor="let task of tasks">
+<div class="tasks-row">
+  <div class="tasks-card"  *ngFor="let task of commonCustomerTasks"> <!--*ngFor="let task of tasks"-->
     <mat-card >
-        <div class="p-20 bg-info position-relative">
-            <mat-card-title >{{ task.taskName }}</mat-card-title>
+        <div class="p-20 bg-info position-relative" style="text-align: center;">
+            <mat-card-title class="task-header">{{ task.taskName }}</mat-card-title>
         </div>
         <mat-card-content>
           <ul>
@@ -11,4 +12,5 @@
           </ul>
         </mat-card-content>
     </mat-card>
+  </div>
 </div>

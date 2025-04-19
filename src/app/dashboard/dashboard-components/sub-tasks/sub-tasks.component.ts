@@ -16,6 +16,7 @@ interface Task {
 })
 export class SubTasksComponent implements OnInit {
   tasks: Task[] = [];
+  commonCustomerTasks: Task[] = [];
 
   constructor(
     private taskAssignService: TaskAssignService,
@@ -23,15 +24,12 @@ export class SubTasksComponent implements OnInit {
   ) {}
 
   ngOnInit(): void{
-    this.getDefinedTasks();
-  }
-  
+    // this.getDefinedTasks();
 
-  public getDefinedTasks(): void {
-    this.taskAssignService.getDefinedTasks().subscribe((response: any) => {
-      if (response) {
-        this.tasks = response;
-      }
+    const commonCustomerId = 0; // if known
+
+    this.taskAssignService.getTasksByCustomerId(commonCustomerId).subscribe((tasks: any) => {
+      this.commonCustomerTasks = tasks;
     });
   }
   
