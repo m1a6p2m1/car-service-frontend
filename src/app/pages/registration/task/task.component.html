@@ -6,7 +6,7 @@
       <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
           <mat-form-field appearance="fill">
-            <mat-label>Task Name</mat-label>
+            <mat-label>Task Na me</mat-label>
             <mat-select formControlName="taskName">
               <mat-option *ngFor="let task of taskNames" [value]="task">
                 {{ task }}

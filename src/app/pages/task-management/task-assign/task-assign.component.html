@@ -1,12 +1,8 @@
 <div class="container">
   <div class="form-section">
-    <form
-      [formGroup]="taskAssignForm"
-      class="example-form"
-      (ngSubmit)="onSubmit()"
-    >
+    <form [formGroup]="taskAssignForm" class="example-form" (ngSubmit)="onSubmit()">
 
-    <!-- <mat-form-field appearance="fill">
+      <!-- <mat-form-field appearance="fill">
       <mat-label>Task Name</mat-label>
       <mat-select formControlName="taskName">
         <mat-option *ngFor="let task of tasks" [value]="task.taskName">
@@ -20,16 +16,10 @@
         <mat-select formControlName="taskName">
 
           <mat-form-field>
-            <input
-              matInput
-              (keyup)="onTaskFilterKeyPress($event.target)"
-              placeholder="Search for Task Here..."
-            />
+            <input matInput (keyup)="onTaskFilterKeyPress($event.target)" placeholder="Search for Task Here..." />
           </mat-form-field>
 
-          <mat-option 
-          *ngFor="let task of tasks" 
-          [value]="task.taskName">
+          <mat-option *ngFor="let task of tasks" [value]="task.taskName">
             {{ task.taskName }}
           </mat-option>
         </mat-select>
@@ -42,24 +32,15 @@
 
       <mat-form-field appearance="fill">
         <mat-label>Customer Name</mat-label>
-        <mat-select
-          formControlName="customerId"
-          (selectionChange)="onCustomerChange($event)"
-        >
+        <mat-select formControlName="customerId" (selectionChange)="onCustomerChange($event)">
           <mat-form-field>
-            <input
-              matInput
-              (keyup)="onCustomerFilterKeyPress($event.target)"
-              placeholder="Search for Customer Here..."
-            />
+            <input matInput (keyup)="onCustomerFilterKeyPress($event.target)"
+              placeholder="Search for Customer Here..." />
           </mat-form-field>
           <mat-option>None</mat-option>
-          <mat-option
-            *ngFor="let customer of selectedCustomers"
-            [value]="customer.id"
-          >
+          <mat-option *ngFor="let customer of selectedCustomers" [value]="customer.id">
             {{
-              customer.id + " " + customer.firstName + " " + customer.lastName
+            customer.id + " " + customer.firstName + " " + customer.lastName
             }}
           </mat-option>
         </mat-select>
@@ -86,57 +67,35 @@
       </mat-list> -->
 
       <div formArrayName="subTasks">
-        <div
-          *ngFor="let subTask of subTasks.controls; let i = index"
-          class="subtask-row"
-          [formGroupName]="i"
-        >
+        <div *ngFor="let subTask of subTasks.controls; let i = index" class="subtask-row" [formGroupName]="i">
           <mat-form-field class="full-width">
-            <input
-              matInput
-              placeholder="Sub Task"
-              formControlName="description"
-              placeholder="Sub Task Description"
-            />
+            <input matInput placeholder="Sub Task" formControlName="description" placeholder="Sub Task Description" />
           </mat-form-field>
           <!-- <input
             [formControlName]="i"
             class="form-control subtask-input"
             placeholder="Sub Task"
           /> -->
-          <button
-            type="button"
-            class="btn btn-danger remove-button"
-            (click)="removeSubTask(i)"
-            [disabled]="subTask.disabled"
-          >
+          <button type="button" class="btn btn-danger remove-button" (click)="removeSubTask(i)"
+            [disabled]="subTask.disabled">
             -
           </button>
         </div>
-        <button
-          type="button"
-          class="btn btn-primary mt-2 mb-4"
-          (click)="addSubTask()"
-        >
+        <button type="button" class="btn btn-primary mt-2 mb-4" (click)="addSubTask()">
           +
         </button>
       </div>
 
-      <button
-        type="submit"
-        mat-raised-button
-        color="primary"
-        class="form-button"
-      >
+      <mat-form-field class="example-full-width">
+        <mat-label>Total Price</mat-label>
+        <input matInput formControlName="totalSubTasks" readonly="">
+      </mat-form-field>
+
+      <button type="submit" mat-raised-button color="primary" class="form-button">
         {{ saveButtonLabel }}
       </button>
       <!--[disabled]="isButtonDisable" -->
-      <button
-        type="button"
-        mat-raised-button
-        color="secondary"
-        (click)="resetData()"
-      >
+      <button type="button" mat-raised-button color="secondary" (click)="resetData()">
         Reset
       </button>
 
@@ -195,20 +154,10 @@
       <ng-container matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef>Action</th>
         <td mat-cell *matCellDef="let element">
-          <button
-            mat-icon-button
-            color="warn"
-            (click)="editData(element)"
-            matTooltip="Edit"
-          >
+          <button mat-icon-button color="warn" (click)="editData(element)" matTooltip="Edit">
             <mat-icon>edit</mat-icon>
           </button>
-          <button
-            mat-icon-button
-            color="warn"
-            (click)="deleteData(element)"
-            matTooltip="Delete"
-          >
+          <button mat-icon-button color="warn" (click)="deleteData(element)" matTooltip="Delete">
             <mat-icon>delete</mat-icon>
           </button>
         </td>
@@ -217,9 +166,6 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
-    <mat-paginator
-      [pageSizeOptions]="[5, 10, 25, 100]"
-      aria-label="Select page of users"
-    ></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
   </div>
 </div>
