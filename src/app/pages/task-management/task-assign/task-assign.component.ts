@@ -176,12 +176,9 @@ totalPriceHidden: any;
       this.selectedSubtasks.forEach((item) => {
         subTasksFormArray.push(this.createSubTasksFormGroup(item));
         this.totalofDefinedSubtasks = this.selectedSubtasks.reduce( (acc: number, item: any) => acc + item.price, 0);
-
       });
-
       this.taskAssignForm.patchValue({totalSubTasks:"Rs. " + this.totalofDefinedSubtasks});
       this.totalPriceHidden = false;
-
     }
 
   }
@@ -189,6 +186,7 @@ totalPriceHidden: any;
   public createSubTasksFormGroup(item: any): FormGroup {
     return this.fb.group({
       description: { disabled: true, value:(item.subTaskName + " (Rs. " + item.price + " )")},
+
 
     });
   }
@@ -340,17 +338,21 @@ totalPriceHidden: any;
     //   option.id.toString().toLowerCase().startsWith(filter)
     // );
 
+
     // const filteredTasks = this.tasks.filter((task: any) =>
     //   task.taskName.toLowerCase().includes(filter)
     //   // option.id.toString().toLowerCase().includes(filter)
     // );
+
 
     // return {
     //   customers: filteredCustomers,
     //   tasks: filteredTasks
     // };
 
+
   }
+
 
 
 }
