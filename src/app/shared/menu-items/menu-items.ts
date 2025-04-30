@@ -92,6 +92,15 @@ const MENUITEMS = [
   },
   {
     state: 'task-management',
+    childState: 'task-introduce',
+    name: 'Tasks Form',
+    type: 'link',
+    icon: 'av_timer',
+    isVisible: false,
+    auth: authenticationEnum.Task_Introduce,
+  },
+  {
+    state: 'task-management',
     childState: 'task-assign',
     name: 'Task Assign Form',
     type: 'link',

@@ -11,13 +11,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { DemoMaterialModule } from 'src/app/demo-material-module';
 import { AllTaskComponent } from './all-task/all-task.component';
+import { TaskIntroduceComponent } from './task-introduce/task-introduce.component';
 
 
 
 @NgModule({
   declarations: [
     TaskAssignComponent,
-    AllTaskComponent
+    AllTaskComponent,
+    TaskIntroduceComponent
   ],
   imports: [
     CommonModule,

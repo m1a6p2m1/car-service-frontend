@@ -1,0 +1,41 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+}
+.form-section {
+    flex: 2;
+    width: 100%;
+    padding: 50px;
+    border-right: 1px solid #ccc;
+}
+.table-section {
+    flex: 2;
+}
+.full-width {
+    width: 100%;
+    margin-right: 5px;
+}
+.form-button {
+    margin-right: 20px;
+}
+
+.subtask-row {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.subtask-input {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.table {
+    width: 100%;
+}
+
+.remove-button {
+    margin-left: 1%;
+    margin-top: 2%;
+    height: 5%;
+}
