@@ -82,10 +82,10 @@ export class TaskIntroduceComponent implements OnInit{
           }
         );
       } else if (this.mode === 'edit') {
-        console.log('Calling service editData with ID:', this.selectedData.id);
+        // console.log('Calling service editData with ID:', this.selectedData.id);
         this.taskIntroduceService.editData(this.selectedData.id, formData).subscribe({
             next: (response: any) => {
-              console.log('Selected Data:', this.selectedData);
+              // console.log('Selected Data:', this.selectedData);
               let elementIndex = this.dataSource.data.findIndex(
                 (element) => element.id === this.selectedData?.id
               );
@@ -113,7 +113,7 @@ export class TaskIntroduceComponent implements OnInit{
   }
 
   addSubTask() {
-    this.subTasks.push(this.fb.group({ subTaskName: ['']}));           //this.fb.group({id: [null],description: [''],})
+    this.subTasks.push(this.fb.group({ subTaskName: ['']}));
   }
   
   removeSubTask(index: number) {
