@@ -55,4 +55,20 @@ export class TaskIntroduceService {
       
           return this.http.put(requestUrl, form_details, {headers: headers} );
     }
+
+    deleteData(id: number) {
+      console.log('In the Service');
+      const requestUrl =
+        environment.baseUrl + '/task-introduce/' + id.toString();
+  
+      let headers = {};
+  
+      if (this.httpService.getAuthToken() !== null) {
+        headers = {
+          Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+        };
+      }
+  
+      return this.http.delete(requestUrl, { headers: headers });
+    }
 }

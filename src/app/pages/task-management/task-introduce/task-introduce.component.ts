@@ -86,12 +86,12 @@ export class TaskIntroduceComponent implements OnInit{
         this.taskIntroduceService.editData(this.selectedData.id, formData).subscribe({
             next: (response: any) => {
               console.log('Selected Data:', this.selectedData);
-              // let elementIndex = this.dataSource.data.findIndex(
-              //   (element) => element.id === this.selectedData?.id
-              // );
-              // this.dataSource.data[elementIndex] = response;
-              // this.dataSource = new MatTableDataSource(this.dataSource.data);
-              // this.messageService.showSuccess('Data Edited Successfully !');
+              let elementIndex = this.dataSource.data.findIndex(
+                (element) => element.id === this.selectedData?.id
+              );
+              this.dataSource.data[elementIndex] = response;
+              this.dataSource = new MatTableDataSource(this.dataSource.data);
+              this.messageService.showSuccess('Data Edited Successfully !');
             },
             error: (error) => {
               this.messageService.showError(
@@ -113,7 +113,7 @@ export class TaskIntroduceComponent implements OnInit{
   }
 
   addSubTask() {
-    this.subTasks.push(this.fb.group({id: [''], subTaskName: ['']}));           //this.fb.group({id: [null],description: [''],})
+    this.subTasks.push(this.fb.group({ subTaskName: ['']}));           //this.fb.group({id: [null],description: [''],})
   }
   
   removeSubTask(index: number) {
@@ -130,6 +130,7 @@ export class TaskIntroduceComponent implements OnInit{
     this.taskIntroduceForm.reset();
     this.saveButtonLabel = 'Save';
     this.isButtonDisable = false;
+    this.taskIntroduceForm.enable();
     
   }
 
@@ -153,5 +154,26 @@ export class TaskIntroduceComponent implements OnInit{
   this.selectedData = { id: data.id };
   }
 
-  public deleteData(data: any) {}
+  public deleteData(data: any) {
+    const id = data.id;
+        try {
+          this.taskIntroduceService.deleteData(id).subscribe({
+            next: (response: any) => {
+              const index = this.dataSource.data.findIndex(
+                (element) => element.id === id
+              );
+              if (index !== -1) {
+                this.dataSource.data.splice(index, 1);
+              }
+              this.dataSource = new MatTableDataSource(this.dataSource.data);
+              this.messageService.showSuccess('Data Deleted Successfully !');
+            },
+            error: (error) => {
+              this.messageService.showError('Action Failed with Error :' + error);
+            },
+          });
+        } catch (error) {
+          this.messageService.showError('Action Failed with Error:' + error);
+        }
+  }
 }
