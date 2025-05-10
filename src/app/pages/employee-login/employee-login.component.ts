@@ -37,6 +37,8 @@ export class EmployeeLoginComponent implements OnInit{
   selectedData!: { id: number; };
   isButtonDisabled = false;
   saveButtonLabel = 'Save';
+  isResetButtonDisabled = false;
+  isResetPasswordBtnHidden = true;
 
   constructor(
     private fb: FormBuilder,
@@ -151,6 +153,14 @@ export class EmployeeLoginComponent implements OnInit{
     this.saveButtonLabel = 'Edit';
     this.mode = 'edit';
     this.selectedData = data;
+    this.employeeLoginForm.disable();
+    this.isResetButtonDisabled = true;
+    this.isButtonDisabled = true;
+    this.isResetPasswordBtnHidden = false;
+  }
+
+  public onResetPasswordClick(){
+    // route to reset password page (send form details)
   }
 
 }

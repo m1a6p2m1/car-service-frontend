@@ -60,4 +60,19 @@ export class EmployeeLoginService {
   
       return this.http.put(requestUrl, form_details, {headers: headers});
     }
+
+    resetPassword(form_details: any) {
+      console.log('In the Service editdata');
+      const requestUrl = environment.baseUrl + '/employee-login/';
+  
+      let headers = {};
+  
+      if (this.httpService.getAuthToken() !== null) {
+        headers = {
+          Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+        };
+      }
+  
+      return this.http.put(requestUrl, form_details, {headers: headers});
+    }
 }
