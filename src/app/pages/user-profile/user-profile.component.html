@@ -1,0 +1,66 @@
+<div class="container">
+    <div class="form-section">
+      <form [formGroup]="userProfileForm" class="example-form">
+  
+        <mat-form-field class="full-width">
+          <mat-label>First Name</mat-label>
+          <input matInput placeholder="First Name" formControlName="firstName">
+         
+         <span class="text-danger" *ngIf="(userProfileForm.get('firstName')?.touched || submitted) && userProfileForm.get('firstName')?.errors && userProfileForm.get('firstName')?.errors!['required']">
+          First Name is Required....!
+        </span>
+        </mat-form-field>
+  
+        <mat-form-field class="full-width">
+          <mat-label>Last Name</mat-label>
+          <input matInput placeholder="Last Name" formControlName="lastName">
+         
+         <span class="text-danger" *ngIf="(userProfileForm.get('lastName')?.touched || submitted) && userProfileForm.get('lastName')?.errors && userProfileForm.get('lastName')?.errors!['required']">
+          Last Name is Required....!
+        </span>
+        </mat-form-field> 
+
+        <mat-form-field class="full-width">
+            <mat-label>Email</mat-label>
+            <input matInput placeholder="Email" formControlName="email">
+            <span class="text-danger" *ngIf="
+              (userProfileForm.get('email')?.touched || submitted) && 
+              userProfileForm.get('email')?.errors && 
+              userProfileForm.get('email')?.errors!['email']">
+            Please Insert a Valid Email Address......
+          </span>
+        </mat-form-field>
+      
+        <mat-form-field class="full-width">
+          <mat-label>Telephone</mat-label>
+          <!-- <span matTextPrefix>+94 &nbsp;</span> -->
+          <input type="tel" matInput placeholder="+94 55-555-1234 OR 055-555-1234" formControlName="phoneNumber">
+          <span class="text-danger" *ngIf="
+                (userProfileForm.get('phoneNumber')?.touched || submitted) && 
+                userProfileForm.get('phoneNumber')?.errors && 
+                userProfileForm.get('phoneNumber')?.errors!['pattern']">
+              Please Insert a Valid Phone Number......
+            </span>
+          <mat-icon matSuffix>phone</mat-icon>
+        </mat-form-field>
+      
+        
+        <div class="image-section">
+          <button [disabled]="fileButtonDisable" type="button" mat-raised-button (click)="fileInput.click()" class="mb-2">Choose File</button>
+          <div>
+            <img [src]="selectedImageUrl ? selectedImageUrl : 'assets/images/item/uploadicon.png'" width="100px" height="100px" />
+          </div>
+          <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file" />
+          <span class="text-danger" *ngIf="submitted && formControl['image'].errors && formControl['image'].errors['required']">
+            Image is required
+          </span>
+          <br />
+        </div>
+      
+        <button type="submit" mat-raised-button color="primary" class="form-button" (click)="editProfile()" [disabled]="isButtonDisable">Update Profile</button>
+      
+      </form>
+    </div>
+  </div>
+  
+  

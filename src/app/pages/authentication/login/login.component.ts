@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { HttpService } from 'src/app/services/http.service';
 import { CacheService } from 'src/app/services/CacheService';
 import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +25,8 @@ export class AppSideLoginComponent implements OnInit {
     private router: Router,
     private httpService: HttpService,
     private cacheService: CacheService,
-    private _messageService: MessageServiceService
+    private _messageService: MessageServiceService,
+    private localStorage: LocalStorageService
   ) {
     this.loginForm = this.formBuilder.group({
       loginName: ['', [Validators.required]],
@@ -76,14 +78,34 @@ export class AppSideLoginComponent implements OnInit {
           password: this.loginForm.value.password,
         })
         .then((response) => {
-          this.httpService.setAuthToken(response.token);
-          this.httpService.setUserId(response.id);
-          this.httpService.setLoginNameToCache(response.login);
-          this.getData(response.id);
+          if (response && response.id) {
+            // set required data to http service
+            this.httpService.setAuthToken(response.token);
+            this.httpService.setUserId(response.id);
+            this.httpService.setLoginNameToCache(response.login);
+
+            // set data to local storage
+            this.setUserInfotoLocalStorage(response);
+
+            this.getData(response.id);
+          }
         })
         .catch((error) => {
           this.userNamePasswordError = true;
         });
     }
+  }
+
+  setUserInfotoLocalStorage(userData: any) {
+    this.localStorage.setItem('id', userData.id);
+    this.localStorage.setItem('firstName', userData.firstName);
+    this.localStorage.setItem('lastName', userData.lastName);
+    this.localStorage.setItem('login', userData.login);
+    this.localStorage.setItem('password', userData.password);
+    this.localStorage.setItem('image', userData.image);
+    this.localStorage.setItem('imageName', userData.imageName);
+    this.localStorage.setItem('imageType', userData.imageType);
+    this.localStorage.setItem('employeeId', userData.employeeId);
+
   }
 }

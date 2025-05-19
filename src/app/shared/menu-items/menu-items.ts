@@ -55,9 +55,18 @@ const MENUITEMS = [
     auth: authenticationEnum.FormDemo,
   },
   {
+    state: 'pages',
+    childState: 'user-profile',
+    name: 'User Profile',
+    type: 'link',
+    icon: 'av_timer',
+    isVisible: false,
+    auth: authenticationEnum.User_Profile,
+  },
+  {
     state: 'registration',
     childState: 'employee',
-    name: 'Employee Form',
+    name: 'Employee',
     type: 'link',
     icon: 'av_timer',
     isVisible: false,
@@ -66,7 +75,7 @@ const MENUITEMS = [
   {
     state: 'registration',
     childState: 'customer',
-    name: 'Customer Form',
+    name: 'Customer',
     type: 'link',
     icon: 'av_timer',
     isVisible: false,
@@ -75,7 +84,7 @@ const MENUITEMS = [
   {
     state: 'registration',
     childState: 'supplier',
-    name: 'Supplier Form',
+    name: 'Supplier',
     type: 'link',
     icon: 'av_timer',
     isVisible: false,
@@ -84,7 +93,7 @@ const MENUITEMS = [
   {
     state: 'registration',
     childState: 'item',
-    name: 'Item Form',
+    name: 'Item',
     type: 'link',
     icon: 'av_timer',
     isVisible: false,
@@ -93,7 +102,7 @@ const MENUITEMS = [
   {
     state: 'task-management',
     childState: 'task-introduce',
-    name: 'Tasks Form',
+    name: 'Tasks',
     type: 'link',
     icon: 'av_timer',
     isVisible: false,
@@ -102,7 +111,7 @@ const MENUITEMS = [
   {
     state: 'task-management',
     childState: 'task-assign',
-    name: 'Task Assign Form',
+    name: 'Task Assign',
     type: 'link',
     icon: 'av_timer',
     isVisible: false,

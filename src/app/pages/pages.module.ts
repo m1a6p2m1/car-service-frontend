@@ -13,11 +13,13 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 @NgModule({
   declarations: [
     FormDemoComponent,
     EmployeeLoginComponent,
+    UserProfileComponent,
   ],
   imports: [
     CommonModule,

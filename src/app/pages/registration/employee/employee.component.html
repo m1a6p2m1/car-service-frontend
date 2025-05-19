@@ -4,7 +4,7 @@
 
       <mat-form-field class="full-width">
         <mat-label>Full Name</mat-label>
-        <input matInput placeholder="Full name" formControlName="fullName">
+        <input matInput placeholder="Full Name" formControlName="fullName">
        <!-- required validation -->
        <span class="text-danger" *ngIf="(employeeForm.get('fullName')?.touched || submitted) && employeeForm.get('fullName')?.errors && employeeForm.get('fullName')?.errors!['required']">
         Full Name is Required....!
@@ -48,6 +48,17 @@
         Address is Required....!
       </span>
       </mat-form-field>
+
+      <mat-form-field class="full-width">
+            <mat-label>Email</mat-label>
+            <input matInput placeholder="Email" formControlName="email">
+            <span class="text-danger" *ngIf="
+              (employeeForm.get('email')?.touched || submitted) && 
+              employeeForm.get('email')?.errors && 
+              employeeForm.get('email')?.errors!['email']">
+            Please Insert a Valid Email Address......
+          </span>
+        </mat-form-field><br><br>
     
       <mat-form-field class="full-width">
         <mat-label>Telephone</mat-label>
@@ -226,6 +237,8 @@
           <button mat-icon-button color="warn" (click)="editData(element)" matTooltip="Edit">
             <mat-icon>edit</mat-icon>
           </button>
+          <button type="submit" mat-raised-button class="action-button" (click)="addLoginCredentials(element)" >Create Login</button><br><br>
+          <button type="submit" mat-raised-button class="action-button" >Disable Login</button>
           <button mat-icon-button color="warn" (click)="deleteData(element)" matTooltip="Delete">
             <mat-icon>delete</mat-icon>
           </button>
@@ -240,3 +253,4 @@
   </div>
 </div>
 
+<router-outlet></router-outlet>
