@@ -5,10 +5,11 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { EmployeeLoginService } from 'src/app/services/employee-login/employee-login.service';
 import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
+import { RegistrationService } from 'src/app/services/registration/registration.service';
 
 interface Employee {
-  value: string;
-  viewValue: string;
+  id: number;
+  name: string;
 }
 
 
@@ -40,7 +41,8 @@ export class EmployeeLoginComponent implements OnInit{
   constructor(
     private fb: FormBuilder,
     private employeeLoginService: EmployeeLoginService,
-    private messageService:MessageServiceService
+    private messageService:MessageServiceService,
+    private registrationService: RegistrationService
   ){
     this.employeeLoginForm = this.fb.group({
       employee: new FormControl(''),
@@ -51,17 +53,11 @@ export class EmployeeLoginComponent implements OnInit{
     });
   }
 
-  employees: Employee[] = [
-    { value: 'Ruwan', viewValue: 'Ruwan' },
-    { value: 'Kamal', viewValue: 'Kamal' },
-    { value: 'Amal', viewValue: 'Amal' },
-    { value: 'Doty', viewValue: 'Doty' },
-  ];
-
-  
+  employees: Employee[] = [];
 
   ngOnInit(): void {
     this.populateData();
+    this.setEmployeeList();
   }
 
   public populateData(): void{
@@ -80,6 +76,25 @@ export class EmployeeLoginComponent implements OnInit{
         this.messageService.showError('Action Failed with Error :'+ error); 
       }
       
+    }
+
+    public setEmployeeList(): void {
+      let employeeList: Employee[] = [];
+      this.registrationService.getEmployeeList().subscribe((response: any) => {
+        if (response && response.length > 0) {
+          response.forEach((employee: any) => {
+            const employeeData = {
+              id: employee.id,
+              name: employee.name
+            }
+
+            employeeList.push(employeeData)
+          });
+        }
+      });
+
+      console.log(employeeList);
+      this.employees = employeeList;
     }
 
   onSubmit(){

@@ -68,4 +68,18 @@ export class RegistrationService {
 
     return this.http.delete(requestUrl, {headers: headers});
   }
+
+  getEmployeeList() {
+    const requestUrl = environment.baseUrl + '/employee/get-employee-list';
+
+    let headers = {};
+
+    if (this.httpService.getAuthToken() !== null) {
+      headers = {
+        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+      };
+    }
+
+    return this.http.get(requestUrl, headers);
+  }
 }
