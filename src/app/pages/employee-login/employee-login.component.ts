@@ -27,7 +27,7 @@ export class EmployeeLoginComponent implements OnInit{
   }
 
   employeeLoginForm: FormGroup;
-  displayedColumns: string[] = ['employee', 'firstName', 'lastName', 'userName', 'password', 'action'];
+  displayedColumns: string[] = ['employee', 'firstName', 'lastName', 'userName', 'action'];
   dataSource!: MatTableDataSource<any>;
   
   @ViewChild(MatPaginator) paginator!: MatPaginator;

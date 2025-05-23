@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { FormDemoComponent } from './form-demo/form-demo.component';
 import { EmployeeLoginComponent } from './employee-login/employee-login.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 export const PagesRoutes: Routes = [
     {
@@ -10,6 +11,10 @@ export const PagesRoutes: Routes = [
     {
         path: 'employee-login',
         component: EmployeeLoginComponent
-    }
+    },
+    {
+        path: 'user-profile',
+        component: UserProfileComponent
+    },
 
 ];

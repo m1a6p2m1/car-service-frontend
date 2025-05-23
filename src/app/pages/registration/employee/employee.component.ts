@@ -5,12 +5,14 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
 import { RegistrationService } from 'src/app/services/registration/registration.service';
+import { EmployeeLoginDetailsComponent } from '../employee-login-details/employee-login-details.component';
 
 const ELEMENT_DATA: any[] = [
   {
@@ -67,7 +69,8 @@ export class EmployeeComponent implements OnInit {
     private fb: FormBuilder,
     private registrationService: RegistrationService,
     private messageService: MessageServiceService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private _dialog: MatDialog,
   ) {
     this.employeeForm = this.fb.group({
       fullName: new FormControl('', [Validators.required]),
@@ -78,6 +81,7 @@ export class EmployeeComponent implements OnInit {
       dob: new FormControl(''),
       gender: new FormControl(''),
       address: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.email]),
       phoneNumber: new FormControl('', [
         Validators.pattern('^(\\+94|0)[1-9]{2}[0-9]{7}$|^(\\+94|0)?7[0-9]{8}$'),
       ]),
@@ -167,7 +171,7 @@ export class EmployeeComponent implements OnInit {
         this.registrationService
           .serviceCall(this.prepareEmployeeData())
           .subscribe({
-            next: (response: any) => {
+            next: (response) => {
               if (
                 this.dataSource &&
                 this.dataSource.data &&
@@ -192,7 +196,7 @@ export class EmployeeComponent implements OnInit {
         this.registrationService
           .editData(this.selectedData.empNumber, this.prepareEmployeeData())
           .subscribe({
-            next: (response: any) => {
+            next: (response) => {
               let elementIndex = this.dataSource.data.findIndex(
                 (element) => element.empNumber === this.selectedData?.empNumber
               );
@@ -293,6 +297,33 @@ export class EmployeeComponent implements OnInit {
     this.fileButtonDisable = false;
     this.selectedImageUrl = null;
     this.isFileSelected = false;
+  }
+
+  public addLoginCredentials(employee: any): void{
+    try {
+      console.log('Employee passed to dialog:', employee);
+        const dialogRef = this._dialog.open(EmployeeLoginDetailsComponent, {
+    data: {
+      employeeId: employee.empNumber,
+      firstName: employee.fullName?.split(' ')[0] ?? '',
+      lastName: employee.fullName?.split(' ')[1] ?? ''
+    }
+    });
+        dialogRef.afterClosed().subscribe({
+          next: (val) => {
+            if (val) {
+              if (val) {
+                this.messageService.showSuccess(
+                  'Login Credentials Add successfully!'
+                );
+              }
+            }
+          },
+        });
+      } catch (error) {
+        console.log(error);
+        this.messageService.showError('Action Failed!');
+      }
   }
 
   public refreshData(): void {

@@ -23,4 +23,5 @@ export enum authenticationEnum {
   All_Tasks = 18,
   Supplier = 19,
   Task_Introduce = 20,
+  User_Profile = 21,
 }
