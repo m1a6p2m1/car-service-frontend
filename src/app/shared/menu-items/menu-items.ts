@@ -100,6 +100,15 @@ const MENUITEMS = [
     auth: authenticationEnum.Item,
   },
   {
+    state: 'registration',
+    childState: 'online-item',
+    name: 'Online Products',
+    type: 'link',
+    icon: 'av_timer',
+    isVisible: false,
+    auth: authenticationEnum.Home_Dashboard,
+  },
+  {
     state: 'task-management',
     childState: 'task-introduce',
     name: 'Tasks',

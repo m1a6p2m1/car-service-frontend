@@ -19,6 +19,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ItemComponent } from './item/item.component';
 import { TaskComponent } from './task/task.component';
 import { EmployeeLoginDetailsComponent } from './employee-login-details/employee-login-details.component';
+import { OnlineItemComponent } from './online-item/online-item.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { EmployeeLoginDetailsComponent } from './employee-login-details/employee
     SupplierComponent,
     ItemComponent,
     TaskComponent,
-    EmployeeLoginDetailsComponent
+    EmployeeLoginDetailsComponent,
+    OnlineItemComponent,
   ],
   imports: [
     CommonModule,

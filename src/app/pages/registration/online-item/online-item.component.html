@@ -1,0 +1,157 @@
+<div class="container">
+  <div class="form-section">
+    <form [formGroup]="onlineItemForm" class="example-form" (ngSubmit)="onSubmit()">
+      <mat-form-field class="full-width">
+        <mat-label>Item Code</mat-label>
+        <input matInput placeholder="Item Code" formControlName="itemCode" />
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Item Name</mat-label>
+        <input matInput placeholder="Item Name" formControlName="name" />
+        <!-- <span
+          class="text-danger"
+          *ngIf="
+            (onlineItemForm.get('name')?.touched || submitted) &&
+            onlineItemForm.get('name')?.errors &&
+            (onlineItemForm.get('name')?.errors)!['required']
+          "
+        >
+          Item Name is Required....!
+        </span> -->
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Item Description</mat-label>
+        <textarea matInput placeholder="Description" formControlName="description"></textarea>
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Item Brand</mat-label>
+        <input matInput placeholder="Item Brand" formControlName="brand" />
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Price</mat-label>
+        <input matInput placeholder="Rs:" formControlName="price" />
+      </mat-form-field>
+
+      <button
+        [disabled]="fileButtonDisable"
+        type="button"
+        mat-raised-button
+        (click)="fileInput.click()"
+        class="mb-2"
+      >
+        Choose File
+      </button>
+      <div>
+        <img
+          [src]="
+            selectedImageUrl
+              ? selectedImageUrl
+              : 'assets/images/item/uploadicon.png'
+          "
+          width="100px"
+          height="100px"
+        />
+      </div>
+      <input
+        hidden
+        (change)="onFileSelected($event)"
+        #fileInput
+        type="file"
+        id="file"
+      />
+      <!-- <span
+        class="text-danger"
+        *ngIf="
+          submitted &&
+          formControl['image'].errors &&
+          formControl['image'].errors['required']
+        "
+      >
+        Image is required
+      </span> -->
+      <br />
+
+      <button
+        type="submit"
+        mat-raised-button
+        color="primary"
+        class="form-button"
+        [disabled]="isButtonDisable"
+      >
+        {{ saveButtonLabel }}
+      </button>
+      <button
+        type="reset"
+        mat-raised-button
+        color="secondary"
+        (click)="resetData()"
+      >
+        Reset
+      </button>
+    </form>
+  </div>
+
+  <div class="table-section">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <!--- Note that these columns can be defined in any order.
+                The actual rendered columns are set as a property on the row definition" -->
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="itemCode">
+        <th mat-header-cell *matHeaderCellDef>Item Code</th>
+        <td mat-cell *matCellDef="let element">{{ element.itemCode }}</td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Item Name</th>
+        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+      </ng-container>
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="brand">
+        <th mat-header-cell *matHeaderCellDef>Brand</th>
+        <td mat-cell *matCellDef="let element">{{ element.brand }}</td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef>Item Price</th>
+        <td mat-cell *matCellDef="let element">{{ element.price }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>Action</th>
+        <td mat-cell *matCellDef="let element">
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="editData(element)"
+            matTooltip="Edit"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="deleteData(element)"
+            matTooltip="Delete"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <mat-paginator
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      aria-label="Select page of users"
+    ></mat-paginator>
+  </div>
+</div>
