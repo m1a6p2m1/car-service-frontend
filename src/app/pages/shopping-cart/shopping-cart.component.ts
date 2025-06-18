@@ -21,6 +21,8 @@ interface OnlineItem {
 export class ShoppingCartComponent implements OnInit{
     onlineItems: OnlineItem[] = [];
      selectedImageUrl!: SafeUrl | null;
+     searchText: string = '';
+     filteredList: any[] = [];
   
     constructor(
       private onlineItemService: OnlineItemService
@@ -31,14 +33,30 @@ export class ShoppingCartComponent implements OnInit{
         this.onlineItems = data.map((item: any) => ({
       ...item,
       imageUrl: `data:${item.imageType};base64,${item.image}`
-    }));
-  
+      })
+      );
+      this.filteredList = this.onlineItems;
       });
+
+      
+
     }
 
     addToCart(item: OnlineItem) {
     console.log('Added to cart:', item);
     // Implement cart logic here
+    }
+
+    applyFilter() {
+      if (!this.searchText) {
+        this.filteredList = this.onlineItems;
+      } else {
+      const lower = this.searchText.toLowerCase();
+      this.filteredList = this.onlineItems.filter(item =>
+        item.name.toLowerCase().includes(lower)
+      );
+      }
+
     }
   
 }
