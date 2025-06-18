@@ -1,0 +1,10 @@
+<div class="item-container">
+  <div class="item-card" *ngFor="let item of onlineItems">
+    <img *ngIf="item.imageUrl" [src]="item.imageUrl"/>
+    <h4>{{ item.name }}</h4>
+    <p class="price">Rs {{ item.price }}.00</p>
+    <button (click)="addToCart(item)">
+      <i class="material-icons">add_shopping_cart</i> Add to Cart
+    </button>
+  </div>
+</div>

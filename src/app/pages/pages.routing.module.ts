@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { FormDemoComponent } from './form-demo/form-demo.component';
 import { EmployeeLoginComponent } from './employee-login/employee-login.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 
 export const PagesRoutes: Routes = [
     {
@@ -15,6 +16,10 @@ export const PagesRoutes: Routes = [
     {
         path: 'user-profile',
         component: UserProfileComponent
+    },
+    {
+        path: 'shopping-cart',
+        component: ShoppingCartComponent
     },
 
 ];

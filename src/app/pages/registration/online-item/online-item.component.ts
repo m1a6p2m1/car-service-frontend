@@ -201,6 +201,7 @@ export class OnlineItemComponent {
       this.onlineItemForm.setErrors = null!;
       this.onlineItemForm.updateValueAndValidity();
       this.submitted = false;
+      this.populateData();
   
       this.selectedImageUrl = null;
       this.isFileSelected = false;
