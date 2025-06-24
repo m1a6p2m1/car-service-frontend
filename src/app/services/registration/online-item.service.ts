@@ -42,6 +42,21 @@ export class OnlineItemService {
       return this.http.get(requestUrl, headers );    
               
     }
+
+    getItemById(id:number){
+      console.log('In the service getitembyid');
+      const requestUrl = environment.baseUrl + '/online-item/'+ id.toString();
+      let headers = {};
+          
+      if (this.httpService.getAuthToken() !== null) {
+        headers = {
+          Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+        };
+      }
+  
+      return this.http.get(requestUrl, headers );    
+              
+    }
   
     editData(itemId:number, form_details: any){
       console.log('In the service edit');

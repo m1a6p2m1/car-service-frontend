@@ -64,9 +64,9 @@ const MENUITEMS = [
     auth: authenticationEnum.User_Profile,
   },
   {
-    state: 'pages',
-    childState: 'shopping-cart',
-    name: 'Shopping Cart',
+    state: 'online-shopping',
+    childState: 'product-list',
+    name: 'Online Shopping',
     type: 'link',
     icon: 'av_timer',
     isVisible: false,

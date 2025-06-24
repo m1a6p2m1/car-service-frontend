@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { HttpService } from '../http.service';
 import { environment } from 'src/app/environments/environment';
+import { Employee } from 'src/app/pages/registration/employee-details/employee-details.component';
 @Injectable({
   providedIn: 'root'
 })
@@ -39,6 +40,22 @@ export class RegistrationService {
     }
 
     return this.http.get(requestUrl, headers );
+  }
+
+  getEmployeeById(id: number){
+    console.log('In the Service 2');
+     const requestUrl = environment.baseUrl + '/employee/' + id.toString();
+
+     let headers = {};
+
+    if (this.httpService.getAuthToken() !== null) {
+      headers = {
+        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+      };
+    }
+
+    return this.http.get<Employee>(requestUrl, { headers });
+
   }
 
   editData(empNumber: number, form_details: any){

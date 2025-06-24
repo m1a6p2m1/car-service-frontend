@@ -92,6 +92,15 @@ export const AppRoutes: Routes = [
           ),
       },
 
+      //online-shopping module  
+      {
+        path: 'online-shopping',
+        loadChildren: () =>
+          import('./pages/online-shopping/online-shopping.module').then(
+            (m) => m.OnlineShoppingModule
+          ),
+      },
+
     ],
   },
 ];

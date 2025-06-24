@@ -14,14 +14,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { UserProfileComponent } from './user-profile/user-profile.component';
-import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 
 @NgModule({
   declarations: [
     FormDemoComponent,
     EmployeeLoginComponent,
     UserProfileComponent,
-    ShoppingCartComponent,
   ],
   imports: [
     CommonModule,

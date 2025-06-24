@@ -237,10 +237,19 @@
           <button mat-icon-button color="warn" (click)="editData(element)" matTooltip="Edit">
             <mat-icon>edit</mat-icon>
           </button>
-          <button type="submit" mat-raised-button class="action-button" (click)="addLoginCredentials(element)" >Create Login</button><br><br>
-          <button type="submit" mat-raised-button class="action-button" >Disable Login</button>
+          <button mat-icon-button color="primary" (click)="viewData(element)" matTooltip="View">
+            <mat-icon>visibility</mat-icon>
+          </button>
+          <!-- <button type="submit" mat-raised-button class="action-button"  >Create Login</button><br><br>
+          <button type="submit" mat-raised-button class="action-button" >Disable Login</button> -->
           <button mat-icon-button color="warn" (click)="deleteData(element)" matTooltip="Delete">
             <mat-icon>delete</mat-icon>
+          </button><br>
+          <button mat-icon-button matTooltip="Create Login" (click)="addLoginCredentials(element)">
+            <mat-icon>person_add</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" matTooltip="Disable Login">
+            <mat-icon>person_off</mat-icon>
           </button>
         </td>
       </ng-container>
