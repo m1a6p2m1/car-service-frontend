@@ -64,6 +64,15 @@ const MENUITEMS = [
     auth: authenticationEnum.User_Profile,
   },
   {
+    state: 'online-shopping',
+    childState: 'product-list',
+    name: 'Online Shopping',
+    type: 'link',
+    icon: 'av_timer',
+    isVisible: false,
+    auth: authenticationEnum.Home_Dashboard,
+  },
+  {
     state: 'registration',
     childState: 'employee',
     name: 'Employee',
@@ -98,6 +107,15 @@ const MENUITEMS = [
     icon: 'av_timer',
     isVisible: false,
     auth: authenticationEnum.Item,
+  },
+  {
+    state: 'registration',
+    childState: 'online-item',
+    name: 'Online Products',
+    type: 'link',
+    icon: 'av_timer',
+    isVisible: false,
+    auth: authenticationEnum.Home_Dashboard,
   },
   {
     state: 'task-management',

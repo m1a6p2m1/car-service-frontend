@@ -1,0 +1,23 @@
+<mat-card class="item-card" *ngIf="item">
+    <div class="image-section">
+        <img *ngIf="item.imageUrl" [src]="item.imageUrl" />
+    </div>
+    <div class="details-section" >
+    <div class="details">
+        <h2>{{ item.name }}</h2>
+        <h4>{{item.description}}</h4>
+        <h4>RS.{{item.price}}</h4>
+    </div>
+    
+    <div class="buttons">
+        <div class="quantity-selector">
+        <h5>Quantity</h5>
+        <button (click)="decreaseQuantity()" [disabled]="quantity <= 1">-</button>
+            <input type="number" [value]="quantity" readonly>
+        <button (click)="increaseQuantity()">+</button>
+    </div>
+      <button class="cart">Add to Cart</button>
+    </div>
+    
+    </div>
+</mat-card>

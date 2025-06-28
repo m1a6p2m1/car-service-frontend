@@ -13,6 +13,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
 import { RegistrationService } from 'src/app/services/registration/registration.service';
 import { EmployeeLoginDetailsComponent } from '../employee-login-details/employee-login-details.component';
+import { Employee, EmployeeDetailsComponent } from '../employee-details/employee-details.component';
 
 const ELEMENT_DATA: any[] = [
   {
@@ -45,9 +46,7 @@ export class EmployeeComponent implements OnInit {
     'callingName',
     'nic',
     'gender',
-    'phoneNumber',
     'employeeStatus',
-    'jobTitle',
     'action',
   ];
 
@@ -64,6 +63,7 @@ export class EmployeeComponent implements OnInit {
   selectedImageUrl!: SafeUrl | null;
   isFileSelected = false;
   fileButtonDisable = false;
+  selectedEmployee: any;
 
   constructor(
     private fb: FormBuilder,
@@ -257,6 +257,13 @@ export class EmployeeComponent implements OnInit {
     const file = data.image;
     const imageType = data.imageType;
     this.selectedImageUrl = `data:${imageType};base64,${file}`;
+  }
+
+  public viewData(employee: Employee): void{
+    this.selectedEmployee = employee;
+    const dialogRef = this._dialog.open(EmployeeDetailsComponent, {
+    data: this.selectedEmployee 
+    });
   }
 
   public deleteData(data: any): void {

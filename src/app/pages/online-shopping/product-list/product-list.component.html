@@ -1,0 +1,17 @@
+<div class="filter-section">
+  <mat-form-field>
+    <mat-label>Filter</mat-label>
+    <input matInput [(ngModel)]="searchText" (ngModelChange)="applyFilter()" placeholder="Search items" />
+  </mat-form-field>
+</div>
+
+<div class="item-container">
+  <mat-card class="item-card" *ngFor="let item of filteredList" (click)="openProductDetails(item)">
+    <img *ngIf="item.imageUrl" [src]="item.imageUrl" />
+    <h4>{{ item.name }}</h4>
+    <p class="price">Rs {{ item.price }}.00</p>
+    <!-- <button (click)="addToCart(item)">
+      <i class="material-icons">add_shopping_cart</i> Add to Cart
+    </button> -->
+  </mat-card>
+</div>

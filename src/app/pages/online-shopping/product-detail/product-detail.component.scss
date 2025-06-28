@@ -1,0 +1,88 @@
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 5px;
+}
+
+.quantity-selector h5 {
+  padding-top: 8px;
+  padding-right: 8px;
+}
+
+.quantity-selector input {
+  width: 40px;
+  text-align: center !important;
+  font-size: 20px;
+  border: none;
+  padding-right: 1px;
+}
+
+.quantity-selector button {
+  padding: 5px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 10px;
+  margin: 6px;
+}
+
+.product-detail {
+  display: flex;
+  gap: 30px;
+  padding: 30px;
+  font-family: sans-serif;
+}
+
+.image-section img {
+  width: 350px;
+  height: 350px;
+  border-radius: 10px;
+}
+
+.details-section {
+  max-width: 500px;
+}
+.actions button {
+  margin-right: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+.cart{
+  background-color: #F2A71B;
+  color: #011F26;
+  width: 215px;
+  height:50px;
+  border: none;
+  padding: 20px;
+  margin-top: 10px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.item-card {
+    height: 500px;
+    width: 1000px;
+    display: flex;
+    margin-left: 125px;
+    margin-top: 60px;
+    flex-direction: row;
+    align-content: center;
+}
+.image-section{
+    padding: 50px;
+    // border-right: 1px solid #ccc;
+
+}
+.details-section{
+    padding: 60px;
+}
+.details{
+    margin-top: 80px;
+}
+.buttons{
+    margin-top: 80px;
+    margin-bottom: 50px;
+}

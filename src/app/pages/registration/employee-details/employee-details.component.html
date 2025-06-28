@@ -1,0 +1,106 @@
+<div class="form-section">
+    <form [formGroup]="employeeDetailsForm" class="example-form" (ngSubmit)="viewData()">
+      <div mat-dialog-content class="content">
+
+        <mat-form-field class="full-width">
+        <mat-label>Full Name</mat-label>
+        <input matInput placeholder="Full Name" formControlName="fullName">
+      </mat-form-field>
+    
+      <mat-form-field class="full-width">
+        <mat-label>Calling Name</mat-label>
+        <input matInput placeholder="Calling Name" formControlName="callingName">
+      </mat-form-field>
+    
+      <mat-form-field class="full-width">
+        <mat-label>Nic Number</mat-label>
+        <input matInput placeholder="Nic Number" formControlName="nic">
+      </mat-form-field>
+    
+      <mat-form-field class="full-width">
+        <mat-label>Birth Date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="dob">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field><br><br>
+    
+      <mat-radio-group aria-label="Select an option" formControlName="gender">
+        <mat-label class="gender-label">Gender</mat-label>
+        <mat-radio-button value="male">Male</mat-radio-button>
+        <mat-radio-button value="female">Female</mat-radio-button>
+      </mat-radio-group><br><br>
+    
+      <mat-form-field class="full-width">
+        <mat-label>Address</mat-label>
+        <textarea matInput placeholder="Address" formControlName="address"></textarea>
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+            <mat-label>Email</mat-label>
+            <input matInput placeholder="Email" formControlName="email">
+        </mat-form-field><br><br>
+    
+      <mat-form-field class="full-width">
+        <mat-label>Telephone</mat-label>
+        <!-- <span matTextPrefix>+94 &nbsp;</span> -->
+        <input type="tel" matInput placeholder="+94 55-555-1234 OR 055-555-1234" formControlName="phoneNumber">
+        <mat-icon matSuffix>phone</mat-icon>
+      </mat-form-field>
+    
+      <mat-form-field class="full-width">
+        <mat-label>Emergency Phone Number</mat-label>
+        <!-- <span matTextPrefix>+94 &nbsp;</span> -->
+        <input type="tel" matInput placeholder="+94 55-555-1234 OR 055-555-1234" formControlName="emergencyPhoneNumber">
+        <mat-icon matSuffix>phone</mat-icon>
+      </mat-form-field>
+    
+      <mat-form-field class="full-width">
+        <mat-label>Blood Group</mat-label>
+        <mat-select formControlName="bloodGroup">
+          <mat-option value="O positive">O positive</mat-option>
+          <mat-option value="O negative">O negative</mat-option>
+          <mat-option value="A positive">A positive</mat-option>
+          <mat-option value="A negative">A negative</mat-option>
+          <mat-option value="B positive">B positive</mat-option>
+          <mat-option value="B negative">B negative</mat-option>
+          <mat-option value="AB positive">AB positive</mat-option>
+          <mat-option value="AB negative">AB negative</mat-option>
+        </mat-select>
+      </mat-form-field>
+    
+      <mat-form-field class="full-width">
+        <mat-label>Employment Type</mat-label>
+        <mat-select formControlName="employmentType">
+          <mat-option value="Permenent">Permenent</mat-option>
+          <mat-option value="Contract">Contract</mat-option>
+          <mat-option value="Intern">Intern</mat-option>
+        </mat-select>
+      </mat-form-field>
+    
+      <mat-form-field class="full-width">
+        <mat-label>Employee Status</mat-label>
+        <mat-select formControlName="employeeStatus">
+          <mat-option value="Active">Active</mat-option>
+          <mat-option value="Inactive">Inactive</mat-option>
+          <mat-option value="Delete">Delete</mat-option>
+        </mat-select>
+      </mat-form-field>
+    
+      <mat-form-field class="full-width">
+        <mat-label>Job Title</mat-label>
+        <mat-select formControlName="jobTitle">
+          <mat-option value="Manager">Manager</mat-option>
+          <mat-option value="Supervisor">Supervisor</mat-option>
+          <mat-option value="Receptionist">Receptionist</mat-option>
+          <mat-option value="Driver">Driver</mat-option>
+          <mat-option value="Technician">Technician</mat-option>
+        </mat-select>
+      </mat-form-field><br><br>
+
+      <div>
+        <img [src]="selectedImageUrl ? selectedImageUrl : 'assets/images/item/uploadicon.png'" width="100px" height="100px" />
+      </div>
+    </div> 
+    </form>
+  </div>
