@@ -101,16 +101,16 @@ export class TaskAssignService {
 
   // customer commonly used tasks loaded into the dashboard
   getTasksByCustomerId(customerId: number) {
-    const requestUrl = environment.baseUrl + '/task-assign/' + customerId.toString();
-  
+    const requestUrl =
+      environment.baseUrl + '/task-assign/' + customerId.toString();
+
     let headers = {};
     if (this.httpService.getAuthToken()) {
       headers = {
         Authorization: 'Bearer ' + this.httpService.getAuthToken(),
       };
     }
-  
+
     return this.http.get(requestUrl, { headers });
   }
-  
 }
