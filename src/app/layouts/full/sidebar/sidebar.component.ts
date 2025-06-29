@@ -20,6 +20,24 @@ import { Subscription } from 'rxjs';
   ],
   templateUrl: './sidebar.component.html',
   styleUrls: [],
+  styles: [`
+    .group-header {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      margin-top:30px;
+      margin-bottom:30px;
+    }
+
+    .group-title {
+      margin-left: 8px;
+      font-weight: 500;
+    }
+
+    .expand-icon {
+      margin-left: auto;
+    }
+  `]
 })
 export class AppSidebarComponent implements OnInit, OnDestroy {
   mobileQuery: MediaQueryList;
@@ -97,4 +115,11 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);
   }
+
+  collapsedGroups: { [key: string]: boolean } = {};
+
+  toggleGroup(name: string): void {
+  this.collapsedGroups[name] = !this.collapsedGroups[name];
+  }
+
 }
