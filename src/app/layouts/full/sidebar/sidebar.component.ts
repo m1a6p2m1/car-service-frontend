@@ -25,8 +25,8 @@ import { Subscription } from 'rxjs';
       cursor: pointer;
       display: flex;
       align-items: center;
-      margin-top:30px;
-      margin-bottom:30px;
+      margin-top:22px;
+      margin-bottom:22px;
     }
 
     .group-title {
@@ -36,6 +36,9 @@ import { Subscription } from 'rxjs';
 
     .expand-icon {
       margin-left: auto;
+    }
+    .loggedUserName{
+      margin-top:100px;
     }
   `]
 })
@@ -59,6 +62,7 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.loadUserName();
     this.cacheSubscription = this.cacheService.cache$.subscribe((data) => {
       this.data = data;
 
@@ -120,6 +124,14 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
 
   toggleGroup(name: string): void {
   this.collapsedGroups[name] = !this.collapsedGroups[name];
+  }
+
+  loggedUserName: string = '';
+
+  loadUserName(): void {
+  const firstName = localStorage.getItem('firstName') || '';
+  const lastName = localStorage.getItem('lastName') || '';
+  this.loggedUserName = `${firstName} ${lastName}`.trim();
   }
 
 }

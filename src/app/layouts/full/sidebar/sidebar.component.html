@@ -3,23 +3,25 @@
 <!-- ============================================================== -->
 <div
   class="user-profile"
-  style="background: url(assets/images/background/user-info.jpg) no-repeat"
+  style="background: url(assets/images/background/car_wash1.webp) no-repeat center center;
+  background-size: cover;  
+  height: 150px; width: 300px;"
 >
   <!-- User profile image -->
-  <div class="profile-img">
+  <!-- <div class="profile-img">
     <img src="assets/images/users/profile.png" alt="user" />
-  </div>
+  </div> -->
   <!-- User profile text-->
   <!-- ============================================================== -->
   <!-- Profile - style you can find in header.scss -->
   <!-- ============================================================== -->
   <div class="profile-text">
-    <a [matMenuTriggerFor]="sdprofile" class="">
-      Markarn Doe <i class="ti-angle-down font-12 m-l-5"></i
+    <a [matMenuTriggerFor]="sdprofile" class="" class="loggedUserName">
+      {{loggedUserName}} <i class="ti-angle-down font-12 m-l-5"></i
     ></a>
   </div>
   <mat-menu #sdprofile="matMenu" class="mymegamenu">
-    <button mat-menu-item>
+    <!-- <button mat-menu-item>
       <mat-icon fontIcon="settings"></mat-icon> Settings
     </button>
     <button mat-menu-item>
@@ -30,7 +32,7 @@
     </button>
     <button mat-menu-item>
       <mat-icon fontIcon="exit_to_app"></mat-icon> Sign Out
-    </button>
+    </button> -->
   </mat-menu>
 </div>
 <!-- <mat-nav-list appAccordion>
@@ -71,6 +73,7 @@
     </mat-list-item>
   </div>
 </mat-nav-list> -->
+
 
 
 

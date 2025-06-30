@@ -18,7 +18,7 @@ const ELEMENT_DATA: any[] = [{ supplierName: '', companyName: '', businessAddres
 export class SupplierComponent implements OnInit {  
 
   supplierForm: FormGroup;
-  displayedColumns: string[] = ['supplierName', 'companyName', 'businessAddress', 'phoneNumber', 'email', 'productSupplied', 'action'];
+  displayedColumns: string[] = ['supplierName', 'companyName', 'productSupplied', 'action'];
   
   // productSuppliedList: string[] = ['Car Wash Chemicals', 'Oils', 'Spare Parts', 'Cleaning Equipments'];
 

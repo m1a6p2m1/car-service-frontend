@@ -341,6 +341,32 @@ const MENUITEMS: Menu[] = [
     ]
   },
   {
+  name: 'Privileges',
+  icon: 'lock',
+  type: 'group',
+  children: [
+    {
+      state: 'privileges',
+      childState: 'system-privileges',
+      name: 'System Privileges',
+      type: 'link',
+      icon: 'admin_panel_settings',
+      isVisible: true,
+      auth: authenticationEnum.Privileges,
+    },
+    {
+      state: 'privileges',
+      childState: 'privilege-groups',
+      name: 'Privilege Groups',
+      type: 'link',
+      icon: 'group',
+      isVisible: true,
+      auth: authenticationEnum.Privilege_Groups,
+    }
+  ]
+  },
+
+  {
     name: 'Registration',
     icon: 'app_registration',
     type: 'group',
