@@ -5,6 +5,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { HttpService } from 'src/app/services/http.service';
 import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
+import { NotificationService } from 'src/app/services/notification-service/notification.service';
+import { RegistrationService } from 'src/app/services/registration/registration.service';
 import { TaskAssignService } from 'src/app/services/task-management/task-assign.service';
 
 interface Task {
@@ -16,6 +18,11 @@ interface Customer {
   value: string;
   viewValue: string;
   id: number;
+}
+
+interface Employee {
+  id: number;
+  name: string;
 }
 
 @Component({
@@ -38,11 +45,24 @@ export class TaskAssignComponent implements OnInit {
 
   selectedSubtasks: any[] = [];
 
+  users = [
+    { id: 1, name: 'Alice' },
+    { id: 2, name: 'Bob' },
+    { id: 3, name: 'Charlie' },
+  ];
+
+  filteredUsers = this.users;
+  filteredUsersList: { id: number; name: string }[][] = [];
+  filterControls: FormControl[] = [];
+  employees: Employee[] = [];
+
   constructor(
     private fb: FormBuilder,
     private taskAssignService: TaskAssignService,
     private messageService: MessageServiceService,
-    private httpService: HttpService
+    private httpService: HttpService,
+    private registrationService: RegistrationService,
+    private notificationService: NotificationService
   ) {
     this.taskAssignForm = this.fb.group({
       taskName: new FormControl(''),
@@ -123,12 +143,15 @@ export class TaskAssignComponent implements OnInit {
     this.getDefinedTasks();
     this.setCreatedByValue();
     this.loadCustomerList();
+    this.setEmployeeList();
 
     this.taskAssignForm
       .get('taskName')
       ?.valueChanges.subscribe((selectedTask) => {
         this.updateSubtasks(selectedTask);
       });
+
+    this.filteredUsers = this.users;
   }
 
   public setCreatedByValue(): void {
@@ -179,6 +202,7 @@ export class TaskAssignComponent implements OnInit {
   public createSubTasksFormGroup(item: any): FormGroup {
     return this.fb.group({
       description: { disabled: true, value: item.subTaskName },
+      assignedUserId: '',
     });
   }
 
@@ -191,6 +215,7 @@ export class TaskAssignComponent implements OnInit {
       this.fb.group({
         id: [null],
         description: [''],
+        assignedUserId: [''],
       })
     );
   }
@@ -234,6 +259,7 @@ export class TaskAssignComponent implements OnInit {
         this.fb.group({
           id: [subTask.id],
           description: [subTask.description],
+          assignedUserId: [subTask.assignedUserId],
         })
       );
     });
@@ -276,6 +302,7 @@ export class TaskAssignComponent implements OnInit {
 
   public refreshData(): void {
     this.populateData();
+    // this.addNotification();
   }
 
   public resetFormManually() {
@@ -302,13 +329,23 @@ export class TaskAssignComponent implements OnInit {
     this.tasks = this.searchTasks(eventTarget.value);
   }
 
-  searchTasks(value: String){
+  searchTasks(value: String) {
     let filter = value.toLowerCase();
-    return this.tasks.filter(
-        (option: any) =>
-          option.taskName.toLowerCase().includes(filter)
+    return this.tasks.filter((option: any) =>
+      option.taskName.toLowerCase().includes(filter)
     );
   }
+
+  // onSubTaskFilterKeyPress(eventTarget: any) {
+  //   this.filteredUsers = this.searchSubTasksUser(eventTarget.value);
+  // }
+
+  // searchSubTasksUser(value: String) {
+  //   let filter = value.toLowerCase();
+  //   return this.users.filter((option: any) =>
+  //     option.name.toLowerCase().includes(filter)
+  //   );
+  // }
 
   onCustomerFilterKeyPress(eventTarget: any) {
     this.selectedCustomers = this.search(eventTarget.value);
@@ -328,18 +365,45 @@ export class TaskAssignComponent implements OnInit {
     //   option.lastName.toLowerCase().startsWith(filter) ||
     //   option.id.toString().toLowerCase().startsWith(filter)
     // );
-  
+
     // const filteredTasks = this.tasks.filter((task: any) =>
     //   task.taskName.toLowerCase().includes(filter)
     //   // option.id.toString().toLowerCase().includes(filter)
     // );
-  
+
     // return {
     //   customers: filteredCustomers,
     //   tasks: filteredTasks
     // };
-    
   }
 
-  
+  public setEmployeeList(): void {
+    let employeeList: Employee[] = [];
+    this.registrationService.getEmployeeList().subscribe((response: any) => {
+      if (response && response.length > 0) {
+        response.forEach((employee: any) => {
+          const employeeData = {
+            id: employee.id,
+            name: employee.name,
+          };
+
+          employeeList.push(employeeData);
+        });
+      }
+    });
+
+    console.log(employeeList);
+    this.employees = employeeList;
+    this.users = employeeList;
+    this.filteredUsers = employeeList;
+  }
+
+  public addNotification(details?: any): void {
+    this.notificationService.addNotification(
+      'Employee Added Successfully',
+      'success',
+      1,
+      'd.mendisat@gmail.com'
+    );
+  }
 }

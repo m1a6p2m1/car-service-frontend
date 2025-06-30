@@ -20,6 +20,27 @@ import { Subscription } from 'rxjs';
   ],
   templateUrl: './sidebar.component.html',
   styleUrls: [],
+  styles: [`
+    .group-header {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      margin-top:22px;
+      margin-bottom:22px;
+    }
+
+    .group-title {
+      margin-left: 8px;
+      font-weight: 500;
+    }
+
+    .expand-icon {
+      margin-left: auto;
+    }
+    .loggedUserName{
+      margin-top:100px;
+    }
+  `]
 })
 export class AppSidebarComponent implements OnInit, OnDestroy {
   mobileQuery: MediaQueryList;
@@ -41,6 +62,7 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.loadUserName();
     this.cacheSubscription = this.cacheService.cache$.subscribe((data) => {
       this.data = data;
 
@@ -97,4 +119,19 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);
   }
+
+  collapsedGroups: { [key: string]: boolean } = {};
+
+  toggleGroup(name: string): void {
+  this.collapsedGroups[name] = !this.collapsedGroups[name];
+  }
+
+  loggedUserName: string = '';
+
+  loadUserName(): void {
+  const firstName = localStorage.getItem('firstName') || '';
+  const lastName = localStorage.getItem('lastName') || '';
+  this.loggedUserName = `${firstName} ${lastName}`.trim();
+  }
+
 }

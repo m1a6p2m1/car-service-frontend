@@ -3,23 +3,25 @@
 <!-- ============================================================== -->
 <div
   class="user-profile"
-  style="background: url(assets/images/background/user-info.jpg) no-repeat"
+  style="background: url(assets/images/background/car_wash1.webp) no-repeat center center;
+  background-size: cover;  
+  height: 150px; width: 300px;"
 >
   <!-- User profile image -->
-  <div class="profile-img">
+  <!-- <div class="profile-img">
     <img src="assets/images/users/profile.png" alt="user" />
-  </div>
+  </div> -->
   <!-- User profile text-->
   <!-- ============================================================== -->
   <!-- Profile - style you can find in header.scss -->
   <!-- ============================================================== -->
   <div class="profile-text">
-    <a [matMenuTriggerFor]="sdprofile" class="">
-      Markarn Doe <i class="ti-angle-down font-12 m-l-5"></i
+    <a [matMenuTriggerFor]="sdprofile" class="" class="loggedUserName">
+      {{loggedUserName}} <i class="ti-angle-down font-12 m-l-5"></i
     ></a>
   </div>
   <mat-menu #sdprofile="matMenu" class="mymegamenu">
-    <button mat-menu-item>
+    <!-- <button mat-menu-item>
       <mat-icon fontIcon="settings"></mat-icon> Settings
     </button>
     <button mat-menu-item>
@@ -30,16 +32,19 @@
     </button>
     <button mat-menu-item>
       <mat-icon fontIcon="exit_to_app"></mat-icon> Sign Out
-    </button>
+    </button> -->
   </mat-menu>
 </div>
-<mat-nav-list appAccordion>
+<!-- <mat-nav-list appAccordion>
   <div *ngFor="let menuitem of navItems">
     <mat-list-item
       *ngIf="menuitem.isVisible"
       appAccordionLink
       routerLinkActive="selected"
     >
+      <div>
+      
+      </div>
       <div *ngIf="!menuitem.childState">
         <a
           class=""
@@ -67,4 +72,54 @@
       <div></div>
     </mat-list-item>
   </div>
+</mat-nav-list> -->
+
+
+
+
+<mat-nav-list appAccordion>
+  <ng-container *ngFor="let menu of navItems">
+    <!-- GROUP -->
+    <ng-container *ngIf="menu.type === 'group'">
+      <!-- menu items -->
+      <mat-list-item class="group-header" (click)="toggleGroup(menu.name)">
+        <mat-icon>{{ menu.icon }}</mat-icon>
+        <span class="group-title">{{ menu.name }}</span>
+        <mat-icon class="expand-icon">
+          {{ collapsedGroups[menu.name] ? 'expand_less' : 'expand_more' }}
+        </mat-icon>
+      </mat-list-item>
+
+      <!--menu child items-->
+      <ng-container *ngIf="collapsedGroups[menu.name]">
+        <ng-container *ngFor="let item of menu.children">
+          <mat-list-item *ngIf="item.isVisible" routerLinkActive="selected">
+            <a
+              [routerLink]="item.childState ? [item.state, item.childState] : [item.state]"
+              appAccordionToggle
+            >
+              <mat-icon>{{ item.icon }}</mat-icon>
+              <span>{{ item.name }}</span>
+            </a>
+          </mat-list-item>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+
+    <!-- SINGLE LINK -->
+    <ng-container *ngIf="menu.type === 'link' && menu.isVisible">
+      <mat-list-item routerLinkActive="selected">
+        <a
+          [routerLink]="menu.childState ? [menu.state, menu.childState] : [menu.state]"
+          appAccordionToggle
+        >
+          <mat-icon>{{ menu.icon }}</mat-icon>
+          <span>{{ menu.name }}</span>
+        </a>
+      </mat-list-item>
+    </ng-container>
+  </ng-container>
 </mat-nav-list>
+
+
+
