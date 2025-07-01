@@ -1,0 +1,100 @@
+<div class="container">
+  <!-- Table Section to the Right of Form -->
+  <div class="table-section">
+    <!-- title of the-->
+    <h2 class="form-title">Employee Report</h2>
+
+    <div class="refresh-button-filter-section">
+      <div class="refresh-button">
+        <button mat-icon-button color="primary" (click)="refreshData()">
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
+      <mat-form-field>
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+      </mat-form-field>
+      <div class="actions-bar">
+        <button class="print-button" (click)="printReport()">
+          <span class="print-icon"></span> Print Report
+        </button>
+      </div>
+    </div>
+
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+      <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+    
+      <!-- Position Column -->
+      <ng-container matColumnDef="fullName">
+        <th mat-header-cell *matHeaderCellDef> Full Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.fullName}} </td>
+      </ng-container>
+    
+      <!-- Name Column -->
+      <ng-container matColumnDef="callingName">
+        <th mat-header-cell *matHeaderCellDef> Calling Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.callingName}} </td>
+      </ng-container>
+    
+      <!-- Weight Column -->
+      <ng-container matColumnDef="nic">
+        <th mat-header-cell *matHeaderCellDef> Nic Number </th>
+        <td mat-cell *matCellDef="let element"> {{element.nic}} </td>
+      </ng-container>
+    
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="dob">
+        <th mat-header-cell *matHeaderCellDef> Birth Date </th>
+        <td mat-cell *matCellDef="let element"> {{element.dob}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="gender">
+        <th mat-header-cell *matHeaderCellDef> Gender </th>
+        <td mat-cell *matCellDef="let element"> {{element.gender}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="address">
+        <th mat-header-cell *matHeaderCellDef> Address </th>
+        <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="phoneNumber">
+        <th mat-header-cell *matHeaderCellDef> Phone Number </th>
+        <td mat-cell *matCellDef="let element"> {{element.phoneNumber}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="emergencyPhoneNumber">
+        <th mat-header-cell *matHeaderCellDef> Energency Phone Number </th>
+        <td mat-cell *matCellDef="let element"> {{element.emergencyPhoneNumber}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="bloodGroup">
+        <th mat-header-cell *matHeaderCellDef> Blood Group </th>
+        <td mat-cell *matCellDef="let element"> {{element.bloodGroup}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="employmentType">
+        <th mat-header-cell *matHeaderCellDef> Employeement Type </th>
+        <td mat-cell *matCellDef="let element"> {{element.employmentType}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="employeeStatus">
+        <th mat-header-cell *matHeaderCellDef> Employee Status </th>
+        <td mat-cell *matCellDef="let element"> {{element.employeeStatus}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="jobTitle">
+        <th mat-header-cell *matHeaderCellDef> Job Title </th>
+        <td mat-cell *matCellDef="let element"> {{element.jobTitle}} </td>
+      </ng-container>
+    
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <!-- pagination-->
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users" class="pagination"></mat-paginator>
+  </div>
+</div>

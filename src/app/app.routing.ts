@@ -100,6 +100,13 @@ export const AppRoutes: Routes = [
             (m) => m.OnlineShoppingModule
           ),
       },
+      {
+        path: 'reports',
+        loadChildren: () =>
+          import('./pages/reports/reports.module').then(
+            (m) => m.ReportModule
+          ),
+      },
 
     ],
   },

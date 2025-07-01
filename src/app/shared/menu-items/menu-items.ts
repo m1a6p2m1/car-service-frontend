@@ -478,6 +478,22 @@ const MENUITEMS: Menu[] = [
   ]
 },
 {
+  name: 'Reports',
+  icon: 'event_available',
+  type: 'group',
+  children: [
+    {
+      state: 'reports',
+      childState: 'employee-list',
+      name: 'Employee List',
+      type: 'link',
+      icon: 'check_circle',
+      isVisible: true,
+      auth: authenticationEnum.Home_Dashboard,
+    }
+  ]
+},
+{
   name: 'Feedback',
   icon: 'feedback',
   type: 'group',
