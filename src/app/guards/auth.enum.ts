@@ -24,4 +24,10 @@ export enum authenticationEnum {
   Supplier = 19,
   Task_Introduce = 20,
   User_Profile = 21,
+  Online_Products = 22,
+  GRN = 23,
+  Attendance = 24,
+  Employee_List_Report = 25,
+  Customer_Feedback = 26,
+  Online_Shopping = 27
 }

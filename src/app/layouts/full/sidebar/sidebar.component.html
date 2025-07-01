@@ -82,7 +82,7 @@
     <!-- GROUP -->
     <ng-container *ngIf="menu.type === 'group'">
       <!-- menu items -->
-      <mat-list-item class="group-header" (click)="toggleGroup(menu.name)">
+      <mat-list-item *ngIf="menu.isVisible" class="group-header" (click)="toggleGroup(menu.name)">
         <mat-icon>{{ menu.icon }}</mat-icon>
         <span class="group-title">{{ menu.name }}</span>
         <mat-icon class="expand-icon">

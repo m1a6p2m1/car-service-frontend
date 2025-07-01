@@ -28,6 +28,8 @@ export interface MenuLink extends MenuBase {
 
 export interface MenuGroup extends MenuBase {
   type: 'group';
+  auth?: authenticationEnum[],
+  isVisible?: boolean;
   children: MenuLink[];
 }
 
@@ -329,13 +331,15 @@ const MENUITEMS: Menu[] = [
     name: 'Dashboard',
     icon: 'dashboard',
     type: 'group',
+    isVisible: false,
+    auth: [authenticationEnum.Home_Dashboard],
     children: [
       {
         state: 'dashboard',
         name: 'Dashboard',
         type: 'link',
         icon: 'dashboard',
-        isVisible: true,
+        isVisible: false,
         auth: authenticationEnum.Home_Dashboard,
       }
     ]
@@ -344,6 +348,8 @@ const MENUITEMS: Menu[] = [
   name: 'Privileges',
   icon: 'lock',
   type: 'group',
+  isVisible: false,
+  auth: [authenticationEnum.Privileges, authenticationEnum.Privilege_Groups],
   children: [
     {
       state: 'privileges',
@@ -351,7 +357,7 @@ const MENUITEMS: Menu[] = [
       name: 'System Privileges',
       type: 'link',
       icon: 'admin_panel_settings',
-      isVisible: true,
+      isVisible: false,
       auth: authenticationEnum.Privileges,
     },
     {
@@ -360,7 +366,7 @@ const MENUITEMS: Menu[] = [
       name: 'Privilege Groups',
       type: 'link',
       icon: 'group',
-      isVisible: true,
+      isVisible: false,
       auth: authenticationEnum.Privilege_Groups,
     }
   ]
@@ -370,6 +376,8 @@ const MENUITEMS: Menu[] = [
     name: 'Registration',
     icon: 'app_registration',
     type: 'group',
+    isVisible: false,
+    auth: [authenticationEnum.Employee, authenticationEnum.Customer, authenticationEnum.Supplier, authenticationEnum.Item, authenticationEnum.Online_Products, authenticationEnum.GRN],
     children: [
       {
         state: 'registration',
@@ -377,7 +385,7 @@ const MENUITEMS: Menu[] = [
         name: 'Employee',
         type: 'link',
         icon: 'person',
-        isVisible: true,
+        isVisible: false,
         auth: authenticationEnum.Employee,
       },
       {
@@ -386,7 +394,7 @@ const MENUITEMS: Menu[] = [
         name: 'Customer',
         type: 'link',
         icon: 'people',
-        isVisible: true,
+        isVisible: false,
         auth: authenticationEnum.Customer,
       },
       {
@@ -395,7 +403,7 @@ const MENUITEMS: Menu[] = [
         name: 'Supplier',
         type: 'link',
         icon: 'store',
-        isVisible: true,
+        isVisible: false,
         auth: authenticationEnum.Supplier,
       },
       {
@@ -404,7 +412,7 @@ const MENUITEMS: Menu[] = [
         name: 'Item',
         type: 'link',
         icon: 'inventory',
-        isVisible: true,
+        isVisible: false,
         auth: authenticationEnum.Item,
       },
       {
@@ -413,8 +421,8 @@ const MENUITEMS: Menu[] = [
         name: 'Online Products',
         type: 'link',
         icon: 'shopping_cart',
-        isVisible: true,
-        auth: authenticationEnum.Home_Dashboard,
+        isVisible: false,
+        auth: authenticationEnum.Online_Products,
       },
       {
         state: 'registration',
@@ -422,8 +430,8 @@ const MENUITEMS: Menu[] = [
         name: 'GRN',
         type: 'link',
         icon: 'shopping_cart',
-        isVisible: true,
-        auth: authenticationEnum.Home_Dashboard,
+        isVisible: false,
+        auth: authenticationEnum.GRN,
       }
     ]
   },
@@ -431,6 +439,8 @@ const MENUITEMS: Menu[] = [
   name: 'Task Hub',
   icon: 'task',
   type: 'group',
+  isVisible: false,
+  auth: [authenticationEnum.Task_Introduce, authenticationEnum.Task_Assign, authenticationEnum.All_Tasks],
   children: [
     {
       state: 'task-management',
@@ -438,7 +448,7 @@ const MENUITEMS: Menu[] = [
       name: 'Tasks',
       type: 'link',
       icon: 'playlist_add_check',
-      isVisible: true,
+      isVisible: false,
       auth: authenticationEnum.Task_Introduce,
     },
     {
@@ -447,7 +457,7 @@ const MENUITEMS: Menu[] = [
       name: 'Task Assign',
       type: 'link',
       icon: 'assignment_ind',
-      isVisible: true,
+      isVisible: false,
       auth: authenticationEnum.Task_Assign,
     },
     {
@@ -456,7 +466,7 @@ const MENUITEMS: Menu[] = [
       name: 'All Tasks',
       type: 'link',
       icon: 'assignment',
-      isVisible: true,
+      isVisible: false,
       auth: authenticationEnum.All_Tasks,
     }
   ]
@@ -465,6 +475,8 @@ const MENUITEMS: Menu[] = [
   name: 'Attendance',
   icon: 'event_available',
   type: 'group',
+  isVisible: false,
+  auth: [authenticationEnum.Attendance],
   children: [
     {
       state: 'attendance',
@@ -472,8 +484,8 @@ const MENUITEMS: Menu[] = [
       name: 'Attendance Mark',
       type: 'link',
       icon: 'check_circle',
-      isVisible: true,
-      auth: authenticationEnum.Home_Dashboard,
+      isVisible: false,
+      auth: authenticationEnum.Attendance,
     }
   ]
 },
@@ -481,6 +493,8 @@ const MENUITEMS: Menu[] = [
   name: 'Reports',
   icon: 'event_available',
   type: 'group',
+  isVisible: false,
+  auth: [authenticationEnum.Employee_List_Report],
   children: [
     {
       state: 'reports',
@@ -488,8 +502,8 @@ const MENUITEMS: Menu[] = [
       name: 'Employee List',
       type: 'link',
       icon: 'check_circle',
-      isVisible: true,
-      auth: authenticationEnum.Home_Dashboard,
+      isVisible: false,
+      auth: authenticationEnum.Employee_List_Report,
     }
   ]
 },
@@ -497,6 +511,8 @@ const MENUITEMS: Menu[] = [
   name: 'Feedback',
   icon: 'feedback',
   type: 'group',
+  isVisible: false,
+  auth: [authenticationEnum.Customer_Feedback],
   children: [
     {
       state: 'feedback',
@@ -504,8 +520,8 @@ const MENUITEMS: Menu[] = [
       name: 'Feedback',
       type: 'link',
       icon: 'question_answer',
-      isVisible: true,
-      auth: authenticationEnum.Home_Dashboard,
+      isVisible: false,
+      auth: authenticationEnum.Customer_Feedback,
     }
   ]
 },
@@ -513,6 +529,8 @@ const MENUITEMS: Menu[] = [
   name: 'Online Shopping',
   icon: 'shopping_cart',
   type: 'group',
+  isVisible: false,
+  auth: [authenticationEnum.Online_Shopping],
   children: [
     {
       state: 'online-shopping',
@@ -520,8 +538,8 @@ const MENUITEMS: Menu[] = [
       name: 'Products',
       type: 'link',
       icon: 'storefront',
-      isVisible: true,
-      auth: authenticationEnum.Home_Dashboard,
+      isVisible: false,
+      auth: authenticationEnum.Online_Shopping,
     }
   ]
 }

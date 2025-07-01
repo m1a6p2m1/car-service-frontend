@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { CacheService } from 'src/app/services/CacheService';
 import { Subscription } from 'rxjs';
+import { authenticationEnum } from 'src/app/guards/auth.enum';
 @Component({
   selector: 'app-sidebar',
   standalone: true,
@@ -75,17 +76,62 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
     this.navItems = this.menuItems.getMenuitem();
     if (authId && authId.length > 0) {
       if (authId.includes(1)) {
-        this.navItems.forEach((element) => {
-          element.isVisible = true;
-        });
+        // this.navItems.forEach((element) => {
+        //   element.isVisible = true;
+        // });
+
+        for (let i = 0; i < this.navItems.length; i++) {
+          if (this.navItems[i].type === 'group') {
+            this.navItems[i].isVisible = true;
+          }
+
+          if (this.navItems[i].children.length && this.navItems[i].children.length > 0) {
+            this.navItems[i].children.forEach((child: any) => {
+              child.isVisible = true;
+            })
+          }
+        }
+
+
         return;
       }
 
       this.navItems.forEach((element) => {
-        if (authId.includes(element.auth!)) {
-          element.isVisible = true;
-        } else {
-          element.isVisible = false;
+        // if (authId.includes(element.auth!)) {
+        //   element.isVisible = true;
+        // } else {
+        //   element.isVisible = false;
+        // }
+
+
+
+        if (element.type == 'group') { /* Parent */
+          // element.auth.forEach((authEnum: authenticationEnum) => {
+          //   if (authId.includes(authEnum)) {
+          //     element.isVisible = true;
+          //   } else {
+          //     element.isVisible = false;
+          //   }
+          // })
+
+          if (element.children && element.children.length > 0) {
+            element.children.forEach((child: any) => {
+              if (authId.includes(child.auth)) {
+                child.isVisible = true;
+              } else {
+                child.isVisible = false;
+              }
+            });
+          }
+
+          for (let i = 0; i < element.auth.length; i++) {
+              if (authId.includes(element.auth[i])) {
+                element.isVisible = true;
+                break;
+              } else {
+                element.isVisible = false;
+              }
+          }
         }
       });
     } else if (
@@ -96,23 +142,71 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
       );
 
       if (privilegeArray.includes(1)) {
-        this.navItems.forEach((element) => {
-          element.isVisible = true;
-        });
+        // this.navItems.forEach((element) => {
+        //   element.isVisible = true;
+        // });
+
+        for (let i = 0; i < this.navItems.length; i++) {
+          if (this.navItems[i].type === 'group') {
+            this.navItems[i].isVisible = true;
+          }
+
+          if (this.navItems[i].children.length && this.navItems[i].children.length > 0) {
+            this.navItems[i].children.forEach((child: any) => {
+              child.isVisible = true;
+            })
+          }
+        }
+
         return;
       }
 
+      // this.navItems.forEach((element) => {
+      //   if (privilegeArray.includes(element.auth!)) {
+      //     element.isVisible = true;
+      //   } else {
+      //     element.isVisible = false;
+      //   }
+      // });
+
       this.navItems.forEach((element) => {
-        if (privilegeArray.includes(element.auth!)) {
-          element.isVisible = true;
-        } else {
-          element.isVisible = false;
+        if (element.type == 'group') { /* Parent */
+          if (element.children && element.children.length > 0) {
+            element.children.forEach((child: any) => {
+              if (privilegeArray.includes(child.auth)) {
+                child.isVisible = true;
+              } else {
+                child.isVisible = false;
+              }
+            });
+          }
+
+          for (let i = 0; i < element.auth.length; i++) {
+              if (privilegeArray.includes(element.auth[i])) {
+                element.isVisible = true;
+                break;
+              } else {
+                element.isVisible = false;
+              }
+          }
         }
       });
     } else if (authId && authId.length === 0) {
-      this.navItems.forEach((element) => {
-        element.isVisible = false;
-      });
+      // this.navItems.forEach((element) => {
+      //   element.isVisible = false;
+      // });
+
+      for (let i = 0; i < this.navItems.length; i++) {
+          if (this.navItems[i].type === 'group') {
+            this.navItems[i].isVisible = false;
+          }
+
+          if (this.navItems[i].children.length && this.navItems[i].children.length > 0) {
+            this.navItems[i].children.forEach((child: any) => {
+              child.isVisible = false;
+            })
+          }
+        }
     }
   }
 
