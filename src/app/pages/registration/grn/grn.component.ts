@@ -81,6 +81,8 @@ export class GrnComponent implements OnInit {
   suppliers: any;
   filteredSuppliers: any;
 
+  processedResponse: any;
+
 
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -127,7 +129,6 @@ export class GrnComponent implements OnInit {
     this.getItems();
     this.getGrn();
     this.getInnerGRN();
-    this.dataPopulate();
     this.getSuppliers();
 
 
@@ -150,7 +151,21 @@ export class GrnComponent implements OnInit {
     try {
       this.demoService.getData().subscribe((response: any) => {
         console.log("get GRN all Server Response", response);
-        this.dataSourceOuter = new MatTableDataSource(response);
+
+        
+        const temp: any[] = [];
+        response.forEach((res: any) => {
+          let supplierName = this.suppliers.find((sup: any) => sup.supplierId = res.supplier).supplierName;
+          let tableRecord = {
+            ...res,
+            supplierName: supplierName
+          };
+          console.log(tableRecord);
+          temp.push(tableRecord);
+        });
+        console.log(temp);
+
+        this.dataSourceOuter = new MatTableDataSource(temp);
         this.dataSourceOuter.paginator = this.paginator; // Reassign paginator
         this.dataSourceOuter.sort = this.sort; // Reassign sort
       });
@@ -191,6 +206,8 @@ export class GrnComponent implements OnInit {
     }
   }
 
+  onSupplierChange(selectedItem: any) {}
+
   refreshData() {
     this.selectedRow = null;
     if (this.inputField) {
@@ -223,9 +240,12 @@ export class GrnComponent implements OnInit {
 
 
   editDataOuter(data: any) {
-
+    console.log(data);
     this.demoForm.patchValue(data);
     this.demoForm.patchValue({ addedDate: new Date(data.addedDate) })
+    this.demoForm.patchValue({
+      supplier: +data.supplier
+    })
     this.originalData = this.demoForm.value;
     console.log(data.grnno);
     this.saveBtnLabel = 'edit';
@@ -543,6 +563,7 @@ export class GrnComponent implements OnInit {
         console.log(response);
         this.filteredSuppliers = response;
         this.suppliers = response;
+        this.dataPopulate();
 
       },
       error: (error) => {
