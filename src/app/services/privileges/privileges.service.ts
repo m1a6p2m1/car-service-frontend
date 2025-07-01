@@ -73,4 +73,21 @@ export class PrivilegesService {
       .put(requestUrl, priviegeGroup, { headers: headers })
       .toPromise();
   }
+
+    public setAsCustomerDefault(id: number, privilegeGroup: any): Promise<any> {
+    const requestUrl =
+      environment.baseUrl + '/privilege-groups/set-as-default/' + id.toString();
+
+    let headers = {};
+
+    if (this.httpService.getAuthToken() !== null) {
+      headers = {
+        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+      };
+    }
+
+    return this.http
+      .put(requestUrl, privilegeGroup, { headers: headers })
+      .toPromise();
+  }
 }

@@ -21,6 +21,7 @@ export class PrivilegeGroupsComponent implements OnInit {
     'id',
     'groupName',
     'groupDescription',
+    'isDefault',
     'action',
   ];
   dataSource!: MatTableDataSource<any>;
@@ -152,6 +153,7 @@ export class PrivilegeGroupsComponent implements OnInit {
   }
 
   detectRightMouseClick($event: any, privilegeGroup: any) {
+    console.log(privilegeGroup);
     this.selectedRowIndex = privilegeGroup.id;
     if ($event.which === 3) {
       this.rightPanelStyle = {
@@ -210,6 +212,23 @@ export class PrivilegeGroupsComponent implements OnInit {
             this.getPrivilegeGroupList();
           }
         },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  onSetAsCustomerDefaultClick(data: any) {
+    try {
+      console.log(this.selectedRecord);
+      const groupId = this.selectedRecord.id;
+      this._privilegesService.setAsCustomerDefault(groupId, this.selectedRecord).then((response: any) => {
+        if (response) {
+          // const data = this.dataSource.data;
+          // const index = data.findIndex(data => data.id === groupId);
+          // data[index].isDefault = true;
+          this.getPrivilegeGroupList();
+        }
       });
     } catch (error) {
       console.log(error);

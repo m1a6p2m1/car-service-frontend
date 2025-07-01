@@ -46,12 +46,14 @@ export class AppSideRegisterComponent implements OnInit {
   onSubmitRegister() {
     this.submitted = true;
     if (this.registerForm?.valid) {
+      /* CUSTOMER ROLE will be added by default if the user is registering through system itself rather than thorugh Admin */
       this.httpService
         .request('POST', '/register', {
           firstName: this.registerForm.value.firstName,
           lastName: this.registerForm.value.lastName,
           login: this.registerForm.value.login,
           password: this.registerForm.value.password,
+          role: 'CUSTOMER'
         })
         .then((response: any) => {
           this.httpService.setAuthToken(response.token);
