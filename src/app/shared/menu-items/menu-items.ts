@@ -415,6 +415,15 @@ const MENUITEMS: Menu[] = [
         icon: 'shopping_cart',
         isVisible: true,
         auth: authenticationEnum.Home_Dashboard,
+      },
+      {
+        state: 'registration',
+        childState: 'grn',
+        name: 'GRN',
+        type: 'link',
+        icon: 'shopping_cart',
+        isVisible: true,
+        auth: authenticationEnum.Home_Dashboard,
       }
     ]
   },

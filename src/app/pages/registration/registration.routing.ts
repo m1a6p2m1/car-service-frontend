@@ -5,6 +5,7 @@ import { SupplierComponent } from './supplier/supplier.component';
 import { ItemComponent } from './item/item.component';
 import { TaskComponent } from './task/task.component';
 import { OnlineItemComponent } from './online-item/online-item.component';
+import { GrnComponent } from './grn/grn.component';
 
 export const RegistrationRoutes: Routes = [
   {
@@ -33,6 +34,10 @@ export const RegistrationRoutes: Routes = [
       {
         path: 'task',
         component: TaskComponent,
+      },
+      {
+        path: 'grn',
+        component: GrnComponent,
       },
     ],
   },

@@ -21,6 +21,7 @@ import { TaskComponent } from './task/task.component';
 import { EmployeeLoginDetailsComponent } from './employee-login-details/employee-login-details.component';
 import { OnlineItemComponent } from './online-item/online-item.component';
 import { EmployeeDetailsComponent } from './employee-details/employee-details.component';
+import { GrnComponent } from './grn/grn.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { EmployeeDetailsComponent } from './employee-details/employee-details.co
     EmployeeLoginDetailsComponent,
     OnlineItemComponent,
     EmployeeDetailsComponent,
+    GrnComponent
   ],
   imports: [
     CommonModule,

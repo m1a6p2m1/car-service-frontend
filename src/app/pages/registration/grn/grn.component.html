@@ -1,0 +1,244 @@
+<div class="container">
+  <div class="form-section">
+    <form [formGroup]="demoForm" class="example-form" (ngSubmit)="onSubmit()" #formDirective="ngForm">
+
+      <mat-form-field class="example-full-width">
+        <mat-label>GRN no</mat-label>
+        <input matInput placeholder="GRN no" formControlName="grnno" readonly="">
+        <div class="errorMsg"
+          *ngIf="demoForm.get('grnno')?.hasError('required') && (demoForm.get('grnno')?.touched || demoForm.get('grnno')?.dirty)">
+          *GRN NO is required
+        </div>
+      </mat-form-field>
+
+
+      <mat-form-field class="example-full-width">
+        <mat-label>Added user</mat-label>
+        <input matInput placeholder="user" formControlName="addedUser" readonly="">
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <mat-label>GRN added Date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="addedDate">
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <form [formGroup]="innerForm" class="example-form" (ngSubmit)="onSubmitInner()" #innerformDirective="ngForm">
+
+        <mat-form-field class="example-full-width">
+          <mat-label>Item</mat-label>
+          <mat-select formControlName="itemID" (selectionChange)="onItemChange($event.value)">
+            @for (item of items; track item) {
+            <mat-option [value]="item.id">{{ item.itemCode + ' ' + item.itemName }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field  class="example-quarter-width">
+          <mat-label>Aval. Qty</mat-label>
+          <input matInput formControlName="avalqty" readonly="">
+        </mat-form-field>
+
+        <mat-form-field  class="example-quarter-width">
+          <mat-label>Category</mat-label>
+          <input matInput formControlName="itemCategory" readonly="">
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+          <mat-label>Item Total Cost</mat-label>
+          <input matInput placeholder="Item Total Cost" formControlName="cost">
+          <div class="errorMsg"
+            *ngIf="demoForm.get('cost')?.hasError('cost') && (demoForm.get('cost')?.touched || demoForm.get('cost')?.dirty)">
+            *Please Enter Valid Cost
+          </div>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+          <mat-label> Quantity</mat-label>
+          <input matInput placeholder="qty" formControlName="qty">
+          <div class="errorMsg"
+            *ngIf="demoForm.get('qty')?.hasError('required') && (demoForm.get('qty')?.touched || demoForm.get('qty')?.dirty)">
+            *Name is required
+          </div>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+          <mat-label>Unit Cost</mat-label>
+          <input matInput placeholder="ucost" formControlName="ucost" readonly="">
+          <div class="errorMsg"
+            *ngIf="demoForm.get('ucost')?.hasError('ucost') && (demoForm.get('ucost')?.touched || demoForm.get('ucost')?.dirty)">
+            *Please Enter Valid Unit Cost
+          </div>
+        </mat-form-field>
+
+
+        <mat-form-field class="example-full-width">
+          <mat-label>Expire Date</mat-label>
+          <input matInput [matDatepicker]="picker1" formControlName="expdate">
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1></mat-datepicker>
+        </mat-form-field>
+
+        <button type="submit" class="btn btn-dark" [disabled]="isInnerButtonDisabled"
+          [disabled]="!innerForm.valid">{{addBtnLabel}}</button>
+
+        <!-- <button type="submit" class="btn btn-success" [disabled]="isButtonDisabled"
+        [disabled]="!demoForm.valid">{{saveBtnLabel}}</button> -->
+
+        <button type="button" class="btn btn-light" (click)="resetInner(innerformDirective)">Reset</button>
+        <br>
+        <br>
+      </form>
+
+      <div class="mat-elevation-z8">
+
+        <table mat-table [dataSource]="dataSource" matSort [hidden]="tableHidden">
+
+          <!-- Position Column -->
+          <ng-container matColumnDef="item">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Item Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.item}} </td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="qty">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Qty </th>
+            <td mat-cell *matCellDef="let element"> {{element.qty}} </td>
+          </ng-container>
+
+          <!-- Weight Column -->
+          <ng-container matColumnDef="cost">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Cost</th>
+            <td mat-cell *matCellDef="let element">{{ element.cost | currency:'Rs. ' }} </td>
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="ucost">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Unit Cost </th>
+            <td mat-cell *matCellDef="let element"> {{element.ucost}} </td>
+          </ng-container>
+
+          <!-- Weight Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
+            <td mat-cell *matCellDef="let element">
+
+              <button type="button" (click)="editInnerData(element)" class="btn btn-warning"
+                [disabled]="editDisable"><mat-icon>edit</mat-icon></button>
+              <button type="button" (click)="deleteInnerData(element)" class="btn btn-danger"
+                [disabled]="deleteDisable"><mat-icon>delete</mat-icon></button>
+
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="innerColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: innerColumns;" [ngClass]="{'highlight-row': innerselectedRow && innerselectedRow.id === row.id,
+              'last-added-row': innerlastAddedRow && innerlastAddedRow.id === row.id}">
+          </tr>
+
+        </table>
+
+      </div>
+
+
+      <br><br>
+
+      <mat-form-field class="example-full-width">
+        <mat-label>Total Cost</mat-label>
+        <input matInput placeholder="total cost" formControlName="tcost" readonly="">
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <mat-label>Supplier</mat-label>
+        <!-- <mat-select formControlName="supplier">
+          <mat-option value="sup1">Supplier 1</mat-option>
+          <mat-option value="sup2">Supplier 2</mat-option>
+          <mat-option value="sup3">Supplier 3</mat-option>
+        </mat-select> -->
+
+        <mat-select formControlName="supplier" (selectionChange)="onItemChange($event.value)">
+            @for (supplier of suppliers; track supplier) {
+          <mat-option [value]="supplier.supplierId">{{ supplier.supplierName + ' ' + supplier.companyName }}</mat-option> }
+        </mat-select>
+
+      </mat-form-field>
+
+      <button type="submit" class="btn btn-success" [disabled]="isButtonDisabled"
+        [disabled]="!demoForm.valid">{{saveBtnLabel}}</button>
+      <button (click)="resetData(formDirective)" type="button" class="btn btn-light"
+        [disabled]="resetOuterDisabled">Reset</button>
+
+    </form>
+  </div>
+  <div class="table-section">
+    <span>
+      <button mat-icon-button color="primary" (click)="refreshData()">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </span>
+    <mat-form-field style="width: 50%;">
+      <mat-label>Search Here...</mat-label>
+      <input matInput placeholder="Ex. Amal Silva" (keyup)="applyFilter($event)" #input>
+    </mat-form-field>
+    <div class="mat-elevation-z8">
+
+      <table mat-table [dataSource]="dataSourceOuter" matSort>
+
+        <!-- Position Column -->
+        <ng-container matColumnDef="grnno">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> GRN Number </th>
+          <td mat-cell *matCellDef="let element"> {{element.grnno}} </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="supplier">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Supplier Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.supplier}} </td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="tcost">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Total Cost </th>
+          <td mat-cell *matCellDef="let element"> {{ element.tcost | currency:'Rs. ' }} </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="addedDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Added Date </th>
+          <td mat-cell *matCellDef="let element"> {{element.addedDate}} </td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
+          <td mat-cell *matCellDef="let element">
+            <button (click)="editDataOuter(element)" class="btn btn-warning"
+              [disabled]="allOuterBtnDisabled"><mat-icon>edit</mat-icon></button>
+            <button (click)="deleteDataOuter(element)" class="btn btn-danger"
+              [disabled]="allOuterBtnDisabled"><mat-icon>delete</mat-icon></button>
+
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'highlight-row': selectedRow && selectedRow.grnno === row.grnno,
+            'last-added-row': lastAddedRow && lastAddedRow.grnno === row.grnno}">
+        </tr>
+
+        <!-- Row shown when there is no matching data. -->
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="4" style="padding: 10px; color:rgb(108, 102, 102); font-style: italic;"> No data
+            matching "{{input.value}}"</td>
+        </tr>
+      </table>
+
+      <mat-paginator [pageSizeOptions]="[10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </div>
+
+
+
+  </div>
+</div>
