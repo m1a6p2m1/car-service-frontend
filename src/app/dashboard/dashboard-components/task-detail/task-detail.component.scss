@@ -1,0 +1,46 @@
+.image-section img {
+  width: 350px;
+  height: 350px;
+  border-radius: 10px;
+}
+
+.details-section {
+  max-width: 650px;
+  padding: 60px;
+}
+
+.item-card {
+    height: 590px;
+    width: 1250px;
+    display: flex;
+    // margin-left: 125px;
+    // margin-top: 60px;
+    flex-direction: row;
+    align-content: center;
+}
+
+.details{
+    margin-top: 80px;
+}
+
+.image-section{
+    max-width: 600px;
+    padding: 50px;
+    border-right: 1px solid #ccc;
+
+}
+.btnBook{
+  background-color: #F2A71B;
+  color: #011F26;
+  width: 215px;
+  height:50px;
+  border: none;
+  padding: 20px;
+  margin-top: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

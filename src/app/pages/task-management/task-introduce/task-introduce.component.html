@@ -20,6 +20,15 @@
                 placeholder="Sub Task Description"
               />
             </mat-form-field>
+
+            <mat-form-field class="full-width">
+              <input
+                matInput
+                placeholder="price"
+                formControlName="subTaskPrice"
+                placeholder="Rs."
+              />
+            </mat-form-field>
            
             <button
               type="button"
@@ -39,6 +48,34 @@
                 +
             </button>    
         </div>
+
+        <mat-form-field class="full-width">
+          <mat-label>Total Task Price</mat-label>
+          <input
+            matInput
+            placeholder="Total Task Price"
+            formControlName="totalTaskPrice"
+            placeholder="Rs. "
+            />     
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+        <mat-label>Description</mat-label>
+        <textarea
+          matInput
+          placeholder="Description"
+          formControlName="description"
+        ></textarea>
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Short Description</mat-label>
+        <textarea
+          matInput
+          placeholder="Short Description"
+          formControlName="shortDescription"
+        ></textarea>
+      </mat-form-field>
         
         <button
           type="submit"

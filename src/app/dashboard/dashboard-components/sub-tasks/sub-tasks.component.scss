@@ -7,7 +7,7 @@
   }
   
   .tasks-card {
-    width: 310px; /* or whatever width fits */
+    
     flex: 0 0 auto;
     padding: 0.5rem ;
   }
@@ -15,4 +15,7 @@
   .task-header {
     font-size: 1.1rem;
     color:white;
+  }
+  .card-view-button{
+    margin-left: 110px;
   }

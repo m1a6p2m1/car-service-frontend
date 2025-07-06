@@ -1,15 +1,21 @@
 <div class="tasks-row">
-  <div class="tasks-card"  *ngFor="let task of commonCustomerTasks"> <!--*ngFor="let task of tasks"-->
+  <div class="tasks-card"  *ngFor="let task of tasks"> <!--*ngFor="let task of tasks"-->
     <mat-card >
         <div class="p-20 bg-info position-relative" style="text-align: center;">
             <mat-card-title class="task-header">{{ task.taskName }}</mat-card-title>
         </div>
         <mat-card-content>
-          <ul>
-            <li>Assign Washing Bay</li>
-            <li>Wash the Vehicle</li>
-            <li>Complete the Washing</li>
-          </ul>
+          <mat-list role="list" >
+          <mat-list-item role="listitem" *ngFor="let sub of task.subTasks">{{sub.subTaskName}}</mat-list-item>
+        </mat-list>
+        <button
+        mat-raised-button
+        color="primary"
+        class="card-view-button"
+        (click)="openTaskDetails(task)"
+        >
+          View >>
+      </button>
         </mat-card-content>
     </mat-card>
   </div>

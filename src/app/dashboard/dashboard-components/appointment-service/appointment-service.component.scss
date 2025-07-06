@@ -1,0 +1,74 @@
+// .slot-container {
+//   display: flex;
+//   flex-wrap: wrap;
+//   gap: 10px;
+//   margin-top: 10px;
+// }
+
+// mat-card {
+//   max-width: 500px;
+//   margin: auto;
+//   padding: 20px;
+// }
+
+// mat-form-field {
+//   width: 100%;
+// }
+
+// .full-width-table {
+//   width: 100%;
+//   margin-top: 20px;
+// }
+
+// .status-available {
+//   color: green;
+//   font-weight: bold;
+// }
+
+// .status-filling {
+//   color: orange;
+//   font-weight: bold;
+// }
+
+// .status-full {
+//   color: red;
+//   font-weight: bold;
+// }
+
+
+.status-full {
+  color: red;
+  font-weight: bold;
+}
+.status-filling {
+  color: orange;
+  font-weight: bold;
+}
+.status-available {
+  color: green;
+  font-weight: bold;
+}
+.appointment-table td{
+  text-align: center;
+}
+.appointment-table th{
+  text-align: center;
+  font-weight: bold;
+  font-size: medium;
+}
+.title{
+  font-weight: bold;
+  font-size:25px;
+}
+.datepicker{
+  width:400px;
+}
+input{
+  size: 50px;
+}
+.selected-button {
+  background: #1976d2;
+  color: #fff;
+}
+.confirm-box { margin-top: 12px; }
+

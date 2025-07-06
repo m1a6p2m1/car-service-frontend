@@ -32,7 +32,10 @@ export class TaskIntroduceComponent implements OnInit{
   ){
     this.taskIntroduceForm = this.fb.group({
       taskName: new FormControl(''),
-      subTasks: this.fb.array([])
+      subTasks: this.fb.array([]),
+      totalTaskPrice: new FormControl({ value: '', disabled: true }),
+      description: new FormControl(''),
+      shortDescription: new FormControl('')
     });
   }
 
@@ -62,6 +65,7 @@ export class TaskIntroduceComponent implements OnInit{
     try {
       let formData = this.taskIntroduceForm.getRawValue();
       if (this.mode === 'add') {
+        
         this.taskIntroduceService.serviceCall(formData).subscribe(
           (response) => {
             if (
@@ -74,6 +78,7 @@ export class TaskIntroduceComponent implements OnInit{
                 ...this.dataSource.data,
               ]);
             }
+            console.log('Calling service addData with ID:', formData);
             this.dataSource = new MatTableDataSource([response]);
             this.messageService.showSuccess('Data Saved Successfully !');
           },
@@ -131,6 +136,7 @@ export class TaskIntroduceComponent implements OnInit{
     this.saveButtonLabel = 'Save';
     this.isButtonDisable = false;
     this.taskIntroduceForm.enable();
+    this.taskIntroduceForm.get('totalTaskPrice')?.disable();
     
   }
 
@@ -138,19 +144,24 @@ export class TaskIntroduceComponent implements OnInit{
     console.log('Edit clicked:', data);
     this.resetData();
     this.taskIntroduceForm.patchValue({
-    taskName: data.taskName
+      taskName: data.taskName,
+      description: data.description,
+      shortDescription: data.shortDescription,
+      totalTaskPrice: data.totalTaskPrice
     });
-
+    this.taskIntroduceForm.get('totalTaskPrice')?.disable();
     if (data.subTasks && data.subTasks.length > 0) {
       data.subTasks.forEach((subTask: any) => {
         this.subTasks.push(this.fb.group({
-          subTaskName: [subTask.subTaskName]
+          subTaskName: [subTask.subTaskName],
+          subTaskPrice: [subTask.subTaskPrice]
         }));
       });
     }
-
+  // this.taskIntroduceForm.formControlName('totalTaskPrice').disabled();
   this.saveButtonLabel = 'Edit';
   this.mode = 'edit';
+  // this.selectedData = data;
   this.selectedData = { id: data.id };
   }
 

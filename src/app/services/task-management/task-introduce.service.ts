@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HttpService } from '../http.service';
 import { environment } from 'src/app/environments/environment';
+import { Task } from 'src/app/models/task.model';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +28,7 @@ export class TaskIntroduceService {
     }
 
 
-    getData() {
+    getData(): Observable<Task[]> {
       console.log('In the Service get data');
       const requestUrl = environment.baseUrl + '/task-introduce';
   
@@ -38,7 +40,22 @@ export class TaskIntroduceService {
         };
       }
   
-      return this.http.get(requestUrl, headers);
+      return this.http.get<Task[]>(requestUrl, headers);
+    }
+
+    getTaskById(id:number): Observable<Task[]>{
+      console.log('In the service getTaskbyid');
+      const requestUrl = environment.baseUrl + '/task-introduce/'+ id.toString();
+      let headers = {};
+          
+      if (this.httpService.getAuthToken() !== null) {
+        headers = {
+          Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+        };
+      }
+  
+      return this.http.get<Task[]>(requestUrl, headers );    
+              
     }
 
     editData(id: number, form_details: any){
