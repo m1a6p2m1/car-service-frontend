@@ -56,9 +56,20 @@
           type="reset"
           mat-raised-button
           color="secondary"
+          class="form-button"
           (click)="resetData()"
+          [disabled]="isResetButtonDisabled"
         >
           Reset
+        </button>
+        <button
+          type="button"
+          mat-raised-button
+          color="primary"
+          (click)="onResetPasswordClick()"
+          [hidden]="isResetPasswordBtnHidden"
+        >
+          Reset Password
         </button>
       </form>
     </div>

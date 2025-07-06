@@ -57,6 +57,10 @@ export class HttpService {
 
     let headers = {};
 
+    if (url === '/login') {
+      window.localStorage.clear();
+    }
+
     if (this.getAuthToken() !== null) {
       headers = { Authorization: 'Bearer ' + this.getAuthToken() };
     }
