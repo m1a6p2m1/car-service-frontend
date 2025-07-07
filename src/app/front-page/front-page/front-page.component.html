@@ -1,0 +1,186 @@
+<header class="header">
+  <nav class="navbar">
+    <div class="container">
+      <div class="nav-brand">
+        <h2>Namal Vehicle Service</h2>
+      </div>
+      <div class="nav-links">
+        <button class="nav-btn" (click)="scrollToServices()">
+          See Services
+        </button>
+        <button class="nav-btn" [routerLink]="['/authentication/login']">
+          Sign In
+        </button>
+        <button
+          class="nav-btn primary"
+          [routerLink]="['/authentication/register']"
+        >
+          Sign Up
+        </button>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <h1>Premium Car Service & Wash</h1>
+      <p>
+        Experience the ultimate car care with our professional services. We
+        treat your vehicle like our own.
+      </p>
+      <div class="hero-buttons">
+        <button class="btn-primary" (click)="scrollToServices()">
+          Explore Services
+        </button>
+        <button class="btn-secondary">Book Now</button>
+      </div>
+    </div>
+    <div class="hero-image">
+      <img
+        src="https://images.pexels.com/photos/3729464/pexels-photo-3729464.jpeg?auto=compress&cs=tinysrgb&w=800"
+        alt="Car Wash Service"
+      />
+    </div>
+  </div>
+</section>
+
+<!-- Services Section -->
+<section class="services" id="services">
+  <div class="container">
+    <h2 class="section-title">Our Services</h2>
+    <p class="section-subtitle">
+      Choose from our comprehensive range of car care services
+    </p>
+
+    <div class="services-grid">
+      <div class="service-card" *ngFor="let service of services">
+        <div class="service-icon">
+          <i [class]="service.icon"></i>
+        </div>
+        <h3>{{ service.title }}</h3>
+        <p>{{ service.description }}</p>
+        <div class="service-price">{{ service.price }}</div>
+        <button class="service-btn">Book Now</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="features">
+  <div class="container">
+    <h2 class="section-title">Why Choose Us?</h2>
+    <div class="features-grid">
+      <div class="feature-item" *ngFor="let feature of features">
+        <div class="feature-icon">
+          <i [class]="feature.icon"></i>
+        </div>
+        <h3>{{ feature.title }}</h3>
+        <p>{{ feature.description }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section class="contact">
+  <div class="container">
+    <h2 class="section-title">Contact Us</h2>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h3>Get in Touch</h3>
+        <p>Ready to give your car the care it deserves? Contact us today!</p>
+
+        <div class="contact-item">
+          <i class="fas fa-map-marker-alt"></i>
+          <div>
+            <h4>Address</h4>
+            <p>{{ serviceAddress }}<br />{{ serviceAddress }}</p>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <i class="fas fa-phone"></i>
+          <div>
+            <h4>Phone</h4>
+            <p>{{ serviceNumber }}</p>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <i class="fas fa-envelope"></i>
+          <div>
+            <h4>Email</h4>
+            <p>{{ serviceEmail }}</p>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <i class="fas fa-clock"></i>
+          <div>
+            <h4>Hours</h4>
+            <p>Mon - Fri: 8AM - 6PM<br />Sat - Sun: 9AM - 5PM</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-form">
+        <h3>Send us a Message</h3>
+        <form>
+          <div class="form-group">
+            <input type="text" placeholder="Your Name" required />
+          </div>
+          <div class="form-group">
+            <input type="email" placeholder="Your Email" required />
+          </div>
+          <div class="form-group">
+            <input type="tel" placeholder="Your Phone" />
+          </div>
+          <div class="form-group">
+            <textarea placeholder="Your Message" rows="5" required></textarea>
+          </div>
+          <button type="submit" class="btn-primary">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>Namal Vehicle Service</h3>
+        <p>
+          Your trusted partner for premium car care services. We're committed to
+          keeping your vehicle in perfect condition.
+        </p>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Pricing</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Follow Us</h4>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-linkedin"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Namal Vehicle Service. All rights reserved.</p>
+    </div>
+  </div>
+</footer>

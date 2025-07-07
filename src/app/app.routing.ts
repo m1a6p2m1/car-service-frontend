@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 import { FullComponent } from './layouts/full/full.component';
 import { AuthGuard } from './guards/auth.guard';
+import { FrontPageComponent } from './front-page/front-page/front-page.component';
 
 export const AppRoutes: Routes = [
   {
@@ -9,8 +10,7 @@ export const AppRoutes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: '/authentication/login',
-        pathMatch: 'full',
+        component: FrontPageComponent
       },
       {
         path: 'authentication',

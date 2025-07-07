@@ -24,6 +24,7 @@ import { SpinnerComponent } from './shared/spinner.component';
 import { ToastrModule } from 'ngx-toastr';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { FrontPageComponent } from './front-page/front-page/front-page.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     FullComponent,
     AppHeaderComponent,
     SpinnerComponent,
+    FrontPageComponent
   ],
   imports: [
     BrowserModule,
