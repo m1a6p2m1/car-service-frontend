@@ -73,7 +73,7 @@ export class AppHeaderComponent implements OnInit {
   public logOutUser(): void {
     this.cacheService.clear(this.httpService.getUserId()!);
     this.httpService.removeToken();
-    this.router.navigate(['/authentication/login']);
+    this.router.navigate(['']);
   }
 
   loadUserProfile(): void {
