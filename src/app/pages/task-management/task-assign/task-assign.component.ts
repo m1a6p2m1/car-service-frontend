@@ -295,6 +295,7 @@ export class TaskAssignComponent implements OnInit {
     const subTasksFormArray = this.subTasks;
     subTasksFormArray.clear();
     this.resetFormManually();
+    this.taskAssignForm.reset();
     this.saveButtonLabel = 'Save';
     this.isButtonDisable = false;
     this.enableFormManually();

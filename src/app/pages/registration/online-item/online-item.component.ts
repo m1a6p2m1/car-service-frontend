@@ -1,11 +1,13 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormControlName, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
 import { OnlineItemService } from 'src/app/services/registration/online-item.service';
+import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-online-item',
@@ -41,7 +43,8 @@ export class OnlineItemComponent {
     private fb: FormBuilder,
     private onlineItemService: OnlineItemService,
     private messageService: MessageServiceService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private _dialog: MatDialog,
   ){
     this.onlineItemForm = this.fb.group({
       itemCode: new FormControl(''),
@@ -228,6 +231,18 @@ export class OnlineItemComponent {
       const file = data.image;
       const imageType = data.imageType;
       this.selectedImageUrl = `data:${imageType};base64,${file}`;
+    }
+
+    public confirmDelete(data: any): void {
+      const dialogRef = this._dialog.open(ConfirmDialogComponent, {
+        data: 'Are you sure you want to delete this record?',
+      });
+  
+      dialogRef.afterClosed().subscribe((result: any) => {
+        if (result) {
+          this.deleteData(data);
+        }
+      });
     }
   
     public deleteData(data: any): void {

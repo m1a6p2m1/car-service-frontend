@@ -12,6 +12,9 @@ import { ProfileComponent } from './dashboard-components/profile/profile.compone
 import { SalesOverviewComponent } from './dashboard-components/sales-overview/sales-overview.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { SubTasksComponent } from './dashboard-components/sub-tasks/sub-tasks.component';
+import { MatListModule } from '@angular/material/list';
+import { TaskDetailComponent } from './dashboard-components/task-detail/task-detail.component';
+import { AppointmentServiceComponent } from './dashboard-components/appointment-service/appointment-service.component';
 
 @NgModule({
   declarations: [
@@ -22,14 +25,16 @@ import { SubTasksComponent } from './dashboard-components/sub-tasks/sub-tasks.co
     ContactsComponent, 
     ActivityTimelineComponent,
     DashboardComponent, 
-    SubTasksComponent
+    SubTasksComponent,
+    TaskDetailComponent,
+    AppointmentServiceComponent,
   ],
   imports: [
     CommonModule,
     DemoMaterialModule,
     RouterModule.forChild(DashboardRoutes),
     NgApexchartsModule,
-    
+    MatListModule
   ],
 })
 export class DashboardModule { }

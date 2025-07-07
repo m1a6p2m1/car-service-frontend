@@ -14,12 +14,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
     FormDemoComponent,
     EmployeeLoginComponent,
     UserProfileComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     CommonModule,
@@ -31,7 +33,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
     MatInputModule,
     MatIconModule,
     MatSelectModule,
-    MatButtonModule
+    MatButtonModule,
   ],
   exports: [],
 })

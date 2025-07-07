@@ -1,0 +1,15 @@
+<mat-card class="item-card" *ngIf="task">
+    <div class="image-section">
+        
+    </div>
+    <div class="details-section" >
+    <div class="details">
+        <h2>{{ task.taskName }}</h2>
+        <h4>{{task.description}}</h4>
+        <h5>{{task.shortDescription}}</h5>
+        <!-- <h4>RS.{{task.totalTaskPrice}}</h4> -->
+    </div>
+        <button class="btnBook" (click)="bookAppointment()">Book Now</button>
+    </div>
+</mat-card>
+

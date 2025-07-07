@@ -5,6 +5,8 @@ import {MatTableDataSource} from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
+import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 const ELEMENT_DATA: any[] = [{firstName:'',lastName:'',nic:'',email:'',gender:'',address:'',phoneNumber:'',licencePlate:'',vehicleType:'',vehicleModel:''}];
 
@@ -33,7 +35,8 @@ export class CustomerComponent implements OnInit{
   constructor (
     private fb: FormBuilder,
     private customerService: CustomerService,
-    private messageService:MessageServiceService
+    private messageService:MessageServiceService,
+    private _dialog: MatDialog,
   ){
     this.customerForm = this.fb.group({
       firstName: new FormControl('', Validators.required),
@@ -124,6 +127,18 @@ export class CustomerComponent implements OnInit{
     this.saveButtonLabel = 'Edit';
     this.mode = 'edit';
     this.selectedData = data;
+  }
+
+  public confirmDelete(data: any): void {
+      const dialogRef = this._dialog.open(ConfirmDialogComponent, {
+        data: 'Are you sure you want to delete this record?',
+      });
+  
+      dialogRef.afterClosed().subscribe((result: any) => {
+        if (result) {
+          this.deleteData(data);
+        }
+      });
   }
 
   public deleteData(data: any):void{

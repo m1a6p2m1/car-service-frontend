@@ -1,0 +1,189 @@
+  <mat-card-title class="title">Select Appointment Date</mat-card-title>
+  <div class="datepicker">
+    <mat-form-field appearance="fill">
+    <input matInput [matDatepicker]="picker"
+    placeholder="Choose date" (dateChange)="onDateChange($event)">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker touchUi #picker></mat-datepicker>
+  </mat-form-field>
+  </div>
+
+
+  <div *ngIf="isLoading">Loading slots...</div>
+
+<!-- Available Time Slots as Table -->
+  <table mat-table [dataSource]="timeSlots" class="mat-elevation-z2" *ngIf="timeSlots.length" class="appointment-table">
+
+  <!-- Time Column -->
+  <ng-container matColumnDef="time">
+    <th mat-header-cell *matHeaderCellDef> Time </th>
+    <td mat-cell *matCellDef="let slot">
+      {{ formatTime(slot.time) }}
+    </td>
+  </ng-container>
+
+  <!-- Status Column -->
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef> Status </th>
+    <td mat-cell *matCellDef="let slot">
+      <span [ngClass]="getStatusClass(slot)">
+        {{ getStatusText(slot) }}
+      </span>
+    </td>
+  </ng-container>
+
+  <!-- Available Bays Column -->
+  <ng-container matColumnDef="available">
+    <th mat-header-cell *matHeaderCellDef> Bays Left </th>
+    <td mat-cell *matCellDef="let slot">
+      {{ 3 - slot.bookedCount }}
+    </td>
+  </ng-container>
+
+  <!-- Action Column -->
+  <ng-container matColumnDef="action">
+    <th mat-header-cell *matHeaderCellDef> Action </th>
+    <td mat-cell *matCellDef="let slot">
+      <button mat-raised-button color="primary"
+              [disabled]="slot.bookedCount >= 3"
+              (click)="selectSlot(slot.time)" 
+              [ngClass]="{ 'selected-button': selectedTime === slot.time }"><!--[disabled]="!appointmentServiceForm.valid"-->
+        Select
+      </button>
+    </td>
+  </ng-container>
+
+  <!-- Header and Row Definitions -->
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+<div *ngIf="selectedTime" class="confirm-box">
+  <p><strong>Selected Slot:</strong> {{ formatTime(selectedTime) }}</p>
+  <button mat-raised-button color="accent" (click)="submitAppointment()">
+    Confirm Appointment
+  </button>
+</div>
+
+
+<!-- <mat-card *ngIf="timeSlots.length > 0">
+  <mat-card-title>Available Time Slots</mat-card-title>
+  <table mat-table [dataSource]="timeSlots" class="mat-elevation-z8 full-width-table">
+
+    
+    <ng-container matColumnDef="time">
+      <th mat-header-cell *matHeaderCellDef> Time </th>
+      <td mat-cell *matCellDef="let slot"> {{ formatTime(slot.time) }} </td>
+    </ng-container>
+
+ 
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef> Status </th>
+      <td mat-cell *matCellDef="let slot">
+        <span [ngClass]="getStatusClass(slot)">
+          {{ getStatusText(slot) }}
+        </span>
+      </td>
+    </ng-container>
+
+   
+    <ng-container matColumnDef="available">
+      <th mat-header-cell *matHeaderCellDef> Available Bays </th>
+      <td mat-cell *matCellDef="let slot"> {{ 3 - slot.bookedCount }} </td>
+    </ng-container>
+
+    
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef> Action </th>
+      <td mat-cell *matCellDef="let slot">
+        <button mat-raised-button color="primary" (click)="selectSlot(slot)" [disabled]="slot.bookedCount >= 3">
+          Book
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</mat-card> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <mat-card>
+  <h2>Book Appointment</h2>
+
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Select Date</mat-label>
+    <input matInput [matDatepicker]="picker" (dateChange)="onDateChange($event.value)" />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <div *ngIf="isLoading">Loading available time slots...</div>
+
+  <div *ngIf="availableSlots.length > 0">
+    <h3 class="mt-4">Available Time Slots</h3>
+    <div class="slot-container">
+      <button
+        mat-raised-button
+        *ngFor="let slot of availableSlots"
+        [color]="selectedTime === slot ? 'primary' : ''"
+        (click)="selectTimeSlot(slot)">
+        {{ slot }}
+      </button>
+    </div>
+  </div>
+
+  <button mat-flat-button color="accent" (click)="submitAppointment()" [disabled]="!appointmentServiceForm.valid" class="mt-4">
+    Book Now
+  </button>
+</mat-card>
+ -->

@@ -1,12 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { TaskAssignService } from 'src/app/services/task-management/task-assign.service';
-// import { TaskAssignComponent } from 'src/app/pages/task-management/task-assign/task-assign.component';
+import { Task } from 'src/app/models/task.model';
+import { Router } from '@angular/router';
+import { TaskIntroduceService } from 'src/app/services/task-management/task-introduce.service';
 
-interface Task {
-  id: any;
-  taskName: string;
-  definedSubTaskDtos: any;
-}
 
 @Component({
   selector: 'app-sub-tasks',
@@ -16,21 +12,24 @@ interface Task {
 })
 export class SubTasksComponent implements OnInit {
   tasks: Task[] = [];
-  commonCustomerTasks: Task[] = [];
 
   constructor(
-    private taskAssignService: TaskAssignService,
-    // private taskAssignComponent: TaskAssignComponent
+    private taskIntroduceService: TaskIntroduceService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void{
-    // this.getDefinedTasks();
+    this.taskIntroduceService.getData().subscribe((taskList: Task[]) => {
+      this.tasks = taskList.map((t: Task) => ({
+        ...t,
+      })
+    );
+    }); 
+  }
 
-    const commonCustomerId = 0; // if known
-
-    this.taskAssignService.getTasksByCustomerId(commonCustomerId).subscribe((tasks: any) => {
-      this.commonCustomerTasks = tasks;
-    });
+  public openTaskDetails(task: Task): void {
+    console.log("task id :", task.id)
+    this.router.navigate(['/dashboard', 'task-detail', task.id]);
   }
   
 }

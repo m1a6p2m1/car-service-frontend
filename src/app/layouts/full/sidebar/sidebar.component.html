@@ -1,12 +1,43 @@
 <!-- ============================================================== -->
 <!-- sidebar -->
 <!-- ============================================================== -->
+
 <div
   class="user-profile"
   style="background: url(assets/images/background/car_wash1.webp) no-repeat center center;
   background-size: cover;  
   height: 150px; width: 300px;"
 >
+
+<!-- profile slider -->
+<!-- <div id="carouselExampleIndicators" class="carousel slide" style="height: 150px; width: 300px; background-size: cover; background: no-repeat center center;" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="assets/images/background/car_wash1.webp" class="d-block w-100" alt="...">
+    </div>
+    <div class="carousel-item">
+      <img src="assets/images/background/car_wash2.webp" class="d-block w-100" alt="...">
+    </div>
+    <div class="carousel-item">
+      <img src="assets/images/background/car_wash1.webp" class="d-block w-100" alt="...">
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button> -->
+
+
+
   <!-- User profile image -->
   <!-- <div class="profile-img">
     <img src="assets/images/users/profile.png" alt="user" />
@@ -15,25 +46,13 @@
   <!-- ============================================================== -->
   <!-- Profile - style you can find in header.scss -->
   <!-- ============================================================== -->
+
+
   <div class="profile-text">
-    <a [matMenuTriggerFor]="sdprofile" class="" class="loggedUserName">
+    <a  class="" class="loggedUserName">
       {{loggedUserName}} <i class="ti-angle-down font-12 m-l-5"></i
     ></a>
   </div>
-  <mat-menu #sdprofile="matMenu" class="mymegamenu">
-    <!-- <button mat-menu-item>
-      <mat-icon fontIcon="settings"></mat-icon> Settings
-    </button>
-    <button mat-menu-item>
-      <mat-icon fontIcon="account_box"></mat-icon> Profile
-    </button>
-    <button mat-menu-item>
-      <mat-icon fontIcon="notifications_off"></mat-icon> Disable notifications
-    </button>
-    <button mat-menu-item>
-      <mat-icon fontIcon="exit_to_app"></mat-icon> Sign Out
-    </button> -->
-  </mat-menu>
 </div>
 <!-- <mat-nav-list appAccordion>
   <div *ngFor="let menuitem of navItems">
@@ -73,7 +92,6 @@
     </mat-list-item>
   </div>
 </mat-nav-list> -->
-
 
 
 

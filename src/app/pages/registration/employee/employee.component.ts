@@ -14,6 +14,7 @@ import { MessageServiceService } from 'src/app/services/message-service/message-
 import { RegistrationService } from 'src/app/services/registration/registration.service';
 import { EmployeeLoginDetailsComponent } from '../employee-login-details/employee-login-details.component';
 import { Employee, EmployeeDetailsComponent } from '../employee-details/employee-details.component';
+import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 
 const ELEMENT_DATA: any[] = [
   {
@@ -263,6 +264,18 @@ export class EmployeeComponent implements OnInit {
     this.selectedEmployee = employee;
     const dialogRef = this._dialog.open(EmployeeDetailsComponent, {
     data: this.selectedEmployee 
+    });
+  }
+
+  public confirmDelete(data: any): void {
+    const dialogRef = this._dialog.open(ConfirmDialogComponent, {
+      data: 'Are you sure you want to delete this record?',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.deleteData(data);
+      }
     });
   }
 
