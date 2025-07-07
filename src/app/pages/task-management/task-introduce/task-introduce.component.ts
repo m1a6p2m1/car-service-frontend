@@ -10,12 +10,12 @@ import { TaskIntroduceService } from 'src/app/services/task-management/task-intr
   selector: 'app-task-introduce',
   standalone: false,
   templateUrl: './task-introduce.component.html',
-  styleUrl: './task-introduce.component.scss'
+  styleUrl: './task-introduce.component.scss',
 })
-export class TaskIntroduceComponent implements OnInit{
+export class TaskIntroduceComponent implements OnInit {
   taskIntroduceForm: FormGroup;
 
-  displayedColumns: string[] = ['taskName', 'action'];  //'subTasks',
+  displayedColumns: string[] = ['taskName', 'action']; //'subTasks',
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -23,28 +23,28 @@ export class TaskIntroduceComponent implements OnInit{
   mode = 'add';
   selectedSubtasks: any;
   isButtonDisable = false;
-  selectedData!: { id: number; };
+  selectedData!: { id: number };
 
   constructor(
     private fb: FormBuilder,
     private taskIntroduceService: TaskIntroduceService,
-    private messageService:MessageServiceService
-  ){
+    private messageService: MessageServiceService
+  ) {
     this.taskIntroduceForm = this.fb.group({
       taskName: new FormControl(''),
       subTasks: this.fb.array([]),
       totalTaskPrice: new FormControl({ value: '', disabled: true }),
       description: new FormControl(''),
-      shortDescription: new FormControl('')
+      shortDescription: new FormControl(''),
     });
   }
 
   ngOnInit(): void {
-      this.populateData();
+    this.populateData();
   }
 
-  public populateData(): void{
-    this.taskIntroduceService.getData().subscribe((response: any)=>{
+  public populateData(): void {
+    this.taskIntroduceService.getData().subscribe((response: any) => {
       // console.log('get data response' , response);
       this.dataSource = new MatTableDataSource(response);
       this.dataSource.paginator = this.paginator;
@@ -61,11 +61,10 @@ export class TaskIntroduceComponent implements OnInit{
     }
   }
 
-  onSubmit(){
+  onSubmit() {
     try {
       let formData = this.taskIntroduceForm.getRawValue();
       if (this.mode === 'add') {
-        
         this.taskIntroduceService.serviceCall(formData).subscribe(
           (response) => {
             if (
@@ -88,7 +87,9 @@ export class TaskIntroduceComponent implements OnInit{
         );
       } else if (this.mode === 'edit') {
         // console.log('Calling service editData with ID:', this.selectedData.id);
-        this.taskIntroduceService.editData(this.selectedData.id, formData).subscribe({
+        this.taskIntroduceService
+          .editData(this.selectedData.id, formData)
+          .subscribe({
             next: (response: any) => {
               // console.log('Selected Data:', this.selectedData);
               let elementIndex = this.dataSource.data.findIndex(
@@ -110,7 +111,6 @@ export class TaskIntroduceComponent implements OnInit{
     }
     this.isButtonDisable = true;
     this.taskIntroduceForm.disable();
-    
   }
 
   get subTasks() {
@@ -118,9 +118,11 @@ export class TaskIntroduceComponent implements OnInit{
   }
 
   addSubTask() {
-    this.subTasks.push(this.fb.group({ subTaskName: ['']}));
+    this.subTasks.push(
+      this.fb.group({ id: [null], subTaskName: [''], subTaskPrice: [''] })
+    );
   }
-  
+
   removeSubTask(index: number) {
     this.subTasks.removeAt(index);
   }
@@ -137,7 +139,7 @@ export class TaskIntroduceComponent implements OnInit{
     this.isButtonDisable = false;
     this.taskIntroduceForm.enable();
     this.taskIntroduceForm.get('totalTaskPrice')?.disable();
-    
+    this.mode = 'add';
   }
 
   public editData(data: any): void {
@@ -147,44 +149,46 @@ export class TaskIntroduceComponent implements OnInit{
       taskName: data.taskName,
       description: data.description,
       shortDescription: data.shortDescription,
-      totalTaskPrice: data.totalTaskPrice
+      totalTaskPrice: data.totalTaskPrice,
     });
     this.taskIntroduceForm.get('totalTaskPrice')?.disable();
     if (data.subTasks && data.subTasks.length > 0) {
       data.subTasks.forEach((subTask: any) => {
-        this.subTasks.push(this.fb.group({
-          subTaskName: [subTask.subTaskName],
-          subTaskPrice: [subTask.subTaskPrice]
-        }));
+        this.subTasks.push(
+          this.fb.group({
+            subTaskName: [subTask.subTaskName],
+            subTaskPrice: [subTask.subTaskPrice],
+          })
+        );
       });
     }
-  // this.taskIntroduceForm.formControlName('totalTaskPrice').disabled();
-  this.saveButtonLabel = 'Edit';
-  this.mode = 'edit';
-  // this.selectedData = data;
-  this.selectedData = { id: data.id };
+    // this.taskIntroduceForm.formControlName('totalTaskPrice').disabled();
+    this.saveButtonLabel = 'Edit';
+    this.mode = 'edit';
+    // this.selectedData = data;
+    this.selectedData = { id: data.id };
   }
 
   public deleteData(data: any) {
     const id = data.id;
-        try {
-          this.taskIntroduceService.deleteData(id).subscribe({
-            next: (response: any) => {
-              const index = this.dataSource.data.findIndex(
-                (element) => element.id === id
-              );
-              if (index !== -1) {
-                this.dataSource.data.splice(index, 1);
-              }
-              this.dataSource = new MatTableDataSource(this.dataSource.data);
-              this.messageService.showSuccess('Data Deleted Successfully !');
-            },
-            error: (error) => {
-              this.messageService.showError('Action Failed with Error :' + error);
-            },
-          });
-        } catch (error) {
-          this.messageService.showError('Action Failed with Error:' + error);
-        }
+    try {
+      this.taskIntroduceService.deleteData(id).subscribe({
+        next: (response: any) => {
+          const index = this.dataSource.data.findIndex(
+            (element) => element.id === id
+          );
+          if (index !== -1) {
+            this.dataSource.data.splice(index, 1);
+          }
+          this.dataSource = new MatTableDataSource(this.dataSource.data);
+          this.messageService.showSuccess('Data Deleted Successfully !');
+        },
+        error: (error) => {
+          this.messageService.showError('Action Failed with Error :' + error);
+        },
+      });
+    } catch (error) {
+      this.messageService.showError('Action Failed with Error:' + error);
+    }
   }
 }
