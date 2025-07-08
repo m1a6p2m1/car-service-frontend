@@ -5,6 +5,16 @@
         class="example-form"
         (ngSubmit)="onSubmit()"
       >
+      <mat-form-field class="full-width">
+          <mat-label>Vehicle Type</mat-label>
+          <mat-select formControlName="vehicleType">
+            <mat-option value="Car">Car</mat-option>
+            <mat-option value="Jeep">Jeep</mat-option>
+            <mat-option value="Van">Van</mat-option>
+            <mat-option value="Other">Other</mat-option>
+          </mat-select>
+        </mat-form-field>
+
         <mat-form-field class="example-full-width">
             <mat-label>Task Name</mat-label>
             <input matInput formControlName="taskName" />
