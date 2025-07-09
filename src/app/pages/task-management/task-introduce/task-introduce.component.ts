@@ -5,6 +5,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
 import { TaskIntroduceService } from 'src/app/services/task-management/task-introduce.service';
+import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-task-introduce',
@@ -28,7 +30,8 @@ export class TaskIntroduceComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private taskIntroduceService: TaskIntroduceService,
-    private messageService: MessageServiceService
+    private messageService: MessageServiceService,
+    private _dialog: MatDialog,
   ) {
     this.taskIntroduceForm = this.fb.group({
       taskName: new FormControl(''),
@@ -118,13 +121,28 @@ export class TaskIntroduceComponent implements OnInit {
   }
 
   addSubTask() {
-    this.subTasks.push(
-      this.fb.group({ id: [null], subTaskName: [''], subTaskPrice: [''] })
-    );
+    const subTaskGroup = this.fb.group({ id: [null], subTaskName: [''], subTaskPrice: [''] });
+
+    subTaskGroup.get('subTaskPrice')?.valueChanges.subscribe(() => {
+      this.calculateTotalSubTaskPrice();
+    });
+
+    this.subTasks.push(subTaskGroup);
+
+    this.calculateTotalSubTaskPrice();
   }
 
   removeSubTask(index: number) {
     this.subTasks.removeAt(index);
+  }
+
+  calculateTotalSubTaskPrice() {
+  const total = this.subTasks.controls.reduce((acc, group) => {
+    const price = group.get('subTaskPrice')?.value || 0;
+    return acc + Number(price);
+  }, 0);
+
+  this.taskIntroduceForm.get('totalTaskPrice')?.setValue(total);
   }
 
   public refreshData(): void {
@@ -154,19 +172,35 @@ export class TaskIntroduceComponent implements OnInit {
     this.taskIntroduceForm.get('totalTaskPrice')?.disable();
     if (data.subTasks && data.subTasks.length > 0) {
       data.subTasks.forEach((subTask: any) => {
-        this.subTasks.push(
-          this.fb.group({
-            subTaskName: [subTask.subTaskName],
-            subTaskPrice: [subTask.subTaskPrice],
-          })
-        );
+      const subTaskGroup = this.fb.group({
+        subTaskName: [subTask.subTaskName],
+        subTaskPrice: [subTask.subTaskPrice],
       });
-    }
-    // this.taskIntroduceForm.formControlName('totalTaskPrice').disabled();
+      subTaskGroup.get('subTaskPrice')?.valueChanges.subscribe(() => {
+      this.calculateTotalSubTaskPrice();
+    });
+
+    this.subTasks.push(subTaskGroup);
+    });
+
+    this.calculateTotalSubTaskPrice();
     this.saveButtonLabel = 'Edit';
     this.mode = 'edit';
     // this.selectedData = data;
     this.selectedData = { id: data.id };
+    }
+  }
+
+  public confirmDelete(data: any): void {
+     const dialogRef = this._dialog.open(ConfirmDialogComponent, {
+          data: 'Are you sure you want to delete this record?',
+        });
+    
+        dialogRef.afterClosed().subscribe((result: any) => {
+          if (result) {
+            this.deleteData(data);
+          }
+        }); 
   }
 
   public deleteData(data: any) {

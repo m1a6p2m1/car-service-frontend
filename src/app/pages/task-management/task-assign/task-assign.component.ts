@@ -8,6 +8,8 @@ import { MessageServiceService } from 'src/app/services/message-service/message-
 import { NotificationService } from 'src/app/services/notification-service/notification.service';
 import { RegistrationService } from 'src/app/services/registration/registration.service';
 import { TaskAssignService } from 'src/app/services/task-management/task-assign.service';
+import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 interface Task {
   id: any;
@@ -62,7 +64,8 @@ export class TaskAssignComponent implements OnInit {
     private messageService: MessageServiceService,
     private httpService: HttpService,
     private registrationService: RegistrationService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private _dialog: MatDialog,
   ) {
     this.taskAssignForm = this.fb.group({
       taskName: new FormControl(''),
@@ -267,6 +270,18 @@ export class TaskAssignComponent implements OnInit {
     this.selectData = data;
     this.saveButtonLabel = 'Edit';
   }
+
+  public confirmDelete(data: any): void {
+        const dialogRef = this._dialog.open(ConfirmDialogComponent, {
+          data: 'Are you sure you want to delete this record?',
+        });
+    
+        dialogRef.afterClosed().subscribe((result: any) => {
+          if (result) {
+            this.deleteData(data);
+          }
+        });
+    }
 
   public deleteData(data: any) {
     const taskId = data.id;

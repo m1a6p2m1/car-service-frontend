@@ -1,39 +1,26 @@
-// .slot-container {
-//   display: flex;
-//   flex-wrap: wrap;
-//   gap: 10px;
-//   margin-top: 10px;
-// }
+.vehicle-type{
+  display: flex;
+  gap: 1rem; // spacing between the two fields
+  align-items: center;
 
-// mat-card {
-//   max-width: 500px;
-//   margin: auto;
-//   padding: 20px;
-// }
+  .full-width {
+    flex: 1; // make both fields take equal width
+  }
 
-// mat-form-field {
-//   width: 100%;
-// }
+}
 
-// .full-width-table {
-//   width: 100%;
-//   margin-top: 20px;
-// }
+.service-type{
+  display: flex;
+  gap: 1rem; // spacing between the two fields
+  align-items: center;
 
-// .status-available {
-//   color: green;
-//   font-weight: bold;
-// }
-
-// .status-filling {
-//   color: orange;
-//   font-weight: bold;
-// }
-
-// .status-full {
-//   color: red;
-//   font-weight: bold;
-// }
+  .full-width {
+    flex: 1; // make both fields take equal width
+  }
+}
+.total-service-price{
+  width:400px;
+}
 
 
 .status-full {

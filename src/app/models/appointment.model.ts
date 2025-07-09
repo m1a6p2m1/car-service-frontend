@@ -7,6 +7,6 @@ export interface Appointment {
 }
 
 export interface TimeSlot {
-  time: string;              
-  bookedCount: number;       
+  time: string;         // e.g., "09:00:00"
+  bookedCount: number;  // e.g., 0–3
 }

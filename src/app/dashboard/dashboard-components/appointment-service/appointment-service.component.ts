@@ -27,7 +27,6 @@ export class AppointmentServiceComponent implements OnInit{
   isLoading = false;
   dateFilter: any;
   
-  // dataSource!: CdkTableDataSourceInput<any>;
 
   // isLoading = false;
 
@@ -38,7 +37,12 @@ export class AppointmentServiceComponent implements OnInit{
   ) {
     this.appointmentServiceForm = this.fb.group({
       date: new FormControl(null),
-      time: new FormControl('')
+      time: new FormControl(''),
+      vehicleType: new FormControl(''),
+      price: new FormControl({value: '', disabled: true }),
+      serviceType: new FormControl(''),
+      servicePrice: new FormControl({value: '', disabled: true }),
+      totalServicePrice: new FormControl({value: '', disabled: true })
     });
   }
 
@@ -46,6 +50,19 @@ export class AppointmentServiceComponent implements OnInit{
 ngOnInit(): void {
     // Optional: set default date here
     this.dataSource = new MatTableDataSource<TimeSlot>();
+    
+    const vehiclePrices: { [key: string]: number } = {
+      'car':150,
+      'van':300,
+      'jeep': 400,  
+    }
+
+    this.appointmentServiceForm.get('vehicleType')?.valueChanges.subscribe((selectedType)=>{
+      const price = vehiclePrices[selectedType] || '';
+      this.appointmentServiceForm.get('price')?.setValue(price);
+    });
+
+  
 }
 
 formatDateLocal(date: Date): string {
@@ -66,10 +83,10 @@ formatDateLocal(date: Date): string {
       // const selectedDateStr = date.toISOString().split('T')[0];
       const iso = this.formatDateLocal(date);
 
-      console.log('Raw selected date:', date);
-      console.log('Local date string:', date?.toDateString());
-      console.log('UTC string:', date?.toUTCString());
-      console.log('toISOString:', date?.toISOString());
+      // console.log('Raw selected date:', date);
+      // console.log('Local date string:', date?.toDateString());
+      // console.log('UTC string:', date?.toUTCString());
+      // console.log('toISOString:', date?.toISOString());
 
       this.isLoading = true;
       this.appointmentService.getAvailableSlots(iso).subscribe({
@@ -121,6 +138,10 @@ formatDateLocal(date: Date): string {
   }
   }
 
+  getBaysLeft(slot: TimeSlot): number {
+    return Math.max(3 - slot.bookedCount, 0);
+  }
+
   // Get readable status text
   getStatusText(slot: TimeSlot): string {
     if (slot.bookedCount >= 3) return 'Full';
@@ -149,6 +170,7 @@ formatDateLocal(date: Date): string {
   submitAppointment(): void {
     console.log('In the Service → save appointment-> ts file');
     if (!this.selectedDate || !this.selectedTime) return;
+    // const formValues = this.appointmentServiceForm.getRawValue();
 
     const booking: Appointment = {
       appointmentDate:this.formatDateLocal(this.selectedDate),
@@ -158,11 +180,11 @@ formatDateLocal(date: Date): string {
     this.appointmentService.bookAppointment(booking).subscribe({
       next: (resp) => {
         alert('Appointment confirmed!');
-        // const updatedSlot = this.timeSlots.find(slot => slot.time === this.selectedTime);
-        // if (updatedSlot) {
-        //   updatedSlot.bookedCount += 1;
-        // }
-        // this.dataSource.data = [...this.timeSlots];
+        const updatedSlot = this.timeSlots.find(slot => slot.time === this.selectedTime);
+        if (updatedSlot) {
+          updatedSlot.bookedCount += 1;
+          this.dataSource.data = [...this.timeSlots];
+        }
         this.selectedTime = null;
         this.onDateChange({ value: this.selectedDate } as MatDatepickerInputEvent<Date>);
       },

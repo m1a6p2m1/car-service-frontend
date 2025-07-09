@@ -22,6 +22,7 @@ import { EmployeeLoginDetailsComponent } from './employee-login-details/employee
 import { OnlineItemComponent } from './online-item/online-item.component';
 import { EmployeeDetailsComponent } from './employee-details/employee-details.component';
 import { GrnComponent } from './grn/grn.component';
+import { CustomerLoginDetailsComponent } from './customer-login-details/customer-login-details.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { GrnComponent } from './grn/grn.component';
     EmployeeLoginDetailsComponent,
     OnlineItemComponent,
     EmployeeDetailsComponent,
-    GrnComponent
+    GrnComponent,
+    CustomerLoginDetailsComponent,
   ],
   imports: [
     CommonModule,

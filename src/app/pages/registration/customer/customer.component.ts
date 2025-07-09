@@ -7,6 +7,7 @@ import { MatSort } from '@angular/material/sort';
 import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { CustomerLoginDetailsComponent } from '../customer-login-details/customer-login-details.component';
 
 const ELEMENT_DATA: any[] = [{firstName:'',lastName:'',nic:'',email:'',gender:'',address:'',phoneNumber:'',licencePlate:'',vehicleType:'',vehicleModel:''}];
 
@@ -163,6 +164,33 @@ export class CustomerComponent implements OnInit{
     }
     
   } 
+
+  public addLoginCredentials(customer: any): void{
+      try {
+        console.log('Customer passed to dialog:', customer);
+          const dialogRef = this._dialog.open(CustomerLoginDetailsComponent, {
+      data: {
+        customerId: customer.cusId,
+        firstName: customer.firstName,
+        lastName: customer.lastName
+      }
+      });
+          dialogRef.afterClosed().subscribe({
+            next: (val) => {
+              if (val) {
+                if (val) {
+                  this.messageService.showSuccess(
+                    'Login Credentials Add successfully!'
+                  );
+                }
+              }
+            },
+          });
+        } catch (error) {
+          console.log(error);
+          this.messageService.showError('Action Failed!');
+        }
+    }
 
   public resetData():void{
     this.customerForm.reset();
