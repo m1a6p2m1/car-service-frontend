@@ -1,22 +1,5 @@
-.vehicle-type{
-  display: flex;
-  gap: 1rem; // spacing between the two fields
-  align-items: center;
-
-  .full-width {
-    flex: 1; // make both fields take equal width
-  }
-
-}
-
-.service-type{
-  display: flex;
-  gap: 1rem; // spacing between the two fields
-  align-items: center;
-
-  .full-width {
-    flex: 1; // make both fields take equal width
-  }
+.selection{
+  width: 400px;
 }
 .total-service-price{
   width:400px;
@@ -45,7 +28,7 @@
 }
 .title{
   font-weight: bold;
-  font-size:25px;
+  font-size:22px;
 }
 .datepicker{
   width:400px;
@@ -58,4 +41,8 @@ input{
   color: #fff;
 }
 .confirm-box { margin-top: 12px; }
+
+p{
+  font-size: 18px;
+}
 

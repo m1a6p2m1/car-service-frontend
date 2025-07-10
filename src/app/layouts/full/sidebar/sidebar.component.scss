@@ -1,0 +1,24 @@
+.group-header {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-top:22px;
+    margin-bottom:22px;
+}
+
+.group-title {
+    margin-left: 8px;
+    font-weight: 500;
+}
+
+.expand-icon {
+    margin-left: auto;
+}
+.loggedUserName{
+    margin-top:100px;
+}
+
+::ng-deep.group-header span span {
+    display: flex !important;
+    justify-content: center !important;
+}

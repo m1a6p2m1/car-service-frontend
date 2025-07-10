@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MatTableDataSource } from '@angular/material/table';
-import { Appointment, TimeSlot } from 'src/app/models/appointment.model';
+import { Appointment, Task, TimeSlot } from 'src/app/models/appointment.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
 
@@ -12,7 +12,16 @@ import { MessageServiceService } from 'src/app/services/message-service/message-
   templateUrl: './appointment-service.component.html',
   styleUrl: './appointment-service.component.scss'
 })
+
+
 export class AppointmentServiceComponent implements OnInit{
+
+   additionalServices: string[] = [
+    'Oil Change',
+    'Filter Change',
+    'Engine Wash'
+  ];
+
   appointmentServiceForm: FormGroup;
 
   displayedColumns: string[] = ['time', 'status', 'available', 'action'];
@@ -26,6 +35,8 @@ export class AppointmentServiceComponent implements OnInit{
   selectedTime: string | null = null;
   isLoading = false;
   dateFilter: any;
+
+  
   
 
   // isLoading = false;
@@ -61,9 +72,9 @@ ngOnInit(): void {
       const price = vehiclePrices[selectedType] || '';
       this.appointmentServiceForm.get('price')?.setValue(price);
     });
-
   
 }
+
 
 formatDateLocal(date: Date): string {
   return date.getFullYear() + '-' +

@@ -15,6 +15,9 @@ import { SubTasksComponent } from './dashboard-components/sub-tasks/sub-tasks.co
 import { MatListModule } from '@angular/material/list';
 import { TaskDetailComponent } from './dashboard-components/task-detail/task-detail.component';
 import { AppointmentServiceComponent } from './dashboard-components/appointment-service/appointment-service.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -34,7 +37,8 @@ import { AppointmentServiceComponent } from './dashboard-components/appointment-
     DemoMaterialModule,
     RouterModule.forChild(DashboardRoutes),
     NgApexchartsModule,
-    MatListModule
+    MatListModule,
+    MatCheckboxModule,
   ],
 })
 export class DashboardModule { }

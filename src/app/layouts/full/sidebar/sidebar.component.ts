@@ -20,28 +20,7 @@ import { authenticationEnum } from 'src/app/guards/auth.enum';
     MatIconModule,
   ],
   templateUrl: './sidebar.component.html',
-  styleUrls: [],
-  styles: [`
-    .group-header {
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      margin-top:22px;
-      margin-bottom:22px;
-    }
-
-    .group-title {
-      margin-left: 8px;
-      font-weight: 500;
-    }
-
-    .expand-icon {
-      margin-left: auto;
-    }
-    .loggedUserName{
-      margin-top:100px;
-    }
-  `]
+  styleUrl: './sidebar.component.scss'
 })
 export class AppSidebarComponent implements OnInit, OnDestroy {
   mobileQuery: MediaQueryList;

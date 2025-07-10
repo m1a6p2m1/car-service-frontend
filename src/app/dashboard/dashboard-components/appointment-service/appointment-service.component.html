@@ -1,5 +1,5 @@
   <mat-card-title class="title">Select Vehicle Type And Service Type</mat-card-title><br><br>
-  <div class="vehicle-type">
+  <div class="selection">
   <mat-form-field class="full-width">
     <mat-label>Vehicle Type</mat-label>
     <mat-select formControlName="vehicleType">
@@ -9,27 +9,34 @@
     </mat-select>
     </mat-form-field>
 
-    <mat-form-field class="full-width">
+    <!-- <mat-form-field class="full-width">
       <mat-label>Price</mat-label>
       <input matInput placeholder="Rs." formControlName="price" readonly>
-    </mat-form-field>
+    </mat-form-field> -->
   </div>
 
-  <div class="service-type">
+  <div class="selection">
    <mat-form-field class="full-width">
     <mat-label>Service Type</mat-label>
     <mat-select formControlName="serviceType">
-      <mat-option value="Car">Normal Service</mat-option>
-      <mat-option value="Jeep">Pick-up/ Drop-off Service</mat-option>
-      <mat-option value="Van">Remote Service</mat-option>
+      <mat-option value="Normal Service">Normal Service</mat-option>
+      <mat-option value="Pick-up/ Drop-off Service">Pick-up/ Drop-off Service</mat-option>
+      <mat-option value="Remote Service">Remote Service</mat-option>
     </mat-select>
-    </mat-form-field>
+    </mat-form-field><br>
     
-    <mat-form-field class="full-width">
+    <!-- <mat-form-field class="full-width">
       <mat-label>Service Price</mat-label>
       <input matInput placeholder=" Rs." formControlName="servicePrice" readonly>
-    </mat-form-field>
+    </mat-form-field> -->
   </div>
+  <div>
+    <section class="example-section" >
+      <mat-card-title class="title">Select If You Need Additional Services</mat-card-title><br><br>
+        <p><mat-checkbox *ngFor="let service of additionalServices" value="service">{{service}}</mat-checkbox></p>   
+    </section>
+  </div>
+
   <div>
 
   <mat-form-field class="total-service-price">

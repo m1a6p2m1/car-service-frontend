@@ -49,8 +49,8 @@ export class CustomerLoginDetailsComponent {
         this.httpService
           .request('POST', '/customer-register', {
             customerId: this.selectedCustomerId,
-            firstName: this.customerLoginDetailsForm.getRawValue().firstName,
-            lastName: this.customerLoginDetailsForm.getRawValue().lastName,
+            firstName: this.customerLoginDetailsForm.get('firstName')?.value,
+            lastName: this.customerLoginDetailsForm.get('lastName')?.value,
             login: this.customerLoginDetailsForm.value.login,
             password: this.customerLoginDetailsForm.value.password,
           })
