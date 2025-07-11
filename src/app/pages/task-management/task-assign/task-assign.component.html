@@ -61,6 +61,11 @@
         </mat-select>
       </mat-form-field>
 
+      <mat-form-field class="full-width" *ngIf="showEmailField">
+            <mat-label>Email</mat-label>
+            <input matInput placeholder="Email" formControlName="email">
+      </mat-form-field>
+
       <mat-form-field class="full-width">
         <mat-label>Description</mat-label>
         <textarea

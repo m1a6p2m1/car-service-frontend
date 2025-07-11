@@ -57,6 +57,7 @@ export class TaskAssignComponent implements OnInit {
   filteredUsersList: { id: number; name: string }[][] = [];
   filterControls: FormControl[] = [];
   employees: Employee[] = [];
+  showEmailField = false;
 
   constructor(
     private fb: FormBuilder,
@@ -72,6 +73,7 @@ export class TaskAssignComponent implements OnInit {
       taskCreatedBy: new FormControl({ value: '', disabled: true }), //
       customerName: new FormControl(''),
       customerId: new FormControl(''),
+      email: new FormControl(''),
       description: new FormControl(''),
       status: new FormControl({ value: 'Start', disabled: true }), //
       subTasks: this.fb.array([]),
@@ -332,6 +334,7 @@ export class TaskAssignComponent implements OnInit {
   }
 
   public onCustomerChange(inputId: any) {
+    this.showEmailField = inputId.value === 0;
     const customerName = this.customers.find(
       (customer: any) => customer.id === inputId.value
     ).firstName;

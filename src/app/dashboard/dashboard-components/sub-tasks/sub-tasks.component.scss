@@ -1,35 +1,35 @@
 .tasks-row {
-    display: flex;
-    // flex-wrap: nowrap;
-    overflow-x: auto;
-    gap: 0.7rem;
-    padding: 1rem 0;
-  }
-  
-  .tasks-card {
-    width: 300px;
-    height: 400px !important;
-    flex: 0 0 auto;
-    padding: 0.5rem ;
-  }
+  display: flex;
+  // flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 0.7rem;
+  padding: 1rem 0;
+}
 
-  .task-content {
-    padding: 0.5rem;
-    height: 300px;
-    overflow-y: auto;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-  }
+.tasks-card {
+  width: 300px;
+  height: 400px !important;
+  flex: 0 0 auto;
+  padding: 0.5rem;
+}
 
-  .task-header {
-    font-size: 1.1rem;
-    color:white;
-  }
-  .card-view-button{
-    // margin-left: 65px;
-    margin-bottom: 10px !important;
-  }
+.task-content {
+  padding: 0.5rem;
+  height: 300px;
+  overflow-y: auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.task-header {
+  font-size: 1.1rem;
+  color: white;
+}
+.card-view-button {
+  // margin-left: 65px;
+  margin-bottom: 10px !important;
+}
