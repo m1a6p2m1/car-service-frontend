@@ -6,6 +6,7 @@ import { HttpService } from 'src/app/services/http.service';
 import { CacheService } from 'src/app/services/CacheService';
 import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { RsaService } from 'src/app/services/rsa-service/rsa.service';
 
 @Component({
   selector: 'app-login',
@@ -26,7 +27,8 @@ export class AppSideLoginComponent implements OnInit {
     private httpService: HttpService,
     private cacheService: CacheService,
     private _messageService: MessageServiceService,
-    private localStorage: LocalStorageService
+    private localStorage: LocalStorageService,
+    private rsaService: RsaService
   ) {
     this.loginForm = this.formBuilder.group({
       loginName: ['', [Validators.required]],
@@ -75,7 +77,7 @@ export class AppSideLoginComponent implements OnInit {
       this.httpService
         .request('POST', '/login', {
           login: this.loginForm.value.loginName,
-          password: this.loginForm.value.password,
+          password: this.rsaService.encrypt(this.loginForm.value.password),
         })
         .then((response) => {
           if (response && response.id) {
