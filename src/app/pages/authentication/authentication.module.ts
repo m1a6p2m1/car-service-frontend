@@ -12,6 +12,7 @@ import { AuthenticationRoutes } from './authentication.routing';
 
 import { AppSideLoginComponent } from './login/login.component';
 import { AppSideRegisterComponent } from './register/register.component';
+import { ForgotPasswordComponent } from 'src/app/forgot-password/forgot-password.component';
 
 @NgModule({
   imports: [
@@ -25,6 +26,6 @@ import { AppSideRegisterComponent } from './register/register.component';
     FormsModule,
     ReactiveFormsModule,
   ],
-  declarations: [AppSideLoginComponent, AppSideRegisterComponent],
+  declarations: [AppSideLoginComponent, AppSideRegisterComponent, ForgotPasswordComponent],
 })
 export class AuthenticationModule {}

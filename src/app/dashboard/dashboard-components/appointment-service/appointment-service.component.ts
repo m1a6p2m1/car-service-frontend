@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Appointment, Task, TimeSlot } from 'src/app/models/appointment.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
@@ -35,6 +37,10 @@ export class AppointmentServiceComponent implements OnInit{
   selectedTime: string | null = null;
   isLoading = false;
   dateFilter: any;
+  selectedVehicle = '';
+  totalCost = 0;
+  selectedOptions: string[] = [];
+  OldSelectedOptions: string[] = [];
 
   
   
@@ -45,7 +51,14 @@ export class AppointmentServiceComponent implements OnInit{
     private fb: FormBuilder,
     private appointmentService: AppointmentService,
     private messageService: MessageServiceService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) {
+  if (this.router.getCurrentNavigation()?.extras.state) {
+    const navigation = this.router.getCurrentNavigation();
+    const taskData = navigation?.extras?.state?.['dataObject'];
+    this.totalCost = taskData?.totalTaskPrice;
+  }
     this.appointmentServiceForm = this.fb.group({
       date: new FormControl(null),
       time: new FormControl(''),
@@ -72,7 +85,19 @@ ngOnInit(): void {
       const price = vehiclePrices[selectedType] || '';
       this.appointmentServiceForm.get('price')?.setValue(price);
     });
+
+    this.appointmentServiceForm.patchValue({
+      totalServicePrice: this.totalCost
+    });
   
+  // this.route.queryParams.subscribe(params => {
+  //   const serializedObject = params['objectData'];
+  //   if (serializedObject) {
+  //     const dataObject = JSON.parse(serializedObject);
+  //     console.log('Received object:', dataObject);
+  //     this.totalCost = dataObject.totalTaskPrice;
+  //   }
+  // });
 }
 
 
@@ -273,4 +298,62 @@ formatDateLocal(date: Date): string {
   //     // call backend booking API here
   //   }
   // }
+
+  public onVehicleTypeChange(vehicle: any): void {
+    if (vehicle == 'Car') {
+      if (this.selectedVehicle) {
+        if(this.selectedVehicle == 'Car') {
+          this.totalCost = this.totalCost - 150;
+        }
+        if (this.selectedVehicle == 'Jeep') {
+          this.totalCost = this.totalCost - 200;
+        }
+        if (this.selectedVehicle == 'Van') {
+          this.totalCost = this.totalCost - 250;
+        }
+      }
+
+      this.selectedVehicle = vehicle;
+
+      if (this.selectedVehicle) {
+        if(this.selectedVehicle == 'Car') {
+          this.totalCost = this.totalCost + 150;
+        }
+        if (this.selectedVehicle == 'Jeep') {
+          this.totalCost = this.totalCost + 200;
+        }
+        if (this.selectedVehicle == 'Van') {
+          this.totalCost = this.totalCost + 250;
+        }
+      }
+      
+    }
+  }
+
+  public onAdditionalServiceChange(service: any, event: MatCheckboxChange): void {
+    if (event.checked) {
+      this.selectedOptions.push(service);
+
+        if (service == "Oil Change") {
+          this.totalCost = this.totalCost + 10;
+        }
+        if (service == "Filter Change") {
+          this.totalCost = this.totalCost + 50;
+        }
+        if (service == "Engine Wash") {
+          this.totalCost = this.totalCost + 100;
+        }
+    } else {
+      this.selectedOptions = this.selectedOptions.filter(item => item !== service);
+        if (service == "Oil Change") {
+          this.totalCost = this.totalCost - 10;
+        }
+        if (service == "Filter Change") {
+          this.totalCost = this.totalCost - 50;
+        }
+        if (service == "Engine Wash") {
+          this.totalCost = this.totalCost - 100;
+        }
+    }
+  }
 }

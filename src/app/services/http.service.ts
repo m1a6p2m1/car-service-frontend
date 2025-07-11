@@ -118,4 +118,17 @@ export class HttpService {
 
     return this.http.put(requestUrl, data, { headers: headers }).toPromise();
   }
+
+  sendPasswordResetMail(data: any) {
+      const requestUrl = environment.baseUrl + '/forgot-password';
+  
+      let headers = {};
+      if (this.getAuthToken() !== null) {
+        headers = {
+          Authorization: 'Bearer ' + this.getAuthToken(),
+        };
+      }
+  
+      return this.http.post(requestUrl, data, { headers: headers });
+  }
 }

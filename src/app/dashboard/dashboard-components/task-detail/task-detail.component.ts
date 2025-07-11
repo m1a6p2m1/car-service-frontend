@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { Task } from 'src/app/models/task.model';
 import { TaskIntroduceService } from 'src/app/services/task-management/task-introduce.service';
 
@@ -38,6 +38,13 @@ export class TaskDetailComponent implements OnInit {
 
   public bookAppointment(): void {
       // console.log("task id :", task.id)
-      this.router.navigate(['/dashboard', 'appointment-service']);
+
+  const navigationExtras: NavigationExtras = {
+    state: {
+      dataObject: this.task
+    }
+  };
+
+      this.router.navigate(['/dashboard', 'appointment-service'], navigationExtras);
     }
 }
