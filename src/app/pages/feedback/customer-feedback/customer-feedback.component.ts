@@ -117,7 +117,7 @@ export class CustomerFeedbackComponent implements OnInit{
     const firstName = localStorage.getItem('firstName') || '';
     const lastName = localStorage.getItem('lastName') || '';
     this.loggedUserName = `${firstName} ${lastName}`.trim();
-  }  
+  }
 
   onClick(rating:number) {
     console.log(rating);
