@@ -93,7 +93,7 @@ export class TaskTrackerService {
   }
 
   getMainTaskDetailsByUid(uid: string) {
-    const requestUrl = environment.baseUrl + '/task-assign/task-by-uid?uid=' + uid ;
+    const requestUrl = environment.baseUrl + '/customer-task-by-uid?uid=' + uid ;
     let headers = {};
           
     if (this.httpService.getAuthToken() !== null) {

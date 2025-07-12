@@ -18,7 +18,7 @@ export const AppRoutes: Routes = [
         component: TaskTrackerComponent,
       },
       {
-        path: 'task-assign/task-by-uid',
+        path: 'customer-task-by-uid',
         component: TaskTrackerComponent,
       },
       {
