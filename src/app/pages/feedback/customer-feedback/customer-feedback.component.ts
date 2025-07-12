@@ -45,11 +45,14 @@ export class CustomerFeedbackComponent implements OnInit{
     private customerFeedbackService: CustomerFeedbackService,
     private messageService:MessageServiceService
   ){
+
+    this.loadUserName();
+
     this.customerFeedbackForm = this.fb.group({
-      userName: new FormControl(''),
+      userName: new FormControl({ value: this.loggedUserName, disabled: true }),
       taskNumber: new FormControl(''),
-      serviceDate: new FormControl({ value: '', disabled: true }),
-      serviceType: new FormControl({ value: '', disabled: true }),
+      serviceDate: new FormControl(''),
+      serviceType: new FormControl(''),
       serviceQuality: new FormControl('', Validators.required),
       // serviceQualityLabel: new FormControl(''),
       recommendation: new FormControl('', Validators.required),
@@ -63,7 +66,7 @@ export class CustomerFeedbackComponent implements OnInit{
     try {
       // this.submitted = true;
       if (this.mode === 'add') {
-        this.customerFeedbackService.serviceCall(this.customerFeedbackForm.value).subscribe({
+        this.customerFeedbackService.serviceCall(this.customerFeedbackForm.getRawValue).subscribe({
           next:(response)=>{
             if (this.dataSource && this.dataSource.data && this.dataSource.data.length > 0) {
               this.dataSource = new MatTableDataSource([response, ...this.dataSource.data]);
@@ -76,7 +79,7 @@ export class CustomerFeedbackComponent implements OnInit{
           }
         });
       }else if (this.mode === 'edit') {
-        this.customerFeedbackService.editData(this.selectedData.id, this.customerFeedbackForm.value).subscribe({
+        this.customerFeedbackService.editData(this.selectedData.id, this.customerFeedbackForm.getRawValue).subscribe({
           next:(response)=>{
             let elementIndex = this.dataSource.data.findIndex((element)=> element.id === this.selectedData?.id);
             this.dataSource.data[elementIndex] = response;
@@ -103,7 +106,18 @@ export class CustomerFeedbackComponent implements OnInit{
       this.ratingArr.push(index);
     }
     this.populateData(this.selectedData.id);
+
+    
+    
   }  
+
+  loggedUserName: string = '';
+
+    loadUserName(): void {
+    const firstName = localStorage.getItem('firstName') || '';
+    const lastName = localStorage.getItem('lastName') || '';
+    this.loggedUserName = `${firstName} ${lastName}`.trim();
+  }
 
   onClick(rating:number) {
     console.log(rating);

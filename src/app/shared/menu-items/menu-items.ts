@@ -521,7 +521,7 @@ const MENUITEMS: Menu[] = [
   icon: 'feedback',
   type: 'group',
   isVisible: false,
-  auth: [authenticationEnum.Customer_Feedback],
+  auth: [authenticationEnum.Customer_Feedback, authenticationEnum.All_Feedbacks],
   children: [
     {
       state: 'feedback',
@@ -531,6 +531,15 @@ const MENUITEMS: Menu[] = [
       icon: 'question_answer',
       isVisible: false,
       auth: authenticationEnum.Customer_Feedback,
+    },
+    {
+      state: 'feedback',
+      childState: 'all-feedbacks',
+      name: 'All Feedbacks',
+      type: 'link',
+      icon: 'question_answer',
+      isVisible: false,
+      auth: authenticationEnum.All_Feedbacks,
     }
   ]
 },
