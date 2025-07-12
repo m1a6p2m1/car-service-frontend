@@ -9,11 +9,13 @@ import { DemoMaterialModule } from 'src/app/demo-material-module';
 import { RouterModule } from '@angular/router';
 import { ReportRoutes } from './reports-routing.module';
 import { EmployeeListComponent } from './static-reports/components/employee-list/employee-list.component';
+import { EmployeeStatsComponent } from './static-reports/components/employee-stats/employee-stats.component';
+import { NgApexchartsModule } from 'ng-apexcharts';
 
 
 @NgModule({
   declarations: [
-    EmployeeListComponent
+    EmployeeListComponent, EmployeeStatsComponent
   ],
   imports: [
     CommonModule,
@@ -24,7 +26,8 @@ import { EmployeeListComponent } from './static-reports/components/employee-list
     MatIconModule,
     MatInputModule,
     MatFormFieldModule,
-    DemoMaterialModule
+    DemoMaterialModule,
+    NgApexchartsModule
   ]
 })
 export class ReportModule { }
