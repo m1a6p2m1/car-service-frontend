@@ -58,6 +58,7 @@ export class TaskAssignComponent implements OnInit {
   filterControls: FormControl[] = [];
   employees: Employee[] = [];
   showEmailField = false;
+  superVisorList: Employee[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -75,6 +76,7 @@ export class TaskAssignComponent implements OnInit {
       customerId: new FormControl(''),
       email: new FormControl(''),
       description: new FormControl(''),
+      supervisor: new FormControl(''),
       status: new FormControl({ value: 'Start', disabled: true }), //
       subTasks: this.fb.array([]),
     });
@@ -123,7 +125,7 @@ export class TaskAssignComponent implements OnInit {
           .subscribe({
             next: (response: any) => {
               let elementIndex = this.dataSource.data.findIndex(
-                (element) => element.taskId === this.selectData?.taskId
+                (element) => element.id === this.selectData?.id
               );
               this.dataSource.data[elementIndex] = response;
               this.dataSource = new MatTableDataSource(this.dataSource.data);
@@ -258,6 +260,7 @@ export class TaskAssignComponent implements OnInit {
     this.resetData();
     this.mode = 'edit';
     this.taskAssignForm.patchValue(data);
+    this.taskAssignForm.enable();
 
     data.subTasks.forEach((subTask: any) => {
       this.subTasks.push(
@@ -316,6 +319,10 @@ export class TaskAssignComponent implements OnInit {
     this.saveButtonLabel = 'Save';
     this.isButtonDisable = false;
     this.enableFormManually();
+
+    while (subTasksFormArray.length !== 0) {
+        subTasksFormArray.removeAt(0);
+    }
   }
 
   public refreshData(): void {
@@ -407,6 +414,9 @@ export class TaskAssignComponent implements OnInit {
           };
 
           employeeList.push(employeeData);
+          if (employee.position === 'Supervisor') {
+            this.superVisorList.push(employeeData);
+          }
         });
       }
     });
@@ -415,6 +425,7 @@ export class TaskAssignComponent implements OnInit {
     this.employees = employeeList;
     this.users = employeeList;
     this.filteredUsers = employeeList;
+    this.superVisorList = employeeList.filter((emp: any) => {})
   }
 
   public addNotification(details?: any): void {

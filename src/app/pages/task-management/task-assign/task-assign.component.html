@@ -75,6 +75,15 @@
         ></textarea>
       </mat-form-field>
 
+      <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Supervisor</mat-label>
+            <mat-select formControlName="supervisor">
+              <mat-option *ngFor="let superVisor of superVisorList" [value]="superVisor.id">
+                {{ superVisor.name }}
+              </mat-option>
+            </mat-select>
+      </mat-form-field>
+
       <mat-form-field class="example-full-width">
         <mat-label>Status</mat-label>
         <input matInput formControlName="status" />
