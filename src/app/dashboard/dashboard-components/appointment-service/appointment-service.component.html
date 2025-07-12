@@ -1,6 +1,8 @@
+  <div class="container" >
+  <div class="task-details">
   <mat-card-title class="title">Select Vehicle Type And Service Type</mat-card-title><br><br>
   <div class="selection">
-  <mat-form-field class="full-width">
+    <mat-form-field class="full-width">
     <mat-label>Vehicle Type</mat-label>
     <mat-select formControlName="vehicleType" (selectionChange)="onVehicleTypeChange($event.value)">
       <mat-option value="Car">Car</mat-option>
@@ -48,6 +50,30 @@
   </mat-form-field>
 
   </div>
+  </div>
+  
+
+  <div class="customer-detail">
+    <mat-card-title class="title">Customer Details</mat-card-title><br><br>
+    <mat-form-field class="full-width">
+      <mat-label>Customer Name</mat-label>
+      <input matInput placeholder="Customer Name" formControlName="customerName">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput placeholder="Email" formControlName="email">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+          <mat-label>Telephone</mat-label>
+          <!-- <span matTextPrefix>+94 &nbsp;</span> -->
+          <input type="tel" matInput placeholder="+94 55-555-1234 OR 055-555-1234" formControlName="phoneNumber">
+          <mat-icon matSuffix>phone</mat-icon>
+        </mat-form-field>
+  </div>
+
+  </div>
 
   <mat-card-title class="title">Select Appointment Date</mat-card-title><br><br>
   <div class="datepicker">
@@ -58,7 +84,6 @@
     <mat-datepicker touchUi #picker></mat-datepicker>
   </mat-form-field>
   </div>
-
 
   <div *ngIf="isLoading">Loading slots...</div>
 

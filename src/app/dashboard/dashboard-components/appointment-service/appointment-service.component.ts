@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MatTableDataSource } from '@angular/material/table';
@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Appointment, Task, TimeSlot } from 'src/app/models/appointment.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
+
 
 @Component({
   selector: 'app-appointment-service',
@@ -41,6 +42,7 @@ export class AppointmentServiceComponent implements OnInit{
   totalCost = 0;
   selectedOptions: string[] = [];
   OldSelectedOptions: string[] = [];
+  taskName: any;
 
   
   
@@ -57,7 +59,10 @@ export class AppointmentServiceComponent implements OnInit{
   if (this.router.getCurrentNavigation()?.extras.state) {
     const navigation = this.router.getCurrentNavigation();
     const taskData = navigation?.extras?.state?.['dataObject'];
-    this.totalCost = taskData?.totalTaskPrice;
+    if (taskData) {
+    this.totalCost = taskData.totalTaskPrice;
+    this.taskName = taskData.taskName;
+  }
   }
     this.appointmentServiceForm = this.fb.group({
       date: new FormControl(null),
@@ -66,13 +71,17 @@ export class AppointmentServiceComponent implements OnInit{
       price: new FormControl({value: '', disabled: true }),
       serviceType: new FormControl(''),
       servicePrice: new FormControl({value: '', disabled: true }),
-      totalServicePrice: new FormControl({value: '', disabled: true })
+      totalServicePrice: new FormControl({value: '', disabled: true }),
+      customerName: new FormControl(''),
+      email: new FormControl(''),
+      phoneNumber: new FormControl('')
     });
   }
 
  
 ngOnInit(): void {
     // Optional: set default date here
+    
     this.dataSource = new MatTableDataSource<TimeSlot>();
     
     const vehiclePrices: { [key: string]: number } = {
@@ -99,6 +108,8 @@ ngOnInit(): void {
   //   }
   // });
 }
+
+
 
 
 formatDateLocal(date: Date): string {
