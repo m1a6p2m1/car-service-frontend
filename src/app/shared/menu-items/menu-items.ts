@@ -481,6 +481,24 @@ const MENUITEMS: Menu[] = [
   ]
 },
 {
+  name: 'Task Tracker',
+  icon: 'event_available',
+  type: 'group',
+  isVisible: false,
+  auth: [authenticationEnum.Home_Dashboard],
+  children: [
+    {
+      state: 'task',
+      childState: 'task-tracker',
+      name: 'Task Tracker',
+      type: 'link',
+      icon: 'check_circle',
+      isVisible: false,
+      auth: authenticationEnum.Home_Dashboard,
+    }
+  ]
+},
+{
   name: 'Attendance',
   icon: 'event_available',
   type: 'group',

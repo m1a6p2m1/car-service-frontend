@@ -114,7 +114,7 @@
           <mat-list-item *ngIf="item.isVisible" routerLinkActive="selected">
             <a
               [routerLink]="item.childState ? [item.state, item.childState] : [item.state]"
-              appAccordionToggle
+              appAccordionToggle [target]="item.childState == 'task-tracker' ? '_self': '_self'"
             >
               <mat-icon>{{ item.icon }}</mat-icon>
               <span>{{ item.name }}</span>
@@ -129,7 +129,7 @@
       <mat-list-item routerLinkActive="selected">
         <a
           [routerLink]="menu.childState ? [menu.state, menu.childState] : [menu.state]"
-          appAccordionToggle
+          appAccordionToggle [target]="menu.childState == 'task-tracker' ? '_self': '_self'"
         >
           <mat-icon>{{ menu.icon }}</mat-icon>
           <span>{{ menu.name }}</span>
