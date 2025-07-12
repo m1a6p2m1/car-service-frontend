@@ -1,10 +1,29 @@
-<div class="tasks-row">
-  <div class="tasks-card"  *ngFor="let task of tasks"> <!--*ngFor="let task of tasks"-->
-    <mat-card >
-        <div class="p-20 bg-info" style="text-align: center;;">
+<div class="services-grid">
+<div *ngFor="let task of tasks">
+  <div class="service-card" >
+    <div class="card-header">
+        <img src="./assets/images/logo/vehicle-service-logo.jpg" [alt]="" class="service-image">
+    </div>
+    <div class="card-content"> 
+      <div class="service-info">
+      <h3 class="service-name">{{ task.taskName }}</h3>
+      <p class="service-description">{{ task.description }}</p>
+        <!-- <div class="p-20 bg-info" style="text-align: center;;">
             <mat-card-title class="task-header">{{ task.taskName }}</mat-card-title>
+        </div> -->
+
+        <div class="features">
+            <div class="feature" *ngFor="let sub of task.subTasks.slice(0, 3)">
+              <svg class="check-icon" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+              </svg>
+              <span>{{ sub.subTaskName }}</span>
+            </div>
+            <div class="feature-count" *ngIf="task.subTasks.length > 3">
+              +{{ task.subTasks.length - 3 }} more features
         </div>
-        <mat-card-content class="task-content">
+          </div>
+        <!-- <mat-card-content class="task-content">
           <mat-list role="list" >
           <mat-list-item role="listitem" *ngFor="let sub of task.subTasks">{{sub.subTaskName}}</mat-list-item>
         </mat-list>
@@ -16,7 +35,61 @@
         >
           View >>
       </button>
-        </mat-card-content>
-    </mat-card>
+        </mat-card-content> -->
+      </div>
+          <div class="card-actions">
+          <button class="view-button" (click)="openTaskDetails(task)">
+            <span>View</span>
+            <svg class="arrow-icon" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        </div>
   </div>
 </div>
+</div>
+</div>
+
+<!-- <div class="service-card" [class.popular]="service.popular">
+      <div class="card-header">
+        <img [src]="service.image" [alt]="service.name" class="service-image">
+        <div class="popular-badge" *ngIf="service.popular">
+          <span>Most Popular</span>
+        </div>
+      </div>
+      
+      <div class="card-content">
+        <div class="service-info">
+          <h3 class="service-name">{{ service.name }}</h3>
+          <p class="service-description">{{ service.description }}</p>
+          
+          <div class="service-details">
+            <div class="price-duration">
+              <span class="price">\${{ service.price }}</span>
+              <span class="duration">{{ service.duration }}</span>
+            </div>
+          </div>
+          
+          <div class="features">
+            <div class="feature" *ngFor="let feature of service.features.slice(0, 3)">
+              <svg class="check-icon" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+              </svg>
+              <span>{{ feature }}</span>
+            </div>
+            <div class="feature-count" *ngIf="service.features.length > 3">
+              +{{ service.features.length - 3 }} more features
+            </div>
+          </div>
+        </div>
+        
+        <div class="card-actions">
+          <button class="view-button" (click)="onViewService()">
+            <span>Book Service</span>
+            <svg class="arrow-icon" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div> -->
