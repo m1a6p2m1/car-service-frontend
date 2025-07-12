@@ -25,6 +25,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { FrontPageComponent } from './front-page/front-page/front-page.component';
+import { TaskTrackerComponent } from './task-tracker/task-tracker.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { FrontPageComponent } from './front-page/front-page/front-page.component
     FullComponent,
     AppHeaderComponent,
     SpinnerComponent,
-    FrontPageComponent
+    FrontPageComponent,
+    TaskTrackerComponent
   ],
   imports: [
     BrowserModule,

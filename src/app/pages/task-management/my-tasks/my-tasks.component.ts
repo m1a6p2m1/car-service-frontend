@@ -29,7 +29,7 @@ export interface UpdatedData {
 })
 export class MyTasksComponent implements OnInit{
 
-    displayedColumns: string[] = ['uniqueSubTaskNo', 'description', 'status', 'action'];
+    displayedColumns: string[] = ['mainUniqueTaskNo','uniqueSubTaskNo', 'customer', 'assigneUserName', 'description', 'status', 'action'];
     dataSource!: MatTableDataSource<any>;
     updatedDataList: UpdatedData[] = [];
 
@@ -76,6 +76,8 @@ export class MyTasksComponent implements OnInit{
                   this.dataSource = new MatTableDataSource(response);
                   this.dataSource.paginator = this.paginator;
                   this.dataSource.sort = this.sort;
+
+                  this.setCustomerNameToDatasource();
           }
         },
         error: (error: any) => {
@@ -109,4 +111,6 @@ public changeSubTaskStatus(dataRow: any): void {
       })
     }
   }
+
+  public setCustomerNameToDatasource(): void {}
 }

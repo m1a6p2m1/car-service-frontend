@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { FullComponent } from './layouts/full/full.component';
 import { AuthGuard } from './guards/auth.guard';
 import { FrontPageComponent } from './front-page/front-page/front-page.component';
+import { TaskTrackerComponent } from './task-tracker/task-tracker.component';
 
 export const AppRoutes: Routes = [
   {
@@ -11,6 +12,14 @@ export const AppRoutes: Routes = [
       {
         path: '',
         component: FrontPageComponent
+      },
+      {
+        path: 'task/task-tracker',
+        component: TaskTrackerComponent,
+      },
+      {
+        path: 'customer-task-by-uid',
+        component: TaskTrackerComponent,
       },
       {
         path: 'authentication',
