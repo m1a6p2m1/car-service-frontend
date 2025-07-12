@@ -8,8 +8,11 @@ import { Component } from '@angular/core';
 })
 export class FrontPageComponent {
   serviceEmail = 'namalvehicleservice@gmail.com';
-  serviceAddress = 'address';
-  serviceNumber = 'number';
+  serviceAddress1 = 'Namal Service Center,'
+  serviceAddress2 = 'Kegalle Road,' 
+  serviceAddress3 = 'Dhaluggala,' 
+  serviceAddress4 = 'Rabukkana.';
+  serviceNumber = '+94776676323';
 
   // these services needed to be loaded from database
   services = [

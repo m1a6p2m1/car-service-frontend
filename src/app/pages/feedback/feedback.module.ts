@@ -13,12 +13,16 @@ import { FeedbackRoutes } from './feedback.routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DemoMaterialModule } from 'src/app/demo-material-module';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { AllFeedbacksComponent } from './all-feedbacks/all-feedbacks.component';
+import { FeedbackDetailsComponent } from './feedback-details/feedback-details.component';
 
 
 
 @NgModule({
   declarations: [
-    CustomerFeedbackComponent
+    CustomerFeedbackComponent,
+    AllFeedbacksComponent,
+    FeedbackDetailsComponent
   ],
   imports: [
     CommonModule,
