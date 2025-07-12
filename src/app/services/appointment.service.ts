@@ -55,7 +55,7 @@ export class AppointmentService {
   /** -------------------- 3.  (Optional) Get all existing appointments -------------------- */
   getAppointments(): Observable<any[]> {
     console.log('In the Service → get appointments');
-    const requestUrl = this.baseUrl;            // GET /appointments
+    const requestUrl = this.baseUrl + '/get-all-appointments';            // GET /appointments
 
     let headers = {};
     if (this.httpService.getAuthToken() !== null) {
@@ -66,5 +66,20 @@ export class AppointmentService {
 
     return this.http.get<any[]>(requestUrl, { headers: headers });
   }
+
+    changeAssignee(data: any) {
+    const requestUrl = environment.baseUrl + '/change-appointment-assignee';
+
+    let headers = {};
+
+    if (this.httpService.getAuthToken() !== null) {
+      headers = {
+        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+      };
+    }
+
+    return this.http.put(requestUrl,data, headers);
+  }
+  
 
 }

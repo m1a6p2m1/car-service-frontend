@@ -499,6 +499,24 @@ const MENUITEMS: Menu[] = [
   ]
 },
 {
+  name: 'Appointments',
+  icon: 'event_available',
+  type: 'group',
+  isVisible: false,
+  auth: [authenticationEnum.Home_Dashboard],
+  children: [
+    {
+      state: 'appointment',
+      childState: 'appointment-list',
+      name: 'Appointment List',
+      type: 'link',
+      icon: 'check_circle',
+      isVisible: false,
+      auth: authenticationEnum.Home_Dashboard,
+    }
+  ]
+},
+{
   name: 'Attendance',
   icon: 'event_available',
   type: 'group',

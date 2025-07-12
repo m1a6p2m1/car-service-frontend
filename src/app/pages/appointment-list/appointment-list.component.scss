@@ -1,0 +1,33 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+.form-section {
+    flex: 1;
+    padding: 5px;
+    border-right: 1px solid #ccc;
+}
+.table-section {
+    flex: 1;
+}
+.form-button {
+    margin-right: 20px;
+}
+.full-width {
+    width: 100%;
+}
+
+.mat-mdc-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+
+.refresh-button-filter-section {
+    display: flex;
+    flex-direction: row;
+}
+
+.refresh-button {
+    margin: 1%;
+}

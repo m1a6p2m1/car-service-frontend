@@ -116,6 +116,13 @@ export const AppRoutes: Routes = [
             (m) => m.ReportModule
           ),
       },
+      {
+        path: 'appointment',
+        loadChildren: () => 
+          import('./pages/appointment-list/appointment.module').then(
+            (m) => m.AppointmentModule
+          ),
+      }
 
     ],
   },
