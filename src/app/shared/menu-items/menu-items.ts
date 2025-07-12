@@ -468,6 +468,15 @@ const MENUITEMS: Menu[] = [
       icon: 'assignment',
       isVisible: false,
       auth: authenticationEnum.All_Tasks,
+    },
+    {
+      state: 'task-management',
+      childState: 'my-tasks',
+      name: 'My Tasks',
+      type: 'link',
+      icon: 'assignment',
+      isVisible: false,
+      auth: authenticationEnum.All_Tasks,
     }
   ]
 },

@@ -131,5 +131,34 @@ export class TaskAssignService {
               
     }
 
+  getAssingeSubTaskData(id: any) {
+    // console.log('In the Service');
+    const requestUrl = environment.baseUrl + '/sub-task-assign/' + id.toString();
+
+    let headers = {};
+
+    if (this.httpService.getAuthToken() !== null) {
+      headers = {
+        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+      };
+    }
+
+    return this.http.get(requestUrl, headers);
+  }
+
+  changeSubTaskStatus(data: any) {
+        // console.log('In the Service');
+    const requestUrl = environment.baseUrl + '/change-sub-task-status';
+
+    let headers = {};
+
+    if (this.httpService.getAuthToken() !== null) {
+      headers = {
+        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+      };
+    }
+
+    return this.http.put(requestUrl,data, headers);
+  }
   
 }

@@ -12,6 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { DemoMaterialModule } from 'src/app/demo-material-module';
 import { AllTaskComponent } from './all-task/all-task.component';
 import { TaskIntroduceComponent } from './task-introduce/task-introduce.component';
+import { MyTasksComponent } from './my-tasks/my-tasks.component';
 
 
 
@@ -19,7 +20,8 @@ import { TaskIntroduceComponent } from './task-introduce/task-introduce.componen
   declarations: [
     TaskAssignComponent,
     AllTaskComponent,
-    TaskIntroduceComponent
+    TaskIntroduceComponent,
+    MyTasksComponent
   ],
   imports: [
     CommonModule,
