@@ -15,9 +15,24 @@
                   The actual rendered columns are set as a property on the row definition" -->
 
       <!-- firstName Column -->
+       <ng-container matColumnDef="mainUniqueTaskNo">
+        <th mat-header-cell *matHeaderCellDef>Main Task No</th>
+        <td mat-cell *matCellDef="let element">{{ element.mainUniqueTaskNo }}</td>
+      </ng-container>
+
       <ng-container matColumnDef="uniqueSubTaskNo">
-        <th mat-header-cell *matHeaderCellDef>Task No</th>
+        <th mat-header-cell *matHeaderCellDef>SUb Task No</th>
         <td mat-cell *matCellDef="let element">{{ element.uniqueSubTaskNo }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="customer">
+        <th mat-header-cell *matHeaderCellDef>Customer</th>
+        <td mat-cell *matCellDef="let element">{{ element.customer }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="assigneUserName">
+        <th mat-header-cell *matHeaderCellDef>Assignee</th>
+        <td mat-cell *matCellDef="let element">{{ element.assigneUserName }}</td>
       </ng-container>
 
       <!-- lastName Column -->

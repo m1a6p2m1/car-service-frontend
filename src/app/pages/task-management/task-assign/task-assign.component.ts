@@ -36,7 +36,7 @@ interface Employee {
 export class TaskAssignComponent implements OnInit {
   taskAssignForm: FormGroup;
 
-  displayedColumns: string[] = ['taskName', 'status', 'customerName', 'action'];
+  displayedColumns: string[] = ['uniqueTaskNo', 'taskName', 'status', 'customerName', 'action'];
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -210,6 +210,7 @@ export class TaskAssignComponent implements OnInit {
     return this.fb.group({
       description: { disabled: true, value: item.subTaskName },
       assignedUserId: '',
+      assigneUserName: ''
     });
   }
 
@@ -223,6 +224,7 @@ export class TaskAssignComponent implements OnInit {
         id: [null],
         description: [''],
         assignedUserId: [''],
+        assigneUserName: ['']
       })
     );
   }
@@ -268,6 +270,7 @@ export class TaskAssignComponent implements OnInit {
           id: [subTask.id],
           description: [subTask.description],
           assignedUserId: [subTask.assignedUserId],
+          assigneUserName: [subTask.assigneUserName]
         })
       );
     });
@@ -349,6 +352,19 @@ export class TaskAssignComponent implements OnInit {
     this.taskAssignForm.patchValue({
       customerName,
     });
+  }
+
+  public onAsigneeChange(inputId: any, index: number) {
+    const empId = inputId.value;
+
+    const emp = this.employees.find((employeeItem: Employee) => {
+      return employeeItem.id == empId;
+    });
+
+    const empName = emp?.name;
+
+    const itemGroup = this.subTasks.at(index) as FormGroup;
+    itemGroup.get('assigneUserName')?.patchValue(empName);
   }
 
   onTaskFilterKeyPress(eventTarget: any) {
