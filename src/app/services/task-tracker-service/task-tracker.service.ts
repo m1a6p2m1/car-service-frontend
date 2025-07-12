@@ -92,6 +92,19 @@ export class TaskTrackerService {
     return this.http.get(requestUrl, headers); 
   }
 
+  getMainTaskDetailsByUid(uid: string) {
+    const requestUrl = environment.baseUrl + '/task-assign/task-by-uid?uid=' + uid ;
+    let headers = {};
+          
+    if (this.httpService.getAuthToken() !== null) {
+      headers = {
+        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+      };
+    }
+          
+    return this.http.get(requestUrl, headers); 
+  }
+
   getTodos(): Observable<Todo[]> {
     return this.todos$;
   }

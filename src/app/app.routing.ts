@@ -18,6 +18,10 @@ export const AppRoutes: Routes = [
         component: TaskTrackerComponent,
       },
       {
+        path: 'task-assign/task-by-uid',
+        component: TaskTrackerComponent,
+      },
+      {
         path: 'authentication',
         loadChildren: () =>
           import('./pages/authentication/authentication.module').then(

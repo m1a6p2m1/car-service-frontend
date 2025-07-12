@@ -3,6 +3,7 @@ import { map, Observable } from 'rxjs';
 import { TaskTrackerService } from '../services/task-tracker-service/task-tracker.service';
 import { HttpService } from '../services/http.service';
 import { ChangeDetectorRef } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 export interface Todo {
   id: number;
@@ -61,14 +62,19 @@ export class TaskTrackerComponent implements OnInit, AfterViewInit {
 
   /* correct variable end */
 
-  constructor(private todoService: TaskTrackerService, private httpService: HttpService, private cdRef: ChangeDetectorRef) {
+  constructor(private todoService: TaskTrackerService, private httpService: HttpService, private cdRef: ChangeDetectorRef, private route: ActivatedRoute) {
   }
 
     ngOnInit(): void {
     }
 
   ngAfterViewInit(): void {
-    this.todoService.getMainTaskDetails(this.httpService.getUserId(), '-1').subscribe({
+
+  let uid = '';
+  this.route.queryParams.subscribe(params => {uid = params['uid'];});
+
+    if (uid == null || uid == '' || uid == undefined) {
+      this.todoService.getMainTaskDetails(this.httpService.getUserId(), '-1').subscribe({
         next: (response: any) => {
           this.tasks = response;
           this.cdRef.detectChanges();
@@ -77,6 +83,17 @@ export class TaskTrackerComponent implements OnInit, AfterViewInit {
           console.log(error);
         }
       })
+    } else if (uid) {
+      this.todoService.getMainTaskDetailsByUid(uid).subscribe({
+        next: (response: any) => {
+          this.tasks = response;
+          this.cdRef.detectChanges();
+        }, 
+        error: (error: any) => {
+          console.log(error);
+        }
+      })
+    }
   }
 
     public setPercentages(): void {
