@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { TaskTrackerService } from '../services/task-tracker-service/task-tracker.service';
 import { HttpService } from '../services/http.service';
+import { ChangeDetectorRef } from '@angular/core';
 
 export interface Todo {
   id: number;
@@ -40,7 +41,7 @@ interface SubTask {
   templateUrl: './task-tracker.component.html',
   styleUrl: './task-tracker.component.scss'
 })
-export class TaskTrackerComponent implements OnInit {
+export class TaskTrackerComponent implements OnInit, AfterViewInit {
   subTasks: SubTask[] = [];
   tasks: Task[] = [];
 
@@ -60,18 +61,23 @@ export class TaskTrackerComponent implements OnInit {
 
   /* correct variable end */
 
-  constructor(private todoService: TaskTrackerService, private httpService: HttpService) {}
+  constructor(private todoService: TaskTrackerService, private httpService: HttpService, private cdRef: ChangeDetectorRef) {
+  }
 
     ngOnInit(): void {
-      this.todoService.getMainTaskDetails(this.httpService.getUserId(), '-1').subscribe({
+    }
+
+  ngAfterViewInit(): void {
+    this.todoService.getMainTaskDetails(this.httpService.getUserId(), '-1').subscribe({
         next: (response: any) => {
           this.tasks = response;
+          this.cdRef.detectChanges();
         }, 
         error: (error: any) => {
           console.log(error);
         }
       })
-    }
+  }
 
     public setPercentages(): void {
     const totalCount = this.statusCount.pending + this.statusCount.done + this.statusCount.processing;
