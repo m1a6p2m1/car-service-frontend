@@ -12,6 +12,16 @@ import { TaskIntroduceService } from 'src/app/services/task-management/task-intr
 export class TaskDetailComponent implements OnInit {
   task!: Task;
 
+taski = {
+  name: 'Remote Car Wash',
+  description: 'A full exterior cleaning service performed at the customer’s location.',
+  subtasks: [
+    { title: 'Get Car', status: 'Pending' },
+    { title: 'Wash Car', status: 'In Progress' },
+    { title: 'Dry Car', status: 'Pending' },
+    { title: 'Payment', status: 'Not Started' }
+  ]
+};
   constructor(
     private route: ActivatedRoute,
     private taskIntroduceService:TaskIntroduceService,

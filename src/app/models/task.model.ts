@@ -1,6 +1,8 @@
 export interface SubTask {
   id: number;
   subTaskName: string;
+  subTaskPrice?: any;
+  status?: any
 }
 
 export interface Task {
