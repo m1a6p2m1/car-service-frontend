@@ -130,4 +130,13 @@ export class AppointmentListComponent implements OnInit {
           }
     }
 
+    formatTime(timeArray: number[]): string {
+      const [hours, minutes] = timeArray;
+  return `${this.pad(hours)}:${this.pad(minutes)}`;
+    }
+
+    pad(num: number): string {
+  return num < 10 ? '0' + num : num.toString();
+}
+
 }
