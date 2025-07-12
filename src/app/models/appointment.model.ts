@@ -4,6 +4,9 @@ export interface Appointment {
   timeSlot: string;          
   bay?: number;
   status?: string;
+  price?: number;
+  taskName?: string;
+  taskId?: number
 }
 
 export interface TimeSlot {

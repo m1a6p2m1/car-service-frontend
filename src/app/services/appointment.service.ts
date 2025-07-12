@@ -38,7 +38,7 @@ export class AppointmentService {
 
 
   /** -------------------- 2.  Book a new appointment -------------------- */
-  bookAppointment(appointment: Appointment): Observable<Appointment>{
+  bookAppointment(appointment: any): Observable<Appointment>{
     console.log('In the Service → save appointment');
     const requestUrl = `${this.baseUrl}`;            // POST /appointments
 

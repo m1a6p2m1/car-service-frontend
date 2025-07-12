@@ -43,7 +43,8 @@ export class AppointmentServiceComponent implements OnInit{
   selectedOptions: string[] = [];
   OldSelectedOptions: string[] = [];
   taskName: any;
-
+  taskId: any;
+  selectedServices: string = "";
   
   
 
@@ -62,6 +63,7 @@ export class AppointmentServiceComponent implements OnInit{
     if (taskData) {
     this.totalCost = taskData.totalTaskPrice;
     this.taskName = taskData.taskName;
+    this.taskId = taskData.id;
   }
   }
     this.appointmentServiceForm = this.fb.group({
@@ -74,7 +76,10 @@ export class AppointmentServiceComponent implements OnInit{
       totalServicePrice: new FormControl({value: '', disabled: true }),
       customerName: new FormControl(''),
       email: new FormControl(''),
-      phoneNumber: new FormControl('')
+      phoneNumber: new FormControl(''),
+      taskId: new FormControl(''),
+      taskName: new FormControl(''),
+      additionalServices: new FormControl('')
     });
   }
 
@@ -209,24 +214,27 @@ formatDateLocal(date: Date): string {
   //   return day !== 0; // disable Sundays
   // };
 
-  selectSlot(time: string): void {
+  selectSlot(time: string, data: any): void {
   this.selectedTime = time;
+  console.log(data);
 }
 
   // Book the selected appointment
   submitAppointment(): void {
     console.log('In the Service → save appointment-> ts file');
     if (!this.selectedDate || !this.selectedTime) return;
-    // const formValues = this.appointmentServiceForm.getRawValue();
+    const formValues = this.appointmentServiceForm.getRawValue();
 
     const booking: Appointment = {
       appointmentDate:this.formatDateLocal(this.selectedDate),
-      timeSlot: this.selectedTime
+      timeSlot: this.selectedTime,
+      price: this.totalCost,
+      taskName: this.taskName,
+      taskId: this.taskId
     };
 
-    this.appointmentService.bookAppointment(booking).subscribe({
+    this.appointmentService.bookAppointment(this.processObjects(booking)).subscribe({
       next: (resp) => {
-        alert('Appointment confirmed!');
         const updatedSlot = this.timeSlots.find(slot => slot.time === this.selectedTime);
         if (updatedSlot) {
           updatedSlot.bookedCount += 1;
@@ -234,20 +242,29 @@ formatDateLocal(date: Date): string {
         }
         this.selectedTime = null;
         this.onDateChange({ value: this.selectedDate } as MatDatepickerInputEvent<Date>);
+
+        this.appointmentServiceForm.disable();
+        this.messageService.showSuccess("Your Appointment Successfully Scheduled!");
       },
       error: (err) => {
         console.error(err);
-        alert('Failed to book appointment');
+        this.messageService.showError("Error Occured. Please try again!=")
       }
     });
   }
 
+  public processObjects(booking: Appointment): void {
+    this.appointmentServiceForm.patchValue({
+      date: booking.appointmentDate,
+      time: booking.timeSlot,
+      totalServicePrice: booking.price,
+      taskId: booking.taskId,
+      taskName: booking.taskName,
+      additionalServices: this.selectedServices
+    });
 
-
-
-
-
-
+    return this.appointmentServiceForm.getRawValue();
+  }
 
 
 
@@ -366,5 +383,7 @@ formatDateLocal(date: Date): string {
           this.totalCost = this.totalCost - 100;
         }
     }
+
+    this.selectedServices = this.selectedOptions.join(',');
   }
 }

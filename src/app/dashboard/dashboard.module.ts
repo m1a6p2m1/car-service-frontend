@@ -17,7 +17,7 @@ import { TaskDetailComponent } from './dashboard-components/task-detail/task-det
 import { AppointmentServiceComponent } from './dashboard-components/appointment-service/appointment-service.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -39,6 +39,8 @@ import { FormsModule } from '@angular/forms';
     NgApexchartsModule,
     MatListModule,
     MatCheckboxModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
 })
 export class DashboardModule { }
