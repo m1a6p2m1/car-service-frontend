@@ -26,6 +26,10 @@ export class AppSideRegisterComponent implements OnInit {
     this.registerForm = this.formBuilder.group({
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
+      nic: ['', [Validators.required, Validators.pattern('^([0-9]{9}[x|X|v|V]|[0-9]{12})$')]],
+      contactNumber: ['', [Validators.required, Validators.pattern('^(\\+94|0)[1-9]{2}[0-9]{7}$|^(\\+94|0)?7[0-9]{8}$')]],
+      address: [''],
+      email: ['', [Validators.email]],
       login: ['', [Validators.required]],
       password: ['', [Validators.required]],
     });
@@ -51,6 +55,10 @@ export class AppSideRegisterComponent implements OnInit {
         .request('POST', '/register', {
           firstName: this.registerForm.value.firstName,
           lastName: this.registerForm.value.lastName,
+          nic: this.registerForm.value.nic,
+          email: this.registerForm.value.email,
+          contactNumber: this.registerForm.value.contactNumber,
+          address: this.registerForm.value.address,
           login: this.registerForm.value.login,
           password: this.registerForm.value.password,
           role: 'CUSTOMER'
