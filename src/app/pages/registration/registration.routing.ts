@@ -6,6 +6,7 @@ import { ItemComponent } from './item/item.component';
 import { TaskComponent } from './task/task.component';
 import { OnlineItemComponent } from './online-item/online-item.component';
 import { GrnComponent } from './grn/grn.component';
+import { VehiclesComponent } from './vehicles/vehicles.component';
 
 export const RegistrationRoutes: Routes = [
   {
@@ -18,6 +19,10 @@ export const RegistrationRoutes: Routes = [
       {
         path: 'customer',
         component: CustomerComponent,
+      },
+      {
+        path: 'vehicles',
+        component: VehiclesComponent,
       },
       {
         path: 'supplier',

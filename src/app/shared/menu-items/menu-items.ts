@@ -377,7 +377,7 @@ const MENUITEMS: Menu[] = [
     icon: 'app_registration',
     type: 'group',
     isVisible: false,
-    auth: [authenticationEnum.Employee, authenticationEnum.Customer, authenticationEnum.Supplier, authenticationEnum.Item, authenticationEnum.Online_Products, authenticationEnum.GRN],
+    auth: [authenticationEnum.Employee, authenticationEnum.Customer, authenticationEnum.Vehicles, authenticationEnum.Supplier, authenticationEnum.Item, authenticationEnum.Online_Products, authenticationEnum.GRN],
     children: [
       {
         state: 'registration',
@@ -396,6 +396,15 @@ const MENUITEMS: Menu[] = [
         icon: 'people',
         isVisible: false,
         auth: authenticationEnum.Customer,
+      },
+      {
+        state: 'registration',
+        childState: 'vehicles',
+        name: 'Vehicles',
+        type: 'link',
+        icon: 'directions_car',
+        isVisible: false,
+        auth: authenticationEnum.Vehicles,
       },
       {
         state: 'registration',

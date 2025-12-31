@@ -23,6 +23,7 @@ import { OnlineItemComponent } from './online-item/online-item.component';
 import { EmployeeDetailsComponent } from './employee-details/employee-details.component';
 import { GrnComponent } from './grn/grn.component';
 import { CustomerLoginDetailsComponent } from './customer-login-details/customer-login-details.component';
+import { VehiclesComponent } from './vehicles/vehicles.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { CustomerLoginDetailsComponent } from './customer-login-details/customer
     EmployeeDetailsComponent,
     GrnComponent,
     CustomerLoginDetailsComponent,
+    VehiclesComponent,
   ],
   imports: [
     CommonModule,

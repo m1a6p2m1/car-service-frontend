@@ -102,19 +102,19 @@ export class TaskAssignService {
   }
 
   // customer commonly used tasks loaded into the dashboard
-  getTasksByCustomerId(customerId: number): Observable<Task[]> {
-    const requestUrl =
-      environment.baseUrl + '/task-assign/' + customerId.toString();
+  // getTasksByCustomerId(customerId: number): Observable<Task[]> {
+  //   const requestUrl =
+  //     environment.baseUrl + '/task-assign/' + customerId.toString();
 
-    let headers = {};
-    if (this.httpService.getAuthToken()) {
-      headers = {
-        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
-      };
-    }
+  //   let headers = {};
+  //   if (this.httpService.getAuthToken()) {
+  //     headers = {
+  //       Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+  //     };
+  //   }
 
-    return this.http.get<Task[]>(requestUrl, { headers });
-  }
+  //   return this.http.get<Task[]>(requestUrl, { headers });
+  // }
 // this create for dashboard task card for the common customers
   getTaskById(id:number): Observable<Task>{
       console.log('In the service getTaskbyid');
