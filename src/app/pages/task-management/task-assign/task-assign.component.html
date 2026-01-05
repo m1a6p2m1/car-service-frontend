@@ -1,10 +1,6 @@
 <div class="container">
   <div class="form-section">
-    <form
-      [formGroup]="taskAssignForm"
-      class="example-form"
-      (ngSubmit)="onSubmit()"
-    >
+    <form [formGroup]="taskAssignForm" class="example-form" (ngSubmit)="onSubmit()">
       <!-- <mat-form-field appearance="fill">
       <mat-label>Task Name</mat-label>
       <mat-select formControlName="taskName">
@@ -18,11 +14,7 @@
         <mat-label>Task Name</mat-label>
         <mat-select formControlName="taskName">
           <mat-form-field>
-            <input
-              matInput
-              (keyup)="onTaskFilterKeyPress($event.target)"
-              placeholder="Search for Task Here..."
-            />
+            <input matInput (keyup)="onTaskFilterKeyPress($event.target)" placeholder="Search for Task Here..." />
           </mat-form-field>
 
           <mat-option *ngFor="let task of tasks" [value]="task.taskName">
@@ -38,50 +30,57 @@
 
       <mat-form-field appearance="fill">
         <mat-label>Customer Name</mat-label>
-        <mat-select
-          formControlName="customerId"
-          (selectionChange)="onCustomerChange($event)"
-        >
+        <mat-select formControlName="customerId" (selectionChange)="onCustomerChange($event)">
           <mat-form-field>
-            <input
-              matInput
-              (keyup)="onCustomerFilterKeyPress($event.target)"
-              placeholder="Search for Customer Here..."
-            />
+            <input matInput (keyup)="onCustomerFilterKeyPress($event.target)"
+              placeholder="Search for Customer Here..." />
           </mat-form-field>
           <!-- <mat-option>None</mat-option> -->
-          <mat-option
-            *ngFor="let customer of selectedCustomers"
-            [value]="customer.id"
-          >
+          <mat-option *ngFor="let customer of selectedCustomers" [value]="customer.id">
             {{
-              customer.id + " " + customer.firstName + " " + customer.lastName
+            customer.id + " " + customer.firstName + " " + customer.lastName
             }}
           </mat-option>
         </mat-select>
       </mat-form-field>
 
+      <mat-form-field class="full-width">
+        <mat-label>Licence Plate</mat-label>
+        <input type="tel" matInput placeholder="Licence Plate Number" formControlName="licencePlate">
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Vehicle Type</mat-label>
+        <input type="tel" matInput placeholder="Vehicle Type" formControlName="vehicleType">
+      </mat-form-field>
+
+      <!-- <mat-form-field class="full-width">
+        <mat-label>Vehicle Type</mat-label>
+        <mat-select formControlName="vehicleType">
+          <mat-option value="Car">Car</mat-option>
+          <mat-option value="Jeep">Jeep</mat-option>
+          <mat-option value="Van">Van</mat-option>
+          <mat-option value="Other">Other</mat-option>
+        </mat-select>
+      </mat-form-field> -->
+
       <mat-form-field class="full-width" *ngIf="showEmailField">
-            <mat-label>Email</mat-label>
-            <input matInput placeholder="Email" formControlName="email">
+        <mat-label>Email</mat-label>
+        <input matInput placeholder="Email" formControlName="email">
       </mat-form-field>
 
       <mat-form-field class="full-width">
         <mat-label>Description</mat-label>
-        <textarea
-          matInput
-          placeholder="Description"
-          formControlName="description"
-        ></textarea>
+        <textarea matInput placeholder="Description" formControlName="description"></textarea>
       </mat-form-field>
 
       <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Supervisor</mat-label>
-            <mat-select formControlName="supervisor">
-              <mat-option *ngFor="let superVisor of superVisorList" [value]="superVisor.id">
-                {{ superVisor.name }}
-              </mat-option>
-            </mat-select>
+        <mat-label>Supervisor</mat-label>
+        <mat-select formControlName="supervisor">
+          <mat-option *ngFor="let superVisor of superVisorList" [value]="superVisor.id">
+            {{ superVisor.name }}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
 
       <mat-form-field class="example-full-width">
@@ -100,18 +99,9 @@
       </mat-list> -->
 
       <div formArrayName="subTasks">
-        <div
-          *ngFor="let subTask of subTasks.controls; let i = index"
-          class="subtask-row"
-          [formGroupName]="i"
-        >
+        <div *ngFor="let subTask of subTasks.controls; let i = index" class="subtask-row" [formGroupName]="i">
           <mat-form-field class="full-width">
-            <input
-              matInput
-              placeholder="Sub Task"
-              formControlName="description"
-              placeholder="Sub Task Description"
-            />
+            <input matInput placeholder="Sub Task" formControlName="description" placeholder="Sub Task Description" />
           </mat-form-field>
           <mat-form-field appearance="fill" class="full-width">
             <mat-label>Assign to</mat-label>
@@ -133,39 +123,21 @@
             class="form-control subtask-input"
             placeholder="Sub Task"
           /> -->
-          <button
-            type="button"
-            class="btn btn-danger remove-button"
-            (click)="removeSubTask(i)"
-            [disabled]="subTask.disabled"
-          >
+          <button type="button" class="btn btn-danger remove-button" (click)="removeSubTask(i)"
+            [disabled]="subTask.disabled">
             -
           </button>
         </div>
-        <button
-          type="button"
-          class="btn btn-primary mt-2 mb-4"
-          (click)="addSubTask()"
-        >
+        <button type="button" class="btn btn-primary mt-2 mb-4" (click)="addSubTask()">
           +
         </button>
       </div>
 
-      <button
-        type="submit"
-        mat-raised-button
-        color="primary"
-        class="form-button"
-      >
+      <button type="submit" mat-raised-button color="primary" class="form-button">
         {{ saveButtonLabel }}
       </button>
       <!--[disabled]="isButtonDisable" -->
-      <button
-        type="button"
-        mat-raised-button
-        color="secondary"
-        (click)="resetData()"
-      >
+      <button type="button" mat-raised-button color="secondary" (click)="resetData()">
         Reset
       </button>
 
@@ -230,20 +202,10 @@
       <ng-container matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef>Action</th>
         <td mat-cell *matCellDef="let element">
-          <button
-            mat-icon-button
-            color="warn"
-            (click)="editData(element)"
-            matTooltip="Edit"
-          >
+          <button mat-icon-button color="warn" (click)="editData(element)" matTooltip="Edit">
             <mat-icon>edit</mat-icon>
           </button>
-          <button
-            mat-icon-button
-            color="warn"
-            (click)="confirmDelete(element)"
-            matTooltip="Delete"
-          >
+          <button mat-icon-button color="warn" (click)="confirmDelete(element)" matTooltip="Delete">
             <mat-icon>delete</mat-icon>
           </button>
         </td>
@@ -252,9 +214,6 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
-    <mat-paginator
-      [pageSizeOptions]="[5, 10, 25, 100]"
-      aria-label="Select page of users"
-    ></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
   </div>
 </div>

@@ -88,18 +88,49 @@ export class TaskAssignService {
   }
 
   getCustomersList() {
-    const requestUrl = environment.baseUrl + '/customer/task-list-customers';
-
-    let headers = {};
-
-    if (this.httpService.getAuthToken() !== null) {
-      headers = {
-        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
-      };
-    }
-
-    return this.http.get(requestUrl, headers);
+      const requestUrl = environment.baseUrl + '/register/users';
+      console.log('customer names');
+      let headers = {};
+  
+      if (this.httpService.getAuthToken() !== null) {
+        headers = {
+          Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+        };
+      }
+  
+      return this.http.get(requestUrl, headers);
   }
+
+  //Auto load licence_plate and vehicle_type when select customer_name
+  getVehicleDetails(customerId: number) {
+      const requestUrl = environment.baseUrl + '/register/vehicles/' + customerId.toString();
+      console.log('Vehicle Details');
+      let headers = {};
+  
+      if (this.httpService.getAuthToken() !== null) {
+        headers = {
+          Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+        };
+      }
+  
+      return this.http.get<any>(requestUrl, { headers });
+  }
+
+
+
+  // getCustomersList() {
+  //   const requestUrl = environment.baseUrl + '/customer/task-list-customers';
+
+  //   let headers = {};
+
+  //   if (this.httpService.getAuthToken() !== null) {
+  //     headers = {
+  //       Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+  //     };
+  //   }
+
+  //   return this.http.get(requestUrl, headers);
+  // }
 
   // customer commonly used tasks loaded into the dashboard
   // getTasksByCustomerId(customerId: number): Observable<Task[]> {
@@ -115,6 +146,8 @@ export class TaskAssignService {
 
   //   return this.http.get<Task[]>(requestUrl, { headers });
   // }
+
+
 // this create for dashboard task card for the common customers
   getTaskById(id:number): Observable<Task>{
       console.log('In the service getTaskbyid');

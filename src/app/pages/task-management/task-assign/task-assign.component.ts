@@ -74,6 +74,8 @@ export class TaskAssignComponent implements OnInit {
       taskCreatedBy: new FormControl({ value: '', disabled: true }), //
       customerName: new FormControl(''),
       customerId: new FormControl(''),
+      licencePlate: new FormControl(''),
+      vehicleType: new FormControl(''),
       email: new FormControl(''),
       description: new FormControl(''),
       supervisor: new FormControl(''),
@@ -263,6 +265,8 @@ export class TaskAssignComponent implements OnInit {
     this.mode = 'edit';
     this.taskAssignForm.patchValue(data);
     this.taskAssignForm.enable();
+    this.taskAssignForm.get('taskCreatedBy')?.disable();
+    this.taskAssignForm.get('status')?.disable();
 
     data.subTasks.forEach((subTask: any) => {
       this.subTasks.push(
@@ -344,13 +348,35 @@ export class TaskAssignComponent implements OnInit {
   }
 
   public onCustomerChange(inputId: any) {
+    const customerId = inputId.value;
+
+    const customer = this.customers.find(
+      (c: any) => c.id === customerId
+    );
+
+    if (!customer) {
+      return;
+    }
+
     this.showEmailField = inputId.value === 0;
-    const customerName = this.customers.find(
-      (customer: any) => customer.id === inputId.value
-    ).firstName;
+    // const customerName = this.customers.find(
+    //   (customer: any) => customer.id === inputId.value
+    // ).firstName;
 
     this.taskAssignForm.patchValue({
-      customerName,
+      customer,
+    });
+
+    this.taskAssignService               //Auto load licence_plate and vehicle_type when select customer_name
+    .getVehicleDetails(customerId)
+    .subscribe(vehicle => {
+
+      if (vehicle) {
+        this.taskAssignForm.patchValue({
+          licencePlate: vehicle.licencePlate,
+          vehicleType: vehicle.vehicleType
+        });
+      }
     });
   }
 
