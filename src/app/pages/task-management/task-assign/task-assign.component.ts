@@ -47,18 +47,19 @@ export class TaskAssignComponent implements OnInit {
 
   selectedSubtasks: any[] = [];
 
-  users = [
-    { id: 1, name: 'Alice' },
-    { id: 2, name: 'Bob' },
-    { id: 3, name: 'Charlie' },
-  ];
+  // users = [
+  //   { id: 1, name: 'Alice' },
+  //   { id: 2, name: 'Bob' },
+  //   { id: 3, name: 'Charlie' },
+  // ];
 
-  filteredUsers = this.users;
-  filteredUsersList: { id: number; name: string }[][] = [];
+  // filteredUsers = this.users;
+  // filteredUsersList: { id: number; name: string }[][] = [];
   filterControls: FormControl[] = [];
   employees: Employee[] = [];
   showEmailField = false;
   superVisorList: Employee[] = [];
+  technicianList: Employee[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -160,7 +161,7 @@ export class TaskAssignComponent implements OnInit {
         this.updateSubtasks(selectedTask);
       });
 
-    this.filteredUsers = this.users;
+    // this.filteredUsers = this.users;
   }
 
   public setCreatedByValue(): void {
@@ -308,6 +309,7 @@ export class TaskAssignComponent implements OnInit {
           }
           this.dataSource = new MatTableDataSource(this.dataSource.data);
           this.messageService.showSuccess('Data Deleted Successfully !');
+          this.refreshData();
         },
         error: (error) => {
           this.messageService.showError('Action Failed with Error :' + error);
@@ -321,11 +323,15 @@ export class TaskAssignComponent implements OnInit {
   public resetData() {
     const subTasksFormArray = this.subTasks;
     subTasksFormArray.clear();
-    this.resetFormManually();
     this.taskAssignForm.reset();
+    this.resetFormManually();
+    this.taskAssignForm.get('taskCreatedBy')?.disable();
+    this.taskAssignForm.get('status')?.disable();
     this.saveButtonLabel = 'Save';
     this.isButtonDisable = false;
     this.enableFormManually();
+    this.setCreatedByValue();
+    this.taskAssignForm.patchValue({status: 'Start'});
 
     while (subTasksFormArray.length !== 0) {
         subTasksFormArray.removeAt(0);
@@ -359,12 +365,12 @@ export class TaskAssignComponent implements OnInit {
     }
 
     this.showEmailField = inputId.value === 0;
-    // const customerName = this.customers.find(
-    //   (customer: any) => customer.id === inputId.value
-    // ).firstName;
+    const customerName = this.customers.find(
+      (customer: any) => customer.id === inputId.value
+    ).firstName;
 
     this.taskAssignForm.patchValue({
-      customer,
+      customerName,
     });
 
     this.taskAssignService               //Auto load licence_plate and vehicle_type when select customer_name
@@ -456,18 +462,25 @@ export class TaskAssignComponent implements OnInit {
           };
 
           employeeList.push(employeeData);
-          if (employee.position === 'Supervisor') {
+          console.log('Position:', employee.position);
+          console.log('Employee Status:', employee.employeeStatus);
+
+          if ( employee.empStatus === 'Active' && employee.position === 'Supervisor' ) {//load supervisor dropdown to employee_status = Active and job_title = Supervisors
             this.superVisorList.push(employeeData);
+          }
+          if (employee.position === 'Technician' && employee.empStatus === 'Active') {
+            this.technicianList.push(employeeData);
           }
         });
       }
     });
 
-    console.log(employeeList);
-    this.employees = employeeList;
-    this.users = employeeList;
-    this.filteredUsers = employeeList;
+    //console.log(employeeList);
+    // this.employees = employeeList;
+    // this.users = employeeList;
+    // this.filteredUsers = employeeList;
     this.superVisorList = employeeList.filter((emp: any) => {})
+    this.technicianList = employeeList.filter((emp: any) => {})
   }
 
   public addNotification(details?: any): void {

@@ -88,11 +88,7 @@
         <input matInput formControlName="status" />
       </mat-form-field>
 
-      <!-- <mat-list
-        role="list"
-        *ngIf="selectedSubtasks.length > 0"
-        class="subtask-list"
-      >
+      <!-- <mat-list role="list" *ngIf="selectedSubtasks.length > 0" class="subtask-list">
         <mat-list-item *ngFor="let subtask of selectedSubtasks">{{
           subtask.subTaskName
         }}</mat-list-item>
@@ -113,8 +109,8 @@
                   placeholder="Search for User Here..."
                 />
               </mat-form-field> -->
-              <mat-option *ngFor="let user of filteredUsers" [value]="user.id">
-                {{ user.name }}
+              <mat-option *ngFor="let technician of technicianList" [value]="technician.id">
+                {{ technician.name }}
               </mat-option>
             </mat-select>
           </mat-form-field>

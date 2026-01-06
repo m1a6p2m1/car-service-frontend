@@ -86,6 +86,7 @@ export class RegistrationService {
     return this.http.delete(requestUrl, {headers: headers});
   }
 
+  //get employee list to set supervisors list task_assign form supervisor field
   getEmployeeList() {
     const requestUrl = environment.baseUrl + '/employee/get-employee-list';
 
