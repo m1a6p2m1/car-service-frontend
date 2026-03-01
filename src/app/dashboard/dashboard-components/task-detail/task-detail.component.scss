@@ -27,6 +27,7 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+    margin-bottom: 12px;
 
     .subtask {
       display: flex;
@@ -107,18 +108,37 @@
   padding: 50px;
   border-right: 1px solid #ccc;
 }
-.btnBook {
-  background-color: #f2a71b;
-  color: #011f26;
-  width: 215px;
+.buttons{
+  width: 250px;
   height: 50px;
+  border-radius: 10px;
   border: none;
-  padding: 20px;
-  margin-top: 10px;
-  border-radius: 5px;
   cursor: pointer;
   font-size: 18px;
-  display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
+  align-content: center;
+}
+.btnBook {
+  background-color: #5388fb;
+  color: #011f26;
+  
+  margin-right: 45px;
+  margin-top: 10px;
+}
+.btnBook:hover{
+  background-color: rgb(1, 69, 213);
+   color: #ffffff;
+}
+.btnBack{
+  background-color: #bebfbf;
+  color: #011f26;
+  
+}
+.btnBack:hover{
+  background-color: #151515;
+  color: #ffffff;
+}
+.mat-icon{
+  padding-top: 5px;
 }

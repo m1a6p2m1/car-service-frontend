@@ -29,7 +29,13 @@
         {{ 'RS ' + sub.subTaskPrice }}
       </div>
     </div>
-    <button class="btnBook" (click)="bookAppointment()">Book Now</button>
+    <div>
+      <button class="buttons btnBook" (click)="bookAppointment()">Book Now</button>
+      <button class="buttons btnBack" (click)="previous()">
+      <mat-icon>arrow_back</mat-icon>
+      <span>Back</span>
+    </button>
+  </div>
   </div>
 </div>
 

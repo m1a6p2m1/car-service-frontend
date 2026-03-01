@@ -56,5 +56,10 @@ taski = {
   };
 
       this.router.navigate(['/dashboard', 'appointment-service'], navigationExtras);
-    }
+  }
+
+  public previous(): void {
+
+      this.router.navigate(['/dashboard']);
+  }
 }

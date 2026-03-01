@@ -19,3 +19,20 @@
 .form-button{
     margin-right: 20px;
 }
+.attendance{
+    width: 50%;
+    margin-top: 12px;
+}
+
+tr:hover {background-color: rgb(153, 211, 250);}
+
+td {
+  text-align: center;
+}
+th {
+  text-align: center;
+}
+.btnSave {
+    width: 300px;
+}
+.btnSave:hover {background-color: rgb(0, 85, 196);}
