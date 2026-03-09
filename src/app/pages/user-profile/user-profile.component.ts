@@ -38,9 +38,9 @@ export class UserProfileComponent implements OnInit{
       id: new FormControl(null),
       firstName: new FormControl('', [Validators.required]),
       lastName: new FormControl('', [Validators.required]),
-      login: new FormControl('', [Validators.required]),
+      // login: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.email]),
-      phoneNumber: new FormControl(''),
+      phoneNumber: new FormControl('', [Validators.pattern('^(\\+94|0)[1-9]{2}[0-9]{7}$|^(\\+94|0)?7[0-9]{8}$')]),
       image: new FormControl('', [Validators.required]),
       imageName: new FormControl(''),
       imageType: new FormControl(''),
@@ -145,14 +145,27 @@ export class UserProfileComponent implements OnInit{
           phoneNumber: user.phoneNumber
         });
         console.log("Form ID:", this.userProfileForm.get('id')?.value);
+        console.log("Form Email:", this.userProfileForm.get('email')?.value);
+        console.log("Form PN:", this.userProfileForm.get('phoneNumber')?.value);
         // this.selectedData = response;
   
         // Load and show user image from local storage or API
-        const image = this.localStorage.getItem('image');
-        const imageType = this.localStorage.getItem('imageType');
-        if (image && imageType) {
-          this.selectedImageUrl = `data:${imageType};base64,${image}`;
-        }
+        if (user.image && user.imageType) {
+        this.selectedImageUrl =
+          this.sanitizer.bypassSecurityTrustUrl(
+            `data:${user.imageType};base64,${user.image}`
+          );
+
+        this.userProfileForm.patchValue({
+          imageName: user.imageName,
+          imageType: user.imageType
+        });
+      }
+        // const image = this.localStorage.getItem('image');
+        // const imageType = this.localStorage.getItem('imageType');
+        // if (image && imageType) {
+        //   this.selectedImageUrl = `data:${imageType};base64,${image}`;
+        // }
         // this.userProfileForm.disable();
         // this.isButtonDisable = true;
         // this.fileButtonDisable = true;

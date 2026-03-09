@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -38,18 +38,17 @@ export class VehiclesComponent implements OnInit{
     private messageService: MessageServiceService,
     private _dialog: MatDialog,
   ){
-    this.vehiclesForm = fb.group({
+    this.vehiclesForm = this.fb.group({
       customerName: new FormControl(''),
       customerId: new FormControl(''),
-      licencePlate: new FormControl(''),
-      vehicleType: new FormControl(''),
-      vehicleModel: new FormControl(''),
+      vehicles: this.fb.array([])
     });
   }
 
   ngOnInit(): void {
     this.loadCustomerList();
     this.populateData();
+    this.addVehicle(); // add first row automatically
   }
 
   onSubmit(){
@@ -154,6 +153,25 @@ export class VehiclesComponent implements OnInit{
       }
     }
 
+    get vehicles(): FormArray {
+        return this.vehiclesForm.get('vehicles') as FormArray;
+    }
+
+    addVehicle() {
+      const vehiclesGroup = this.fb.group({ 
+        id: [null], 
+        licencePlate: [''], 
+        vehicleType: [''], 
+        vehicleModel: [''] 
+      });
+
+      this.vehicles.push(vehiclesGroup);
+    }
+
+    removeVehicle(index: number) {
+      this.vehicles.removeAt(index);
+    }
+
     public refreshData(): void{
       this.populateData();
     }
@@ -165,10 +183,13 @@ export class VehiclesComponent implements OnInit{
       this.saveButtonLabel = 'Save';
       this.isButtonDisable = false;
       this.enableFormManually();
+      this.addVehicle(); // add first row automatically
     }
 
     public resetFormManually() {
       this.vehiclesForm.get('customerId')?.reset();
+      const vehiclesFormArray = this.vehicles;
+      vehiclesFormArray.clear();
     }
 
     public enableFormManually() {
@@ -177,7 +198,22 @@ export class VehiclesComponent implements OnInit{
 
     public editData(data: any):void{
       this.resetData();
-      this.vehiclesForm.patchValue(data);
+      
+      this.vehiclesForm.patchValue({
+        customerId: data.customerId
+      });
+
+      const vehiclesArray = this.vehiclesForm.get('vehicles') as FormArray;
+      vehiclesArray.clear();
+
+      vehiclesArray.push(
+        this.fb.group({
+          id: data.id,
+          licencePlate: data.licencePlate,
+          vehicleType: data.vehicleType,
+          vehicleModel: data.vehicleModel
+        })
+      );
       this.vehiclesForm.enable();
       this.saveButtonLabel = 'Edit';
       this.mode = 'edit';

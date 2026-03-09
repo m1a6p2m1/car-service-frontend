@@ -53,9 +53,9 @@ export class AttendanceMarkComponent implements OnInit {
     const today = new Date().toISOString().split('T')[0];//
 
     if (savedDate === today) {//
-      this.isAttendanceSavedToday = false; // enable dropdown
+      this.isAttendanceSavedToday = true; // enable dropdown
     } else {
-      this.isAttendanceSavedToday = true; // disable dropdown
+      this.isAttendanceSavedToday = false; // disable dropdown
       localStorage.removeItem('attendanceSavedDate');//
     }
     this.populateData();

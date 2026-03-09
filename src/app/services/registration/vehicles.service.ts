@@ -14,7 +14,6 @@ export class VehiclesService {
 
     getCustomersList() {
       const requestUrl = environment.baseUrl + '/register/users';
-      console.log('customer names');
       let headers = {};
   
       if (this.httpService.getAuthToken() !== null) {

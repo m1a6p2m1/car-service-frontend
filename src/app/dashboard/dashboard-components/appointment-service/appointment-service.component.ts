@@ -86,6 +86,8 @@ export class AppointmentServiceComponent implements OnInit{
  
 ngOnInit(): void {
     // Optional: set default date here
+
+    this.loadUserProfile();
     
     this.dataSource = new MatTableDataSource<TimeSlot>();
     
@@ -113,6 +115,28 @@ ngOnInit(): void {
   //   }
   // });
 }
+
+//load logged customer data
+loadUserProfile(): void {
+    this.appointmentService.getLoggedInUserDetails().subscribe({
+      next: (user: any) => {
+        this.appointmentServiceForm.patchValue({
+          id: user.id,
+          customerName: `${user.firstName} ${user.lastName}`,
+          email: user.email,
+          phoneNumber: user.phoneNumber
+        });
+        console.log("loadUserProfile");
+        console.log("Form Name:", this.appointmentServiceForm.get('customerName')?.value);
+        console.log("Form Email:", this.appointmentServiceForm.get('email')?.value);
+        console.log("Form PN:", this.appointmentServiceForm.get('phoneNumber')?.value);
+        // this.selectedData = response;
+      },
+      error: (error) => {
+        console.error('Failed to load user profile:', error);
+      }
+    });
+  }
 
 
 

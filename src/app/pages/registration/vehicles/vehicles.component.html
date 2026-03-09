@@ -18,29 +18,54 @@
                 </mat-select>
             </mat-form-field>
 
-            <mat-form-field class="full-width">
-                <mat-label>Licence Plate</mat-label>
-                <input type="tel" matInput placeholder="Licence Plate Number" formControlName="licencePlate">
-            </mat-form-field>
+          <div formArrayName="vehicles">
+            <div class="vehicle-details-row" *ngFor="let vehicle of vehicles.controls; let i = index"  [formGroupName]="i"><!--*ngFor="let subTask of subTasks.controls; let i = index"  [formGroupName]="i"-->
+              <mat-form-field class="vehicle-details">
+                <input
+                  matInput
+                  formControlName="licencePlate"
+                  placeholder="Licence Plate"
+                />
+              </mat-form-field>
 
-            <mat-form-field class="full-width">
+              <mat-form-field class="vehicle-details">
                 <mat-label>Vehicle Type</mat-label>
-                <mat-select formControlName="vehicleType">
-                    <mat-option value="Car">Car</mat-option>
-                    <mat-option value="Jeep">Jeep</mat-option>
-                    <mat-option value="Van">Van</mat-option>
-                    <mat-option value="Other">Other</mat-option>
-                </mat-select>
-            </mat-form-field>
+                  <mat-select formControlName="vehicleType">
+                      <mat-option value="Car">Car</mat-option>
+                      <mat-option value="Jeep">Jeep</mat-option>
+                      <mat-option value="Van">Van</mat-option>
+                      <mat-option value="Other">Other</mat-option>
+                  </mat-select>
+              </mat-form-field>
 
-            <mat-form-field class="full-width">
-                <mat-label>Vehicle Model</mat-label>
-                <mat-select formControlName="vehicleModel">
-                    <mat-option value="Toyota">Toyota</mat-option>
-                    <mat-option value="Honda">Honda</mat-option>
-                    <mat-option value="Suzuki">Suzuki</mat-option>
-                </mat-select>
-            </mat-form-field><br><br>
+              <mat-form-field class="vehicle-details">
+                  <mat-label>Vehicle Model</mat-label>
+                  <mat-select formControlName="vehicleModel">
+                      <mat-option value="Toyota">Toyota</mat-option>
+                      <mat-option value="Honda">Honda</mat-option>
+                      <mat-option value="Suzuki">Suzuki</mat-option>
+                  </mat-select>
+              </mat-form-field>
+           
+              <button
+                type="button"
+                class="btn btn-danger remove-button"
+                (click)="removeVehicle(i)"
+              ><!--[disabled]="subTask.disabled"
+              (click)="removeSubTask(i)"-->
+                -
+              </button>
+            </div> 
+
+            <button
+                  type="button"
+                  class="btnAdd"
+                  (click)="addVehicle()"
+                  [disabled]="isButtonDisable"
+              >
+                  Add Vehicles
+            </button>
+          </div>   
 
             <button type="submit" mat-raised-button color="primary" class="form-button"
                 [disabled]="isButtonDisable">{{saveButtonLabel}}</button>

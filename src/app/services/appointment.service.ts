@@ -80,6 +80,24 @@ export class AppointmentService {
 
     return this.http.put(requestUrl,data, headers);
   }
+
+
+  //load logged customer data
+  getLoggedInUserDetails(): Observable<any> {
+    console.log('In the Service');
+    const requestUrl = environment.baseUrl + '/user-profile' ; // Example: http://localhost:8080/user-profile
+  
+    let headersObj = {};
+  
+    const token = this.httpService.getAuthToken();
+    if (token !== null) {
+      headersObj = {
+        Authorization: 'Bearer ' + token
+      };
+    }
+  
+    return this.http.get(requestUrl, { headers: new HttpHeaders(headersObj) });
+  }
   
 
 }
