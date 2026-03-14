@@ -13,6 +13,8 @@ import { DemoMaterialModule } from 'src/app/demo-material-module';
 import { AllTaskComponent } from './all-task/all-task.component';
 import { TaskIntroduceComponent } from './task-introduce/task-introduce.component';
 import { MyTasksComponent } from './my-tasks/my-tasks.component';
+import { AdditionalServicesComponent } from './additional-services/additional-services.component';
+import { MatRadioModule } from '@angular/material/radio';
 
 
 
@@ -21,7 +23,8 @@ import { MyTasksComponent } from './my-tasks/my-tasks.component';
     TaskAssignComponent,
     AllTaskComponent,
     TaskIntroduceComponent,
-    MyTasksComponent
+    MyTasksComponent,
+    AdditionalServicesComponent,
   ],
   imports: [
     CommonModule,
@@ -33,7 +36,8 @@ import { MyTasksComponent } from './my-tasks/my-tasks.component';
     MatIconModule,
     MatInputModule,
     MatFormFieldModule,
-    DemoMaterialModule,  
+    DemoMaterialModule, 
+    MatRadioModule 
   ]
 })
 export class TaskManagementModule { }

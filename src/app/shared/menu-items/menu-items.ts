@@ -486,7 +486,16 @@ const MENUITEMS: Menu[] = [
       icon: 'assignment',
       isVisible: false,
       auth: authenticationEnum.All_Tasks,
-    }
+    },
+    {
+      state: 'task-management',
+      childState: 'additional-services',
+      name: 'Additional Services',
+      type: 'link',
+      icon: 'playlist_add_check',
+      isVisible: false,
+      auth: authenticationEnum.Additional_Services,
+    },
   ]
 },
 {

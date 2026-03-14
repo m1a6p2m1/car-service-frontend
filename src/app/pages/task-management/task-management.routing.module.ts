@@ -3,6 +3,7 @@ import { TaskAssignComponent } from "./task-assign/task-assign.component";
 import { AllTaskComponent } from "./all-task/all-task.component";
 import { TaskIntroduceComponent } from "./task-introduce/task-introduce.component";
 import { MyTasksComponent } from "./my-tasks/my-tasks.component";
+import { AdditionalServicesComponent } from "./additional-services/additional-services.component";
 
 export const TaskManagementRoutes: Routes = [
     {
@@ -23,6 +24,10 @@ export const TaskManagementRoutes: Routes = [
             {
                 path: 'my-tasks',
                 component: MyTasksComponent
+            },
+            {
+                path: 'additional-services',
+                component: AdditionalServicesComponent
             }
             
         ]

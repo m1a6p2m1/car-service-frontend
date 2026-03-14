@@ -39,7 +39,7 @@
         <p><mat-checkbox 
           *ngFor="let service of additionalServices" 
           [checked]="selectedOptions.includes(service)"
-          (change)="onAdditionalServiceChange(service, $event)">{{service}}</mat-checkbox></p>   
+          (change)="onAdditionalServiceChange(service, $event)">{{service.additionalServicesName}} - Rs.{{service.additionalServicePrice}}</mat-checkbox></p>   
     </section>
   </div>
 
@@ -79,7 +79,7 @@
   <mat-card-title class="title">Select Appointment Date</mat-card-title><br><br>
   <div class="datepicker">
     <mat-form-field appearance="fill">
-    <input matInput [matDatepicker]="picker"
+    <input matInput [matDatepicker]="picker" [min]="minDate" [matDatepickerFilter]="dateFilter"
     placeholder="Choose date" (dateChange)="onDateChange($event)">
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker touchUi #picker></mat-datepicker>

@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Appointment, Task, TimeSlot } from 'src/app/models/appointment.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
+import { AdditionalServicesService } from 'src/app/services/task-management/additional-services.service';
 
 
 @Component({
@@ -19,11 +20,11 @@ import { MessageServiceService } from 'src/app/services/message-service/message-
 
 export class AppointmentServiceComponent implements OnInit{
 
-   additionalServices: string[] = [
-    'Oil Change',
-    'Filter Change',
-    'Engine Wash'
-  ];
+  //  additionalServices: string[] = [
+  //   'Oil Change',
+  //   'Filter Change',
+  //   'Engine Wash'
+  // ];
 
   appointmentServiceForm: FormGroup;
 
@@ -37,14 +38,22 @@ export class AppointmentServiceComponent implements OnInit{
   selectedSlot: TimeSlot | null = null;
   selectedTime: string | null = null;
   isLoading = false;
-  dateFilter: any;
   selectedVehicle = '';
   totalCost = 0;
-  selectedOptions: string[] = [];
+  selectedOptions: any[] = [];
   OldSelectedOptions: string[] = [];
   taskName: any;
   taskId: any;
   selectedServices: string = "";
+  additionalServices: any[] = [];
+  minDate: Date = new Date(); // disables past dates
+
+  dateFilter = (date: Date | null): boolean => {
+    if (!date) return false;
+
+    const day = date.getDay();
+    return day !== 0; // disables Sundays
+  };
   
   
 
@@ -53,6 +62,7 @@ export class AppointmentServiceComponent implements OnInit{
   constructor(
     private fb: FormBuilder,
     private appointmentService: AppointmentService,
+    private additionalServicesService: AdditionalServicesService,
     private messageService: MessageServiceService,
     private activatedRoute: ActivatedRoute,
     private router: Router
@@ -93,14 +103,21 @@ ngOnInit(): void {
     
     const vehiclePrices: { [key: string]: number } = {
       'car':150,
+      'jeep': 400, 
       'van':300,
-      'jeep': 400,  
+       
     }
 
     this.appointmentServiceForm.get('vehicleType')?.valueChanges.subscribe((selectedType)=>{
-      const price = vehiclePrices[selectedType] || '';
+      const price = vehiclePrices[selectedType] || 0;
       this.appointmentServiceForm.get('price')?.setValue(price);
     });
+
+    this.additionalServicesService.getData().subscribe((resopnse:any)=>{
+      this.additionalServices = resopnse.filter(
+        (service:any) => service.status === "Yes"
+      );
+    })
 
     this.appointmentServiceForm.patchValue({
       totalServicePrice: this.totalCost
@@ -232,12 +249,6 @@ formatDateLocal(date: Date): string {
     return 'status-available';
   }
 
-  // Optional: Disable Sundays in date picker
-  // dateFilter = (d: Date | null): boolean => {
-  //   const day = (d || new Date()).getDay();
-  //   return day !== 0; // disable Sundays
-  // };
-
   selectSlot(time: string, data: any): void {
   this.selectedTime = time;
   console.log(data);
@@ -352,7 +363,6 @@ formatDateLocal(date: Date): string {
   // }
 
   public onVehicleTypeChange(vehicle: any): void {
-    if (vehicle == 'Car') {
       if (this.selectedVehicle) {
         if(this.selectedVehicle == 'Car') {
           this.totalCost = this.totalCost - 150;
@@ -377,7 +387,7 @@ formatDateLocal(date: Date): string {
         if (this.selectedVehicle == 'Van') {
           this.totalCost = this.totalCost + 250;
         }
-      }
+      
       
     }
   }
@@ -385,29 +395,12 @@ formatDateLocal(date: Date): string {
   public onAdditionalServiceChange(service: any, event: MatCheckboxChange): void {
     if (event.checked) {
       this.selectedOptions.push(service);
-
-        if (service == "Oil Change") {
-          this.totalCost = this.totalCost + 10;
-        }
-        if (service == "Filter Change") {
-          this.totalCost = this.totalCost + 50;
-        }
-        if (service == "Engine Wash") {
-          this.totalCost = this.totalCost + 100;
-        }
+      this.totalCost = this.totalCost + service.additionalServicePrice;
     } else {
-      this.selectedOptions = this.selectedOptions.filter(item => item !== service);
-        if (service == "Oil Change") {
-          this.totalCost = this.totalCost - 10;
-        }
-        if (service == "Filter Change") {
-          this.totalCost = this.totalCost - 50;
-        }
-        if (service == "Engine Wash") {
-          this.totalCost = this.totalCost - 100;
-        }
+      this.selectedOptions = this.selectedOptions.filter(item => item.id !== service.id);
+      this.totalCost = this.totalCost - service.additionalServicePrice;
     }
 
-    this.selectedServices = this.selectedOptions.join(',');
+    // this.selectedServices = this.selectedOptions.join(',');
   }
 }
