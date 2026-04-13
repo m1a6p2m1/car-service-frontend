@@ -99,6 +99,8 @@ export class AppSideLoginComponent implements OnInit {
   }
 
   setUserInfotoLocalStorage(userData: any) {
+
+    this.localStorage.setItem('user', JSON.stringify(userData));
     this.localStorage.setItem('id', userData.id);
     this.localStorage.setItem('firstName', userData.firstName);
     this.localStorage.setItem('lastName', userData.lastName);

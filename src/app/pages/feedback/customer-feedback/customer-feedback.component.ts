@@ -64,9 +64,18 @@ export class CustomerFeedbackComponent implements OnInit{
     // console.log('form submitted');
     // console.log(this.customerForm.value);
     try {
+      const formData = this.customerFeedbackForm.getRawValue();
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+      formData.userId = user.id;
+      if (formData.serviceDate) {
+        formData.serviceDate = new Date(formData.serviceDate)
+            .toISOString()
+            .split('T')[0];   // "2026-04-06"
+}
       // this.submitted = true;
       if (this.mode === 'add') {
-        this.customerFeedbackService.serviceCall(this.customerFeedbackForm.getRawValue).subscribe({
+        this.customerFeedbackService.serviceCall(formData).subscribe({
           next:(response)=>{
             if (this.dataSource && this.dataSource.data && this.dataSource.data.length > 0) {
               this.dataSource = new MatTableDataSource([response, ...this.dataSource.data]);
@@ -79,7 +88,7 @@ export class CustomerFeedbackComponent implements OnInit{
           }
         });
       }else if (this.mode === 'edit') {
-        this.customerFeedbackService.editData(this.selectedData.id, this.customerFeedbackForm.getRawValue).subscribe({
+        this.customerFeedbackService.editData(this.selectedData.id, formData).subscribe({
           next:(response)=>{
             let elementIndex = this.dataSource.data.findIndex((element)=> element.id === this.selectedData?.id);
             this.dataSource.data[elementIndex] = response;
@@ -105,7 +114,7 @@ export class CustomerFeedbackComponent implements OnInit{
     for (let index = 0; index < this.starCount; index++) {
       this.ratingArr.push(index);
     }
-    this.populateData(this.selectedData.id);
+    this.populateData();
 
     
     
@@ -140,10 +149,11 @@ export class CustomerFeedbackComponent implements OnInit{
     }
   }
 
-  public populateData(data: any):void{
+  populateData(): void {
     try {
-      const id = data.id;
-      this.customerFeedbackService.getData(id).subscribe((response: any)=>{
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+  
+      this.customerFeedbackService.getData(user.uniqueCusNo).subscribe((response: any)=>{
         this.dataSource = new MatTableDataSource(response);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -189,8 +199,9 @@ export class CustomerFeedbackComponent implements OnInit{
     this.customerFeedbackForm.updateValueAndValidity();
     this.rating = 0;
     // this.ratingLabels = [];
-    this.customerFeedbackForm.get('serviceType')?.disable();
-    this.customerFeedbackForm.get('serviceDate')?.disable();
+    // this.customerFeedbackForm.get('serviceType')?.disable();
+    // this.customerFeedbackForm.get('serviceDate')?.disable();
+    this.loadUserName();
   }
 
   public deleteData(data: any):void{
@@ -217,7 +228,7 @@ export class CustomerFeedbackComponent implements OnInit{
     }
 
   public refreshData(): void{
-    this.populateData(this.selectedData.id);
+    this.populateData();
   }
 
 }

@@ -32,5 +32,7 @@ export enum authenticationEnum {
   Online_Shopping = 27,
   All_Feedbacks = 28,
   Vehicles = 30,
-  Additional_Services = 31
+  Additional_Services = 31,
+  Appointment_List = 32,
+  All_Appointments = 33,
 }

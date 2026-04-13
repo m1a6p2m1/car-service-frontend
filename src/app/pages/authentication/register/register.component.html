@@ -130,12 +130,17 @@
             <mat-form-field appearance="outline" class="w-100" color="primary">
               <input type="text" id="email" name="email" formControlName="email" matInput />
             </mat-form-field>
-            <span class="text-danger" *ngIf="
-                (formControl['email'].touched || submitted) &&
-                formControl['email'].errors &&
-                formControl['email'].errors['email']
-              ">
-              Please Insert a Valid Email Address
+            <span
+              class="text-danger"
+              *ngIf="(formControl['email'].touched || submitted) && formControl['email'].errors"
+            >
+              <ng-container *ngIf="formControl['email'].errors['required']">
+                Email is required
+              </ng-container>
+
+              <ng-container *ngIf="formControl['email'].errors['email']">
+                Please Insert a Valid Email Address
+              </ng-container>
             </span>
 
             <mat-label for="contactNumber" class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 m-t-12 d-block">Contact Number</mat-label>

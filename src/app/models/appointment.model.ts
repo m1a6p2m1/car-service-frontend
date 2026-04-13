@@ -6,7 +6,9 @@ export interface Appointment {
   status?: string;
   price?: number;
   taskName?: string;
-  taskId?: number
+  taskId?: number;
+  role?: string;
+  login?: string | null;
 }
 
 export interface TimeSlot {

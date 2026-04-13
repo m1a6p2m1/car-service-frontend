@@ -521,7 +521,7 @@ const MENUITEMS: Menu[] = [
   icon: 'event_available',
   type: 'group',
   isVisible: false,
-  auth: [authenticationEnum.Home_Dashboard],
+  auth: [authenticationEnum.Appointment_List, authenticationEnum.All_Appointments],
   children: [
     {
       state: 'appointment',
@@ -530,7 +530,16 @@ const MENUITEMS: Menu[] = [
       type: 'link',
       icon: 'check_circle',
       isVisible: false,
-      auth: authenticationEnum.Home_Dashboard,
+      auth: authenticationEnum.Appointment_List,
+    },
+    {
+      state: 'appointment',
+      childState: 'all-appointments',
+      name: 'All Appointments',
+      type: 'link',
+      icon: 'assignment',
+      isVisible: false,
+      auth: authenticationEnum.All_Appointments,
     }
   ]
 },

@@ -21,7 +21,7 @@ export class CustomerComponent implements OnInit{
 
   customerForm: FormGroup;
 
-  displayedColumns: string[] = ['firstName','nic', 'phoneNumber', 'licencePlate', 'vehicleType','action'];
+  displayedColumns: string[] = ['firstName','nic', 'phoneNumber','action'];
 
   dataSource!: MatTableDataSource<any>;
 

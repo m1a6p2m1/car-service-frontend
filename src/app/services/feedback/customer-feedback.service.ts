@@ -15,7 +15,7 @@ export class CustomerFeedbackService {
   ) { }
 
   serviceCall(form_details: any){
-        // console.log('In the Service servicecall');
+        console.log('In the Service servicecall');
     
         const requestUrl = environment.baseUrl + '/customer-feedback'; //http://localhost:8080
     
@@ -31,9 +31,9 @@ export class CustomerFeedbackService {
     
   }
 
-  getData(id: number){
+  getData(uniqueCusNo: string){
     console.log('In the Service getdata');
-    const requestUrl = environment.baseUrl + '/customer-feedback/' + id.toString(); //http://localhost:8080
+    const requestUrl = environment.baseUrl + '/customer-feedback/' + uniqueCusNo; //http://localhost:8080
 
     let headers = {};
 

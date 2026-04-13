@@ -9,11 +9,13 @@ import { DemoMaterialModule } from 'src/app/demo-material-module';
 import { RouterModule } from '@angular/router';
 import { AppointmentListComponent } from './appointment-list.component';
 import { AppointmentRoutes } from './appointment-routing.module';
+import { AllAppointmentsComponent } from './all-appointments/all-appointments.component';
 
 
 @NgModule({
   declarations: [
-    AppointmentListComponent
+    AppointmentListComponent,
+    AllAppointmentsComponent
   ],
   imports: [
     CommonModule,

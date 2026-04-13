@@ -129,14 +129,32 @@ export class AppointmentListComponent implements OnInit {
             })
           }
     }
+    // formatTime(time: string): string {
+    //   if (!time) return '';
+    //   return time.substring(0, 5); // "10:00"
+    // }
 
-    formatTime(timeArray: number[]): string {
-      const [hours, minutes] = timeArray;
-  return `${this.pad(hours)}:${this.pad(minutes)}`;
-    }
+  //   formatTime(timeArray: number[]): string {
+  //     const [hours, minutes] = timeArray;
+  // return `${this.pad(hours)}:${this.pad(minutes)}`;
+  //   }
 
     pad(num: number): string {
   return num < 10 ? '0' + num : num.toString();
 }
+
+  formatTime(time: any): string {
+    if (!time) return '';
+
+    if (typeof time === 'string') {
+      return time.substring(0, 5);
+    }
+
+    if (Array.isArray(time)) {
+      return `${this.pad(time[0])}:${this.pad(time[1])}`;
+    }
+
+    return '';
+  }
 
 }

@@ -67,6 +67,20 @@ export class AppointmentService {
     return this.http.get<any[]>(requestUrl, { headers: headers });
   }
 
+  getAppointmentsByCustomer(uniqueCusNo: string) {
+    console.log('In the Service → get appointments');
+    const requestUrl = this.baseUrl + '/get-all-appointments/' + uniqueCusNo;            // GET /appointments
+
+    let headers = {};
+    if (this.httpService.getAuthToken() !== null) {
+      headers = {
+        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+      };
+    }
+
+    return this.http.get(requestUrl, { headers: headers });
+  }
+
     changeAssignee(data: any) {
     const requestUrl = environment.baseUrl + '/change-appointment-assignee';
 
@@ -97,6 +111,20 @@ export class AppointmentService {
     }
   
     return this.http.get(requestUrl, { headers: new HttpHeaders(headersObj) });
+  }
+
+  deleteAppointment(id: number){
+    const requestUrl = environment.baseUrl + '/all-appointments/' + id.toString(); //http://localhost:8080
+
+    let headers = {};
+
+    if (this.httpService.getAuthToken() !== null) {
+      headers = {
+        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+      };
+    }
+
+    return this.http.delete(requestUrl, {headers: headers});
   }
   
 

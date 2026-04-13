@@ -18,7 +18,7 @@ import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.comp
 export class VehiclesComponent implements OnInit{
 
   vehiclesForm: FormGroup;
-    displayedColumns: string[] = ['customerName', 'licencePlate', 'vehicleType', 'vehicleModel','action'];
+    displayedColumns: string[] = ['customerName','customerNumber', 'licencePlate', 'vehicleType', 'vehicleModel','action'];
   
     dataSource!: MatTableDataSource<any>;
   
@@ -40,6 +40,7 @@ export class VehiclesComponent implements OnInit{
   ){
     this.vehiclesForm = this.fb.group({
       customerName: new FormControl(''),
+      customerNumber: new FormControl(''),
       customerId: new FormControl(''),
       vehicles: this.fb.array([])
     });

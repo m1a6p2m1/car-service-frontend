@@ -54,34 +54,14 @@
         <td mat-cell *matCellDef="let element">{{ element.totalServicePrice }}</td>
       </ng-container>
 
-    <ng-container matColumnDef="assignee">
-        <th mat-header-cell *matHeaderCellDef>Assignee</th>
-        <td mat-cell *matCellDef="let element">
-          <mat-form-field class="status-select">
-                <mat-select 
-                  [value]="element.assignee" 
-                  (selectionChange)="updateStatus(element.id, $event.value)"
-                  [panelClass]="'status-panel'">
-                  <mat-option 
-                    *ngFor="let option of superVisorList" 
-                    [value]="option.id">
-                     {{ option.name }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-        </td>
-      </ng-container>
-
       <ng-container matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef>Action</th>
         <td mat-cell *matCellDef="let element">
-          <button
-            mat-icon-button
-            color="warn"
-            (click)="updateAssignee(element)"
-            matTooltip="Update Assignee"
-          >
+          <button mat-icon-button color="warn" (click)="editData(element)" matTooltip="Edit">
             <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="confirmDelete(element)" matTooltip="Delete">
+            <mat-icon>delete</mat-icon>
           </button>
         </td>
       </ng-container>
@@ -96,3 +76,4 @@
     ></mat-paginator>
   </div>
 </div>
+

@@ -47,6 +47,7 @@ export class AppointmentServiceComponent implements OnInit{
   selectedServices: string = "";
   additionalServices: any[] = [];
   minDate: Date = new Date(); // disables past dates
+  userRole: string = '';
 
   dateFilter = (date: Date | null): boolean => {
     if (!date) return false;
@@ -96,8 +97,12 @@ export class AppointmentServiceComponent implements OnInit{
  
 ngOnInit(): void {
     // Optional: set default date here
+    this.userRole = localStorage.getItem('userRole') || '';
+
+    console.log("User Role from localStorage:", this.userRole);
 
     this.loadUserProfile();
+    // this.loadUserProfile();
     
     this.dataSource = new MatTableDataSource<TimeSlot>();
     
@@ -154,8 +159,6 @@ loadUserProfile(): void {
       }
     });
   }
-
-
 
 
 formatDateLocal(date: Date): string {
@@ -258,14 +261,24 @@ formatDateLocal(date: Date): string {
   submitAppointment(): void {
     console.log('In the Service → save appointment-> ts file');
     if (!this.selectedDate || !this.selectedTime) return;
-    const formValues = this.appointmentServiceForm.getRawValue();
+    let roleToSave = '';
 
+    if (this.userRole === 'EMPLOYEE') {
+      roleToSave = 'SYSTEM';
+    } else {
+      roleToSave = 'CUSTOMER';
+    }
+    // const formValues = this.appointmentServiceForm.getRawValue();
+
+    const login = localStorage.getItem('login') ?? undefined;
     const booking: Appointment = {
       appointmentDate:this.formatDateLocal(this.selectedDate),
       timeSlot: this.selectedTime,
       price: this.totalCost,
       taskName: this.taskName,
-      taskId: this.taskId
+      taskId: this.taskId,
+      role: roleToSave,
+      login: login
     };
 
     this.appointmentService.bookAppointment(this.processObjects(booking)).subscribe({
@@ -298,7 +311,11 @@ formatDateLocal(date: Date): string {
       additionalServices: this.selectedServices
     });
 
-    return this.appointmentServiceForm.getRawValue();
+    return {
+      ...this.appointmentServiceForm.getRawValue(),
+      role: booking.role,
+      login: booking.login
+    };
   }
 
 
@@ -401,6 +418,10 @@ formatDateLocal(date: Date): string {
       this.totalCost = this.totalCost - service.additionalServicePrice;
     }
 
-    // this.selectedServices = this.selectedOptions.join(',');
+    this.selectedServices = this.selectedOptions
+    .map(s => s.additionalServicesName)
+    .join(',');
   }
+
+
 }

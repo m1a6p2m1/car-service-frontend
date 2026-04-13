@@ -1,0 +1,156 @@
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { AppointmentService } from 'src/app/services/appointment.service';
+import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
+import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+
+@Component({
+  selector: 'app-all-appointments',
+  standalone:false,
+  templateUrl: './all-appointments.component.html',
+  styleUrl: './all-appointments.component.scss'
+})
+export class AllAppointmentsComponent implements OnInit{
+
+  displayedColumns: string[] = ['customerName', 'appointmentDate', 'appointmentTime','serviceType', 'email', 'phoneNumber', 'totalServicePrice', 'action'];
+      dataSource!: MatTableDataSource<any>;
+    
+      @ViewChild(MatPaginator) paginator!: MatPaginator;
+      @ViewChild(MatSort) sort!: MatSort;
+
+  constructor(
+    private appointmentService: AppointmentService,
+    private messageService: MessageServiceService,
+    private _dialog: MatDialog,
+  ){}
+
+  ngOnInit(): void{
+    // console.log('oninit')
+    this.populateData();
+  }
+
+  //table data filtering
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  public refreshData(): void{
+      this.populateData();
+    }
+  
+  populateData(): void {
+      try {
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+    //     console.log('Logged user:', user);
+    // console.log('Role:', user?.role);
+    // console.log('CusNo:', user?.uniqueCusNo);
+
+    //  Validate user data first
+    if (!user || !user.role) {
+      console.error('User not found in localStorage or role missing');
+      this.messageService.showError('User session expired. Please login again.');
+      return;
+    }
+        if (user.role === 'CUSTOMER') {
+      //     if (!user.uniqueCusNo) {
+      //   console.error('uniqueCusNo is missing');
+      //   this.messageService.showError('Customer number not found.');
+      //   return;
+      // }
+          // Only customer appointments
+          this.appointmentService.getAppointmentsByCustomer(user.uniqueCusNo).subscribe(
+            (res: any) => {
+            console.log('Customer appointments: ', res);  
+
+              this.dataSource = new MatTableDataSource(res);
+              this.dataSource.paginator = this.paginator;
+              this.dataSource.sort = this.sort;
+            },
+            (error) => {
+              console.error('Full API Error:', error);
+
+              this.messageService.showError(
+              error?.error?.message || error?.message || 'Unknown error occurred'
+              );
+            }
+          );
+
+        } else {
+          // Admin / Manager → all appointments
+          this.appointmentService.getAppointments().subscribe(
+            (response: any) => {
+              console.log('All appointments: ', response);
+
+              this.dataSource = new MatTableDataSource(response);
+              this.dataSource.paginator = this.paginator;
+              this.dataSource.sort = this.sort;
+            },
+            (error) => {
+              this.messageService.showError('Error: ' + error);
+            }
+          );
+        }
+
+      } catch (error) {
+        this.messageService.showError('Action Failed: ' + error);
+      }
+  }
+
+  pad(num: number): string {
+    return num < 10 ? '0' + num : num.toString();
+  }
+
+  formatTime(time: any): string {
+    if (!time) return '';
+
+    if (typeof time === 'string') {
+      return time.substring(0, 5);
+    }
+
+    if (Array.isArray(time)) {
+      return `${this.pad(time[0])}:${this.pad(time[1])}`;
+    }
+
+    return '';
+  }
+
+  public editData(data: any): void {}
+  
+
+  public confirmDelete(data: any): void {
+      const dialogRef = this._dialog.open(ConfirmDialogComponent, {
+        data: 'Are you sure you want to Delete this Appointment record?',
+      });
+  
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.deleteAppointment(data.id);
+        }
+      });
+    }
+  
+   deleteAppointment(id: number): void {
+  this.appointmentService.deleteAppointment(id).subscribe({
+    next: (response: any) => {
+      // alert('Appointment deleted successfully');
+      this.dataSource = new MatTableDataSource(this.dataSource.data);
+      this.messageService.showSuccess('Appointment Deleted Successfully !');
+      this.refreshData(); // reload table
+    },
+    error: (error) => {
+      console.error(error);
+      // alert('Error deleting appointment');
+      this.messageService.showError('Action Failed with Error :' + error);
+    }
+  });
+}
+
+}

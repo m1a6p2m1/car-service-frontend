@@ -55,6 +55,7 @@ export class CustomerLoginDetailsComponent {
             password: this.customerLoginDetailsForm.value.password,
           })
           .then((response: any) => {
+            // console.log('Customer Login');
             this.httpService.setAuthToken(response.token);
             this._dialogRef.close(true);
             // this.router.navigate(['/authentication/login']);
