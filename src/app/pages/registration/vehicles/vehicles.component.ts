@@ -18,7 +18,7 @@ import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.comp
 export class VehiclesComponent implements OnInit{
 
   vehiclesForm: FormGroup;
-    displayedColumns: string[] = ['customerName','customerNumber', 'licencePlate', 'vehicleType', 'vehicleModel','action'];
+    displayedColumns: string[] = ['customerName','uniqueCusNo', 'licencePlate', 'vehicleType', 'vehicleModel','action'];
   
     dataSource!: MatTableDataSource<any>;
   
@@ -31,6 +31,7 @@ export class VehiclesComponent implements OnInit{
     submitted = false;
     selectedCustomers: any = [];
     customers: any = [];
+    isEditMode: any;
 
   constructor(
     private fb: FormBuilder,
@@ -40,7 +41,7 @@ export class VehiclesComponent implements OnInit{
   ){
     this.vehiclesForm = this.fb.group({
       customerName: new FormControl(''),
-      customerNumber: new FormControl(''),
+      uniqueCusNo: new FormControl(''),
       customerId: new FormControl(''),
       vehicles: this.fb.array([])
     });
@@ -61,11 +62,20 @@ export class VehiclesComponent implements OnInit{
         if (this.mode === 'add') {
           this.vehiclesService.serviceCall(formData).subscribe({
             next:(response)=>{
-              if (this.dataSource && this.dataSource.data && this.dataSource.data.length > 0) {
-                this.dataSource = new MatTableDataSource([response, ...this.dataSource.data]);
+              // if (this.dataSource && this.dataSource.data && this.dataSource.data.length > 0) {
+              //   this.dataSource = new MatTableDataSource([response, ...this.dataSource.data]);
+              // }else {
+              //   this.dataSource = new MatTableDataSource([response]);
+              // }
+              const newData = Array.isArray(response) ? response : [response];
+
+              this.dataSource = new MatTableDataSource([
+                ...newData,
+                ...(this.dataSource?.data || [])
+              ]);
                 this.messageService.showSuccess('Data Saved Successfully !');
-              }
-              this.dataSource = new MatTableDataSource([response]);       
+
+                this.isEditMode = false;    
             },
             error:(error) => {
               this.messageService.showError('Action Failed with Error :'+ error); 
@@ -78,6 +88,9 @@ export class VehiclesComponent implements OnInit{
               this.dataSource.data[elementIndex] = response;
               this.dataSource = new MatTableDataSource(this.dataSource.data);
               this.messageService.showSuccess('Data Edited Successfully !');
+
+              this.isEditMode = false;
+              this.mode = 'add';
             },
             error:(error) => {
               this.messageService.showError('Action Failed with Error :'+ error); 
@@ -130,15 +143,31 @@ export class VehiclesComponent implements OnInit{
 
     public populateData(): void{
       try {
-        this.vehiclesService.getData().subscribe((response: any)=>{
-          this.dataSource = new MatTableDataSource(response);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
-          console.log('server response: ',response);
-        },
-        (error)=>{
-          this.messageService.showError('Action Failed with Error :'+ error);
-        });
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+        if (user.role === 'CUSTOMER') {
+          this.vehiclesService.getVehiclesByCustomer(user.uniqueCusNo).subscribe((response: any)=>{
+            this.dataSource = new MatTableDataSource(response);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+            console.log('server response vehicle get data: ',response);
+          },
+          (error)=>{
+            this.messageService.showError(
+              error?.error?.message || error?.message || 'Unknown error occurred'
+            );
+          });
+        }else {
+          this.vehiclesService.getData().subscribe((response: any)=>{
+            this.dataSource = new MatTableDataSource(response);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+            console.log('server response vehicle get data: ',response);
+          },
+          (error)=>{
+            this.messageService.showError('Action Failed: ' + error);
+          });
+        }
       } catch (error) {
         this.messageService.showError('Action Failed with Error :'+ error); 
       }
@@ -199,7 +228,7 @@ export class VehiclesComponent implements OnInit{
 
     public editData(data: any):void{
       this.resetData();
-      
+      this.isEditMode = true;
       this.vehiclesForm.patchValue({
         customerId: data.customerId
       });

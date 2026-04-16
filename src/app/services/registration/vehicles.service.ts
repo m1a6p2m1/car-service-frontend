@@ -86,4 +86,18 @@ export class VehiclesService {
 
     return this.http.delete(requestUrl, { headers: headers });
   }
+
+  getVehiclesByCustomer(uniqueCusNo: string) {
+    console.log('In the Service → get appointments');
+    const requestUrl = environment.baseUrl + '/vehicles/' + uniqueCusNo;            // GET /appointments
+
+    let headers = {};
+    if (this.httpService.getAuthToken() !== null) {
+      headers = {
+        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+      };
+    }
+
+    return this.http.get(requestUrl, { headers: headers });
+  }
 }

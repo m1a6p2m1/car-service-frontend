@@ -113,6 +113,22 @@ export class AppointmentService {
     return this.http.get(requestUrl, { headers: new HttpHeaders(headersObj) });
   }
 
+  //load logged customer's vehicles
+  getVehiclesByCustomer(id: number){
+     const requestUrl =
+      environment.baseUrl + '/vehicles/vehicles-by-Customer/' + id.toString();
+
+    let headers = {};
+
+    if (this.httpService.getAuthToken() !== null) {
+      headers = {
+        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+      };
+    }
+
+    return this.http.get<any[]>(requestUrl, { headers: headers });
+  }
+
   deleteAppointment(id: number){
     const requestUrl = environment.baseUrl + '/all-appointments/' + id.toString(); //http://localhost:8080
 

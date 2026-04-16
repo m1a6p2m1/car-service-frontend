@@ -48,6 +48,7 @@ export class AppointmentServiceComponent implements OnInit{
   additionalServices: any[] = [];
   minDate: Date = new Date(); // disables past dates
   userRole: string = '';
+  vehicleList: any[] = [];
 
   dateFilter = (date: Date | null): boolean => {
     if (!date) return false;
@@ -55,6 +56,7 @@ export class AppointmentServiceComponent implements OnInit{
     const day = date.getDay();
     return day !== 0; // disables Sundays
   };
+
   
   
 
@@ -80,7 +82,7 @@ export class AppointmentServiceComponent implements OnInit{
     this.appointmentServiceForm = this.fb.group({
       date: new FormControl(null),
       time: new FormControl(''),
-      vehicleType: new FormControl(''),
+      vehicleType: new FormControl({value: '', disabled: true }),
       price: new FormControl({value: '', disabled: true }),
       serviceType: new FormControl(''),
       servicePrice: new FormControl({value: '', disabled: true }),
@@ -88,6 +90,7 @@ export class AppointmentServiceComponent implements OnInit{
       customerName: new FormControl(''),
       email: new FormControl(''),
       phoneNumber: new FormControl(''),
+      licencePlate: new FormControl(''),
       taskId: new FormControl(''),
       taskName: new FormControl(''),
       additionalServices: new FormControl('')
@@ -102,7 +105,14 @@ ngOnInit(): void {
     console.log("User Role from localStorage:", this.userRole);
 
     this.loadUserProfile();
-    // this.loadUserProfile();
+
+    const user = JSON.parse(localStorage.getItem('user')!);
+    const customerId = user.id;
+
+    this.loadVehicles(customerId);
+
+    console.log("Customer ID:", customerId);
+    console.log("Vehicle List:", this.vehicleList);
     
     this.dataSource = new MatTableDataSource<TimeSlot>();
     
@@ -159,6 +169,28 @@ loadUserProfile(): void {
       }
     });
   }
+
+  //load logged customer's vehicles data
+  loadVehicles(customerId: number) {
+  this.appointmentService.getVehiclesByCustomer(customerId).subscribe({
+    next: (res: any[]) => {
+      this.vehicleList = res;
+      console.log("Vehicles:", this.vehicleList);
+    },
+    error: (err) => {
+      console.error("Vehicle load error", err);
+    }
+  });
+}
+
+onVehicleSelect(vehicle: any) {
+  console.log("Selected Vehicle:", vehicle);
+
+  // Auto-fill vehicle type (optional)
+  this.appointmentServiceForm.patchValue({
+    vehicleType: vehicle.vehicleType
+  });
+}
 
 
 formatDateLocal(date: Date): string {
