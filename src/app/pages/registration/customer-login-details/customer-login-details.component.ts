@@ -25,6 +25,8 @@ export class CustomerLoginDetailsComponent {
       this.customerLoginDetailsForm = this.fb.group({
         firstName: new FormControl({value: '', disabled: true}),//
         lastName: new FormControl({value: '', disabled: true}),
+        email: new FormControl({ value: '', disabled: true }), 
+        contactNumber: new FormControl({ value: '', disabled: true }),
         login: new FormControl('', [Validators.required]),
         password: new FormControl('', [Validators.required]),
       });
@@ -35,10 +37,26 @@ export class CustomerLoginDetailsComponent {
       console.log('Dialog Data:', this.data);
       if (this.data) {
       this.selectedCustomerId = this.data.customerId;
-      this.customerLoginDetailsForm.patchValue({
-        firstName: this.data.firstName,
-        lastName: this.data.lastName,
-      });
+
+      this.customerService.getData().subscribe((res: any) => {
+      // find selected customer from backend list
+      const customer = res.find((c: any) => c.cusId === this.selectedCustomerId);
+
+      if (customer) {
+        this.customerLoginDetailsForm.patchValue({
+          firstName: customer.firstName,
+          lastName: customer.lastName,
+          email: customer.email,
+          contactNumber: customer.contactNumber
+        });
+      }
+    });
+      // this.customerLoginDetailsForm.patchValue({
+      //   firstName: this.data.firstName,
+      //   lastName: this.data.lastName,
+      //   email: this.data.email,
+      //   contactNumber: this.data.contactNumber
+      // });
     }
   
     }
@@ -51,6 +69,8 @@ export class CustomerLoginDetailsComponent {
             customerId: this.selectedCustomerId,
             firstName: this.customerLoginDetailsForm.get('firstName')?.value,
             lastName: this.customerLoginDetailsForm.get('lastName')?.value,
+            email: this.data.email,
+            contactNumber: this.data.contactNumber,
             login: this.customerLoginDetailsForm.value.login,
             password: this.customerLoginDetailsForm.value.password,
           })

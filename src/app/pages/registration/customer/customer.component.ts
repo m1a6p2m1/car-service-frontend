@@ -9,7 +9,7 @@ import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.comp
 import { MatDialog } from '@angular/material/dialog';
 import { CustomerLoginDetailsComponent } from '../customer-login-details/customer-login-details.component';
 
-const ELEMENT_DATA: any[] = [{firstName:'',lastName:'',nic:'',email:'',gender:'',address:'',phoneNumber:'',licencePlate:'',vehicleType:'',vehicleModel:''}];
+// const ELEMENT_DATA: any[] = [{firstName:'',lastName:'',nic:'',email:'',gender:'',address:'',contactNumber:'',licencePlate:'',vehicleType:'',vehicleModel:''}];
 
 @Component({
   selector: 'app-customer',
@@ -21,7 +21,7 @@ export class CustomerComponent implements OnInit{
 
   customerForm: FormGroup;
 
-  displayedColumns: string[] = ['firstName','nic', 'phoneNumber','action'];
+  displayedColumns: string[] = ['firstName','nic', 'contactNumber','action'];
 
   dataSource!: MatTableDataSource<any>;
 
@@ -46,7 +46,7 @@ export class CustomerComponent implements OnInit{
       email: new FormControl('', [Validators.email]),
       gender: new FormControl(''),
       address: new FormControl(''),
-      phoneNumber: new FormControl('', [Validators.pattern('^(\\+94|0)[1-9]{2}[0-9]{7}$|^(\\+94|0)?7[0-9]{8}$')]),//, [Validators.pattern('^(\+94|0)?[1-9]{2}[0-9]{7}$|^(\\+94|0)?7[0-9]{8}$')]
+      contactNumber: new FormControl('', [Validators.pattern('^(\\+94|0)[1-9]{2}[0-9]{7}$|^(\\+94|0)?7[0-9]{8}$')]),//, [Validators.pattern('^(\+94|0)?[1-9]{2}[0-9]{7}$|^(\\+94|0)?7[0-9]{8}$')]
       licencePlate: new FormControl(''),
       vehicleType: new FormControl(''),
       vehicleModel: new FormControl(''),
@@ -67,11 +67,19 @@ export class CustomerComponent implements OnInit{
             if (this.dataSource && this.dataSource.data && this.dataSource.data.length > 0) {
               this.dataSource = new MatTableDataSource([response, ...this.dataSource.data]);
               this.messageService.showSuccess('Data Saved Successfully !');
+              console.log('Customer form submitted')
             }
             this.dataSource = new MatTableDataSource([response]);       
           },
           error:(error) => {
-            this.messageService.showError('Action Failed with Error :'+ error); 
+            console.log('Full error:', error);
+
+            const msg =
+              error?.error?.message ||
+              error?.message ||
+              'Unknown error occurred';
+
+            this.messageService.showError(msg);
           }
         });
       }else if (this.mode === 'edit') {
@@ -83,7 +91,14 @@ export class CustomerComponent implements OnInit{
             this.messageService.showSuccess('Data Edited Successfully !');
           },
           error:(error) => {
-            this.messageService.showError('Action Failed with Error :'+ error); 
+            console.log('Full error:', error);
+
+            const msg =
+              error?.error?.message ||
+              error?.message ||
+              'Unknown error occurred';
+
+            this.messageService.showError(msg); 
           }
         });
       }

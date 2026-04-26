@@ -14,7 +14,7 @@ export class CustomerService {
   ) {}
 
   serviceCall(form_details: any) {
-    //console.log('In the Service');
+    console.log('In the Add Service');
     const requestUrl = environment.baseUrl + '/customer';
     
          let headers = {};
@@ -40,7 +40,8 @@ export class CustomerService {
           };
         }
     
-        return this.http.get(requestUrl, headers );
+        // return this.http.get(requestUrl, headers );
+        return this.http.get(requestUrl, { headers: headers });
   }
 
   editData(cusId:number, form_details: any){

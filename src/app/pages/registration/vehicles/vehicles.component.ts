@@ -214,6 +214,7 @@ export class VehiclesComponent implements OnInit{
       this.isButtonDisable = false;
       this.enableFormManually();
       this.addVehicle(); // add first row automatically
+      this.isEditMode = false; // ADD Vehicle button Show when reset button click
     }
 
     public resetFormManually() {
@@ -228,7 +229,7 @@ export class VehiclesComponent implements OnInit{
 
     public editData(data: any):void{
       this.resetData();
-      this.isEditMode = true;
+      this.isEditMode = true; // ADD VEHICLE button doesn't Show when edit button click
       this.vehiclesForm.patchValue({
         customerId: data.customerId
       });

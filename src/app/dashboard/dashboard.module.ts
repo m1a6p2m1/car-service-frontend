@@ -18,6 +18,8 @@ import { AppointmentServiceComponent } from './dashboard-components/appointment-
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ConfirmAppointmentComponent } from './dashboard-components/confirm-appointment/confirm-appointment.component';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     SubTasksComponent,
     TaskDetailComponent,
     AppointmentServiceComponent,
+    ConfirmAppointmentComponent
   ],
   imports: [
     CommonModule,
@@ -40,7 +43,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatListModule,
     MatCheckboxModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatButtonModule,
   ],
 })
 export class DashboardModule { }

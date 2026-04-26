@@ -1,1 +1,8 @@
-<p>confirm-appointment works!</p>
+<h2 mat-dialog-title>Confirm Appointment</h2>
+<mat-dialog-content>
+  <p style="white-space: pre-line;">{{ message }}</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-raised-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onConfirm()" class="btnConfirm">Yes, Continue..</button>
+</mat-dialog-actions>

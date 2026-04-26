@@ -60,11 +60,11 @@
         <mat-form-field class="full-width">
           <mat-label>Telephone</mat-label>
           <!-- <span matTextPrefix>+94 &nbsp;</span> -->
-          <input type="tel" matInput placeholder="+94 55-555-1234 OR 055-555-1234" formControlName="phoneNumber">
+          <input type="tel" matInput placeholder="+94 55-555-1234 OR 055-555-1234" formControlName="contactNumber">
           <span class="text-danger" *ngIf="
-              (customerForm.get('phoneNumber')?.touched || submitted) && 
-              customerForm.get('phoneNumber')?.errors && 
-              customerForm.get('phoneNumber')?.errors!['pattern']">
+              (customerForm.get('contactNumber')?.touched || submitted) && 
+              customerForm.get('contactNumber')?.errors && 
+              customerForm.get('contactNumber')?.errors!['pattern']">
             Please Insert a Valid Phone Number......
           </span>
           <mat-icon matSuffix>phone</mat-icon>
@@ -153,9 +153,9 @@
           <td mat-cell *matCellDef="let element"> {{element.address}} </td>
         </ng-container>
 
-        <ng-container matColumnDef="phoneNumber">
-          <th mat-header-cell *matHeaderCellDef> Phone Number </th>
-          <td mat-cell *matCellDef="let element"> {{element.phoneNumber}} </td>
+        <ng-container matColumnDef="contactNumber">
+          <th mat-header-cell *matHeaderCellDef> Contact Number </th>
+          <td mat-cell *matCellDef="let element"> {{element.contactNumber}} </td>
         </ng-container>
 
         <ng-container matColumnDef="licencePlate">

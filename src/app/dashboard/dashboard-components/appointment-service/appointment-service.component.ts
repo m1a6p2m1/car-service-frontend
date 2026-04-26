@@ -8,6 +8,8 @@ import { Appointment, Task, TimeSlot } from 'src/app/models/appointment.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
 import { AdditionalServicesService } from 'src/app/services/task-management/additional-services.service';
+import { ConfirmAppointmentComponent } from '../confirm-appointment/confirm-appointment.component';
+import { MatDialog } from '@angular/material/dialog';
 
 
 @Component({
@@ -68,7 +70,8 @@ export class AppointmentServiceComponent implements OnInit{
     private additionalServicesService: AdditionalServicesService,
     private messageService: MessageServiceService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private _dialog: MatDialog,
   ) {
   if (this.router.getCurrentNavigation()?.extras.state) {
     const navigation = this.router.getCurrentNavigation();
@@ -82,7 +85,7 @@ export class AppointmentServiceComponent implements OnInit{
     this.appointmentServiceForm = this.fb.group({
       date: new FormControl(null),
       time: new FormControl(''),
-      vehicleType: new FormControl({value: '', disabled: true }),
+      vehicleType: new FormControl(''),
       price: new FormControl({value: '', disabled: true }),
       serviceType: new FormControl(''),
       servicePrice: new FormControl({value: '', disabled: true }),
@@ -285,9 +288,22 @@ formatDateLocal(date: Date): string {
   }
 
   selectSlot(time: string, data: any): void {
-  this.selectedTime = time;
-  console.log(data);
-}
+    this.selectedTime = time;
+    console.log(data);
+  }
+
+  public confirmAppointment(): void {
+      const dialogRef = this._dialog.open(ConfirmAppointmentComponent, {
+        // data: 'Your total price may change depending on the selected service type and any additional services added during the service. Would you like to continue..?',
+        data: 'Your Total Price may change depending on the selected service type. Any \n additional services added during the service may also affect the price.\nWould you like to continue?'
+      });
+  
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.submitAppointment();
+        }
+      });
+  }
 
   // Book the selected appointment
   submitAppointment(): void {

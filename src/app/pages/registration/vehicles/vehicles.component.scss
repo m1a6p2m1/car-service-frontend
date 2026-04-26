@@ -46,7 +46,7 @@
   width: 120px;
   height: 35px;
   border-radius: 10px;
-  background-color: #6bbcf6;
+  background-color: #81bfeb;
   border: none;
   cursor: pointer;
   font-size: 14px;
@@ -55,5 +55,14 @@
   align-content: center;
 }
 .btnAdd:hover{
-  background-color: #007ed8;
+  background-color: #489fde;
+}
+.btnSave {
+  width: 280px;
+  margin-right: 8px;
+}
+.btnSave:hover {background-color: rgb(0, 85, 196);}
+
+.btnReset{
+  width: 280px;
 }
