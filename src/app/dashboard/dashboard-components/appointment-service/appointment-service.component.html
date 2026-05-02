@@ -65,6 +65,13 @@
     </mat-form-field>
 
     </div>
+
+    <div>
+      <button class="buttons btnBack" (click)="previous()">
+      <mat-icon>arrow_back</mat-icon>
+      <span>Back</span>
+    </button>
+    </div>
   </div>
   
 
@@ -83,7 +90,7 @@
     <mat-form-field class="full-width">
           <mat-label>Telephone</mat-label>
           <!-- <span matTextPrefix>+94 &nbsp;</span> -->
-          <input type="tel" matInput placeholder="+94 55-555-1234 OR 055-555-1234" formControlName="phoneNumber">
+          <input type="tel" matInput placeholder="+94 55-555-1234 OR 055-555-1234" formControlName="contactNumber">
           <mat-icon matSuffix>phone</mat-icon>
         </mat-form-field>
   </div>

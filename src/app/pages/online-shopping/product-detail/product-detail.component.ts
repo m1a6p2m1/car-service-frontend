@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { OnlineItemService } from 'src/app/services/registration/online-item.service';
 
 interface OnlineItem {
@@ -27,6 +27,7 @@ export class ProductDetailComponent implements OnInit{
   constructor(
     private route: ActivatedRoute,
     private onlineItemService: OnlineItemService,
+    private router: Router,
   ){}
 
 ngOnInit(): void {
@@ -59,6 +60,10 @@ decreaseQuantity() {
   if (this.quantity > 1) {
     this.quantity--;
   }
+}
+
+previous(): void {
+  this.router.navigate(['/online-shopping/product-list']);
 }
 
 }

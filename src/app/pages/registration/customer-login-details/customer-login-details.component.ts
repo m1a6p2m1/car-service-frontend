@@ -60,19 +60,20 @@ export class CustomerLoginDetailsComponent {
     }
   
     }
-  
+
     public createLogin(): void {
       try {
         // if (this.employeeLoginDetailsForm?.valid) {
+        const formData = this.customerLoginDetailsForm.getRawValue();
         this.httpService
           .request('POST', '/customer-register', {
             customerId: this.selectedCustomerId,
-            firstName: this.customerLoginDetailsForm.get('firstName')?.value,
-            lastName: this.customerLoginDetailsForm.get('lastName')?.value,
-            email: this.data.email,
-            contactNumber: this.data.contactNumber,
-            login: this.customerLoginDetailsForm.value.login,
-            password: this.customerLoginDetailsForm.value.password,
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email,
+            contactNumber: formData.contactNumber,
+            login: formData.login,
+            password: formData.password,
           })
           .then((response: any) => {
             // console.log('Customer Login');
@@ -85,5 +86,30 @@ export class CustomerLoginDetailsComponent {
         console.log('create login error:',error);
       }
     }
+  
+    // public createLogin(): void {
+    //   try {
+    //     // if (this.employeeLoginDetailsForm?.valid) {
+    //     this.httpService
+    //       .request('POST', '/customer-register', {
+    //         customerId: this.selectedCustomerId,
+    //         firstName: this.customerLoginDetailsForm.get('firstName')?.value,
+    //         lastName: this.customerLoginDetailsForm.get('lastName')?.value,
+    //         email: this.data.email,
+    //         contactNumber: this.data.contactNumber,
+    //         login: this.customerLoginDetailsForm.value.login,
+    //         password: this.customerLoginDetailsForm.value.password,
+    //       })
+    //       .then((response: any) => {
+    //         // console.log('Customer Login');
+    //         this.httpService.setAuthToken(response.token);
+    //         this._dialogRef.close(true);
+    //         // this.router.navigate(['/authentication/login']);
+    //       });
+    //   // }
+    //   } catch (error) {
+    //     console.log('create login error:',error);
+    //   }
+    // }
 
 }

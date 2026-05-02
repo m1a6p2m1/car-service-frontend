@@ -31,7 +31,7 @@ export interface Attendance {
   styleUrl: './attendance-mark.component.scss',
 })
 export class AttendanceMarkComponent implements OnInit {
-  displayedColumns: string[] = ['empId', 'employeeName', 'date', 'status'];
+  displayedColumns: string[] = ['uniqueEmpNo', 'employeeName', 'date', 'status'];
   attendanceList: Attendance[] = [];
   dataSource!: MatTableDataSource<any>;
 
@@ -48,36 +48,6 @@ export class AttendanceMarkComponent implements OnInit {
     private attendanceMarkService: AttendanceMarkService,
     private messageService: MessageServiceService
   ) { }
-
-//   ngOnInit(): void {
-//   const today = new Date().toISOString().split('T')[0];
-
-//   this.attendanceMarkService.getAttendanceByDate(today)
-//     .subscribe({
-//       next: (response: any) => {
-//         if (response && response.length > 0) {
-//           // Already saved → EDIT MODE
-//           this.attendanceList = response;
-//           this.mode = 'edit';
-//           this.saveButtonLabel = 'Update';
-//           this.isAttendanceSavedToday = true;
-//         } else {
-//           // Not saved → ADD MODE
-//           this.mode = 'add';
-//           this.saveButtonLabel = 'Save';
-//           this.populateData();
-//         }
-
-//         this.dataSource = new MatTableDataSource(this.attendanceList);
-//         this.dataSource.paginator = this.paginator;
-//         this.dataSource.sort = this.sort;
-//       },
-//       error: () => {
-//         this.populateData();
-//       }
-//     });
-// }
-
 
   ngOnInit(): void {
     // const savedDate = localStorage.getItem('attendanceSavedDate');//
@@ -123,8 +93,9 @@ export class AttendanceMarkComponent implements OnInit {
 
         const today= new Date().toISOString().split('T')[0];
 
-        this.attendanceList = response.map((emp: { id: any; name: String; })=> ({
-          employeeId: emp.id,
+        this.attendanceList = response.map((emp: any)=> ({
+          // employeeId: emp.id,
+          uniqueEmpNo: emp.uniqueEmpNo,
           employeeName: emp.name,
           date: today,
           attendanceStatus: 'PRESENT'   //default value

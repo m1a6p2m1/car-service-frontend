@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { Appointment, Task, TimeSlot } from 'src/app/models/appointment.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
@@ -51,6 +51,7 @@ export class AppointmentServiceComponent implements OnInit{
   minDate: Date = new Date(); // disables past dates
   userRole: string = '';
   vehicleList: any[] = [];
+  task!: Task;
 
   dateFilter = (date: Date | null): boolean => {
     if (!date) return false;
@@ -69,7 +70,7 @@ export class AppointmentServiceComponent implements OnInit{
     private appointmentService: AppointmentService,
     private additionalServicesService: AdditionalServicesService,
     private messageService: MessageServiceService,
-    private activatedRoute: ActivatedRoute,
+    private route: ActivatedRoute,
     private router: Router,
     private _dialog: MatDialog,
   ) {
@@ -92,7 +93,7 @@ export class AppointmentServiceComponent implements OnInit{
       totalServicePrice: new FormControl({value: '', disabled: true }),
       customerName: new FormControl(''),
       email: new FormControl(''),
-      phoneNumber: new FormControl(''),
+      contactNumber: new FormControl(''),
       licencePlate: new FormControl(''),
       taskId: new FormControl(''),
       taskName: new FormControl(''),
@@ -159,12 +160,12 @@ loadUserProfile(): void {
           id: user.id,
           customerName: `${user.firstName} ${user.lastName}`,
           email: user.email,
-          phoneNumber: user.phoneNumber
+          contactNumber: user.contactNumber
         });
         console.log("loadUserProfile");
         console.log("Form Name:", this.appointmentServiceForm.get('customerName')?.value);
         console.log("Form Email:", this.appointmentServiceForm.get('email')?.value);
-        console.log("Form PN:", this.appointmentServiceForm.get('phoneNumber')?.value);
+        console.log("Form PN:", this.appointmentServiceForm.get('contactNumber')?.value);
         // this.selectedData = response;
       },
       error: (error) => {
@@ -364,6 +365,29 @@ formatDateLocal(date: Date): string {
       role: booking.role,
       login: booking.login
     };
+  }
+
+  // public previous(): void {
+
+  //   const previousId = this.task.id -1;
+    
+  //     this.router.navigate(['/dashboard/task-detail', previousId], {
+  //       state: {
+  //         dataObject: this.task
+  //       }
+  //     });
+  // }
+
+  loadTaskId(): void {
+    this.route.paramMap.subscribe(params => {
+      this.taskId = Number(params.get('id'));
+    });
+  }
+
+  previous(): void {
+    if (this.taskId >= 1) {
+      this.router.navigate(['/dashboard/task-detail', this.taskId]);
+    }
   }
 
 

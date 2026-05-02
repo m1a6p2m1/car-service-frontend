@@ -40,27 +40,46 @@
 }
 
 .details-section {
-  max-width: 500px;
+  max-width: 600px;
 }
 .actions button {
   margin-right: 5px;
   padding: 10px 20px;
   cursor: pointer;
 }
-.cart{
-  background-color: #F2A71B;
-  color: #011F26;
-  width: 215px;
-  height:50px;
+.button-row{
+  display: flex;
+  gap: 10px;              /* space between buttons */
+  align-items: baseline;
+}
+.button-row button{
+  width: 200px;
+  height: 50px;
+  border-radius: 10px;
   border: none;
-  padding: 20px;
-  margin-top: 10px;
-  border-radius: 50px;
   cursor: pointer;
   font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: row;
+}
+.cart{
+  background-color: #fada07;
+  color: #011F26;
+}
+.cart:hover{
+  background-color: #a57f0b;
+  color: #dbddde;
+}
+
+.btnBack{
+  background-color: #81817a;
+  color: #011f26;
+}
+.btnBack:hover{
+  background-color: #333231;
+  color: #ffffff;
+}
+.mat-icon{
+  padding-top: 5px;
 }
 .item-card {
     height: 500px;
@@ -70,6 +89,8 @@
     margin-top: 60px;
     flex-direction: row;
     align-content: center;
+    justify-content: space-evenly;
+    align-items: center;
 }
 .image-section{
     padding: 50px;
@@ -78,11 +99,12 @@
 }
 .details-section{
     padding: 60px;
+    width: 410px;
 }
 .details{
     margin-top: 80px;
 }
 .buttons{
-    margin-top: 80px;
+    margin-top: 20px;
     margin-bottom: 50px;
 }
