@@ -449,7 +449,7 @@ const MENUITEMS: Menu[] = [
   icon: 'task',
   type: 'group',
   isVisible: false,
-  auth: [authenticationEnum.Task_Introduce, authenticationEnum.Task_Assign, authenticationEnum.All_Tasks],
+  auth: [authenticationEnum.Task_Introduce, authenticationEnum.Task_Assign, authenticationEnum.All_Tasks, authenticationEnum.My_Tasks, authenticationEnum.Additional_Services],
   children: [
     {
       state: 'task-management',
@@ -485,7 +485,7 @@ const MENUITEMS: Menu[] = [
       type: 'link',
       icon: 'assignment',
       isVisible: false,
-      auth: authenticationEnum.All_Tasks,
+      auth: authenticationEnum.My_Tasks,
     },
     {
       state: 'task-management',
