@@ -10,6 +10,7 @@ import { MessageServiceService } from 'src/app/services/message-service/message-
 import { AdditionalServicesService } from 'src/app/services/task-management/additional-services.service';
 import { ConfirmAppointmentComponent } from '../confirm-appointment/confirm-appointment.component';
 import { MatDialog } from '@angular/material/dialog';
+import { V } from '@angular/cdk/keycodes';
 
 
 @Component({
@@ -187,13 +188,24 @@ loadUserProfile(): void {
   });
 }
 
-onVehicleSelect(vehicle: any) {
-  console.log("Selected Vehicle:", vehicle);
+onVehicleSelect(licencePlate: string) {
+
+  console.log("Selected licencePlate: ", licencePlate);
+  console.log("vehicle list: ", this.vehicleList);
+
+  const vehicle = this.vehicleList.find(
+      v => v.licencePlate === licencePlate);
+
+      console.log("matched Vehicle:", vehicle);
 
   // Auto-fill vehicle type (optional)
-  this.appointmentServiceForm.patchValue({
-    vehicleType: vehicle.vehicleType
-  });
+    if (vehicle) {
+      this.appointmentServiceForm.patchValue({
+    // licencePlate: vehicle.licencePlate,
+      vehicleType: vehicle.vehicleType
+      });
+    }
+  
 }
 
 
@@ -345,12 +357,12 @@ formatDateLocal(date: Date): string {
       },
       error: (err) => {
         console.error(err);
-        this.messageService.showError("Error Occured. Please try again!=")
+        this.messageService.showError("Error Occured. Please try again!");
       }
     });
   }
 
-  public processObjects(booking: Appointment): void {
+  public processObjects(booking: Appointment): Appointment  {
     this.appointmentServiceForm.patchValue({
       date: booking.appointmentDate,
       time: booking.timeSlot,

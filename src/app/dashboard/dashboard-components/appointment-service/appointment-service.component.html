@@ -8,8 +8,8 @@
       <mat-label>Select Your Vehicle</mat-label>
       <mat-select formControlName="licencePlate" (selectionChange)="onVehicleSelect($event.value)">
         
-        <mat-option *ngFor="let v of vehicleList" [value]="v">
-          {{ v.licencePlate }} - {{ v.vehicleModel }}
+        <mat-option *ngFor="let v of vehicleList" [value]="v.licencePlate">
+          {{ v.licencePlate }}
         </mat-option>
 
       </mat-select>

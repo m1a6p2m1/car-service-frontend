@@ -82,7 +82,12 @@ export class VehiclesComponent implements OnInit{
             }
           });
         }else if (this.mode === 'edit') {
-          this.vehiclesService.editData(this.selectedData.id, formData).subscribe({
+
+          const vehicleData = formData.vehicles[0];
+
+          vehicleData.customerId = formData.customerId;
+
+          this.vehiclesService.editData(this.selectedData.id, vehicleData).subscribe({
             next:(response)=>{
               let elementIndex = this.dataSource.data.findIndex((element)=> element.id === this.selectedData?.id);
               this.dataSource.data[elementIndex] = response;

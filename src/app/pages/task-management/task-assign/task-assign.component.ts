@@ -27,6 +27,10 @@ interface Employee {
   name: string;
 }
 
+interface Appointment {
+  appointmentUniqueNo: string;
+}
+
 @Component({
   selector: 'app-task-assign',
   standalone: false,
@@ -36,7 +40,7 @@ interface Employee {
 export class TaskAssignComponent implements OnInit {
   taskAssignForm: FormGroup;
 
-  displayedColumns: string[] = ['uniqueTaskNo', 'taskName', 'status', 'customerName', 'action'];
+  displayedColumns: string[] = ['uniqueTaskNo', 'taskName', 'date','time', 'customerName', 'action'];
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -71,6 +75,9 @@ export class TaskAssignComponent implements OnInit {
     private _dialog: MatDialog,
   ) {
     this.taskAssignForm = this.fb.group({
+      date: new FormControl(''),
+      time: new FormControl(''),
+      appointmentUniqueNo: new FormControl(''),
       taskName: new FormControl(''),
       taskCreatedBy: new FormControl({ value: '', disabled: true }), //
       customerName: new FormControl(''),
@@ -86,10 +93,15 @@ export class TaskAssignComponent implements OnInit {
   }
 
   tasks: Task[] = [];
+  appointments: Appointment[] = [];
 
   customers: any = [];
 
+  appointmentUniqueNumbers: any = [];
+
   selectedCustomers: any = [];
+
+  timeSlots: string[] = [];
 
   // : Customer[] = [
   //   { value: 'Ruwan', viewValue: 'Ruwan', id: 1 },
@@ -98,10 +110,164 @@ export class TaskAssignComponent implements OnInit {
   //   { value: 'Doty', viewValue: 'Doty', id: 4 },
   // ];
 
+  formatDateLocal(date: Date): string {  //year-month-day(2026-05-06)
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
+  formatTime(hours: number, minutes: number): string {
+    const ampm = hours >= 12 ? 'PM' : 'AM';   // decides AM or PM
+
+    const h = hours % 12 || 12;               // converts 24h → 12h format
+    const m = minutes.toString().padStart(2, '0');
+
+    return `${h.toString().padStart(2, '0')}:${m} ${ampm}`;
+
+    
+  }
+
+  formatDateFromArray(dateArray: number[]): string {
+    if(!dateArray) return '';
+    const [year, month, day] = dateArray;
+    return  `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+  }
+
+  formatTimeFromArray(time: number[]): string {
+    if (!time) return '' ;
+
+    let [hours, minutes] = time;
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const h = hours % 12 || 12;
+    const m = minutes.toString().padStart(2, '0');
+
+    return `${h.toString().padStart(2, '0')}:${m} ${ampm}`;
+  }
+
+  convertTo24Hour(time: string): string {
+    const [timePart, modifier] = time.split(' ');
+    let [hours, minutes] = timePart.split(':').map(Number);
+
+    if (modifier === 'PM' && hours !== 12) hours += 12;
+    if (modifier === 'AM' && hours === 12) hours = 0;
+
+    const hh = hours.toString().padStart(2, '0');
+    const mm = minutes.toString().padStart(2, '0');
+
+
+    return `${hh}:${mm}:00`;
+  }
+
+  onDateChange(date: Date) {
+    this.generateTimeSlots(date);
+  }
+
+  generateTimeSlots(selectedDate:Date){
+    this.timeSlots =  [];
+
+    const day = selectedDate.getDay();
+
+    let start: number;
+    let end: number;
+
+    if (day === 0) {
+      //sunday has no slot
+      return;
+    }else if (day === 6) {
+      //Saturday
+      start = 9 * 60; //9.00
+      end = 15 * 60; //3.00   
+    } else {
+      //Mon-fri
+      start = 9 * 60; //9.00
+      end = 17 * 60; //5.00
+    }
+
+    while (start <= end){
+      //skip 1:00 PM
+      if (start === 13 * 60) {
+        start += 60;
+        continue;
+      }
+
+      const hours = Math.floor(start / 60);
+      const minutes = start % 60;
+
+      this.timeSlots.push(this.formatTime(hours, minutes));
+
+      start += 60;
+    }
+  }
+
+  onDateAndTimeChange(){
+    const date = this.taskAssignForm.get('date')?.value;
+    const time = this.taskAssignForm.get('time')?.value;
+
+    console.log("Selected Date:", date);
+    console.log("Selected Time:", time);
+
+    if (!date || !time) {
+      return; // wait until both selected
+    }
+
+    const formattedDate = this.formatDateLocal(date);
+    const formattedTime = this.convertTo24Hour(time);
+
+    console.log("Formatted Time:", formattedTime);
+
+
+    this.taskAssignService.getAppointmentsByDateAndTime(formattedDate,formattedTime)
+        .subscribe({
+          next: (response: Appointment[]) => {
+          
+            this.appointments = response;
+
+            console.log("Appointments:", response);
+          },
+          error: (err) => {
+            console.log("No appointments found");
+            this.appointments = [];
+          }
+    });
+  }
+
+  onAppointmentSelect(appointmentUniqueNo: string){
+    this.taskAssignService.getDetailsByAppointmentNo(appointmentUniqueNo)
+      .subscribe((res:any)=>{
+        console.log(res);
+
+        const customer = this.customers.find(
+          (c: any) => 
+            `${c.firstName} ${c.lastName}` === res.customerName
+        );
+
+        this.taskAssignForm.patchValue({
+          taskName: res.taskName,
+          customerName: res.customerName,
+          customerId: customer ? customer.id : null,
+          licencePlate: res.licencePlate,
+          vehicleType: res.vehicleType,
+        });
+      });
+  }
+
   onSubmit() {
     try {
       let formData = this.taskAssignForm.getRawValue();
+
+      if(formData.time) {
+        formData.time = this.convertTo24Hour(formData.time);
+      }
+
+      if (formData.date instanceof Date) {
+        formData.date = this.formatDateLocal(formData.date);
+      }
       formData.status = 'Start';
+
+      console.log("Final Payload:", formData);
+
       if (this.mode === 'add') {
         this.taskAssignService.serviceCall(formData).subscribe(
           (response) => {
@@ -130,6 +296,10 @@ export class TaskAssignComponent implements OnInit {
               let elementIndex = this.dataSource.data.findIndex(
                 (element) => element.id === this.selectData?.id
               );
+
+              response.date = response.date;
+              response.time = response.time;
+
               this.dataSource.data[elementIndex] = response;
               this.dataSource = new MatTableDataSource(this.dataSource.data);
               this.messageService.showSuccess('Data Edited Successfully !');
@@ -159,6 +329,23 @@ export class TaskAssignComponent implements OnInit {
       .get('taskName')
       ?.valueChanges.subscribe((selectedTask) => {
         this.updateSubtasks(selectedTask);
+      });
+
+      this.taskAssignForm.get('time')?.valueChanges.subscribe(() => {
+        // if (time) {
+        //   const converted = this.convertTo24Hour(time);
+        //   this.taskAssignForm.patchValue(
+        //     { time: converted },
+        //     { emitEvent: false }
+        //   );
+        // }
+        this.onDateAndTimeChange();
+      });
+
+      this.taskAssignForm.get('date')?.valueChanges.subscribe((date) => {
+        if (date) {
+          this.generateTimeSlots(date);
+        }
       });
 
     // this.filteredUsers = this.users;
@@ -264,10 +451,56 @@ export class TaskAssignComponent implements OnInit {
   public editData(data: any) {
     this.resetData();
     this.mode = 'edit';
-    this.taskAssignForm.patchValue(data);
+
+    // Convert date array → Date object
+    let formattedDate = null;
+    if (data.date) {
+      const [year, month, day] = data.date;
+      formattedDate = new Date(year, month - 1, day);
+    }
+
+    // Convert time array → "04:00 PM"
+    let formattedTime = '';
+    if (data.time) {
+      const [hours, minutes] = data.time;
+      formattedTime = this.formatTime(hours, minutes);
+    }
+
+    const customer = this.customers.find(
+      (c: any) => `${c.firstName} ${c.lastName}` === data.customerName
+    );
+
+    this.taskAssignForm.patchValue({
+      ...data,
+      customerId: customer ? customer.id : null,
+      date: formattedDate,
+      time: formattedTime
+    });
     this.taskAssignForm.enable();
     this.taskAssignForm.get('taskCreatedBy')?.disable();
     this.taskAssignForm.get('status')?.disable();
+
+    // Load time slots for selected date
+    if (formattedDate) {
+      this.generateTimeSlots(formattedDate);
+    }
+
+    // Load appointments for selected date & time
+    if (formattedDate && formattedTime) {
+      const formattedDateStr = this.formatDateLocal(formattedDate);
+      const formattedTimeStr = this.convertTo24Hour(formattedTime);
+
+      this.taskAssignService
+        .getAppointmentsByDateAndTime(formattedDateStr, formattedTimeStr)
+        .subscribe((res: Appointment[]) => {
+          this.appointments = res;
+
+          // Set appointment after loading options
+          this.taskAssignForm.patchValue({
+            appointmentUniqueNo: data.appointmentUniqueNo
+          });
+        });
+    }
 
     data.subTasks.forEach((subTask: any) => {
       this.subTasks.push(
@@ -462,8 +695,8 @@ export class TaskAssignComponent implements OnInit {
           };
 
           employeeList.push(employeeData);
-          console.log('Position:', employee.position);
-          console.log('Employee Status:', employee.employeeStatus);
+          // console.log('Position:', employee.position);
+          // console.log('Employee Status:', employee.employeeStatus);
 
           if ( employee.empStatus === 'Active' && employee.position === 'Supervisor' ) {//load supervisor dropdown to employee_status = Active and job_title = Supervisors
             this.superVisorList.push(employeeData);

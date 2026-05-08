@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/app/environments/environment';
 import { HttpService } from '../http.service';
@@ -101,6 +101,26 @@ export class TaskAssignService {
       return this.http.get(requestUrl, headers);
   }
 
+  getAppointmentsByDateAndTime(date: string, time: string) {
+
+      const requestUrl = environment.baseUrl + `/appointment-service/by-date-time?date=${date}&time=${time}`;
+
+      console.log('appointment unique no');
+      let headers = new HttpHeaders();
+
+      const token = this.httpService.getAuthToken();
+      console.log("TOKEN:", token);
+  
+      if (token !== null) {
+        // headers = {
+        //   Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+        // };
+        headers = headers.set('Authorization', 'Bearer ' + token);
+      }
+      // console.log("TOKEN:", this.httpService.getAuthToken());
+      return this.http.get<any[]>(requestUrl, {headers});
+  }
+
   //Auto load licence_plate and vehicle_type when select customer_name
   getVehicleDetails(customerId: number) {
       const requestUrl = environment.baseUrl + '/register/vehicles/' + customerId.toString();
@@ -114,6 +134,20 @@ export class TaskAssignService {
       }
   
       return this.http.get<any>(requestUrl, { headers });
+  }
+
+  getDetailsByAppointmentNo(appointmentUniqueNo: string) {
+    console.log('In the Service → get appointments');
+    const requestUrl = environment.baseUrl + '/appointment-service/' + appointmentUniqueNo;            // GET /appointments
+
+    let headers = {};
+    if (this.httpService.getAuthToken() !== null) {
+      headers = {
+        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+      };
+    }
+
+    return this.http.get(requestUrl, { headers: headers });
   }
 
 

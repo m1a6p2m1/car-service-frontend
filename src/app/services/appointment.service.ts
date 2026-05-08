@@ -92,7 +92,7 @@ export class AppointmentService {
       };
     }
 
-    return this.http.put(requestUrl,data, headers);
+    return this.http.put(requestUrl,data, { headers: headers });
   }
 
 
