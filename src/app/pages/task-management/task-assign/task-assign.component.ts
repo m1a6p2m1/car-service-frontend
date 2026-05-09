@@ -491,7 +491,7 @@ export class TaskAssignComponent implements OnInit {
       const formattedTimeStr = this.convertTo24Hour(formattedTime);
 
       this.taskAssignService
-        .getAppointmentsByDateAndTime(formattedDateStr, formattedTimeStr)
+        .getAppointmentsByDateAndTime(formattedDateStr, formattedTimeStr, data.appointmentUniqueNo)
         .subscribe((res: Appointment[]) => {
           this.appointments = res;
 

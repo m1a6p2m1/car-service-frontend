@@ -101,15 +101,20 @@ export class TaskAssignService {
       return this.http.get(requestUrl, headers);
   }
 
-  getAppointmentsByDateAndTime(date: string, time: string) {
+  getAppointmentsByDateAndTime(date: string, time: string, currentNo?: string) {
 
-      const requestUrl = environment.baseUrl + `/appointment-service/by-date-time?date=${date}&time=${time}`;
+      let requestUrl = environment.baseUrl + `/appointment-service/by-date-time?date=${date}&time=${time}`;
 
-      console.log('appointment unique no');
+      if (currentNo) {
+        requestUrl += `&currentNo=${currentNo}`;
+      }
+
+      console.log('Current Appointment No:', currentNo);
+
       let headers = new HttpHeaders();
 
       const token = this.httpService.getAuthToken();
-      console.log("TOKEN:", token);
+      // console.log("TOKEN:", token);
   
       if (token !== null) {
         // headers = {
