@@ -13,7 +13,7 @@
             <mat-label>Select Your Task</mat-label>
             <mat-select [(ngModel)]="selectedOption"  name="task" (selectionChange)="onTaskChange($event)">
               <mat-option *ngFor="let task of tasks" [value]="task.id">
-                {{ task.taskName }}
+                {{ task.taskName + ' - ' + task.uniqueTaskNo }}
               </mat-option>
             </mat-select>
         </mat-form-field>

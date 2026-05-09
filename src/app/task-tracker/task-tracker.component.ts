@@ -26,6 +26,7 @@ interface Task {
   id: any;
   taskName: string;
   subTasks: any;
+  uniqueTaskNo?: any;
 }
 
 interface SubTask {
@@ -130,7 +131,7 @@ export class TaskTrackerComponent implements OnInit, AfterViewInit {
     
     let pending = 0, processing = 0, done = 0;
     const taskId = taskEvent.value;
-    this.subTasks = this.tasks.find((item: any) => item.id = taskId)?.subTasks;
+    this.subTasks = this.tasks.find((item: any) => item.id == taskId)?.subTasks;
 
           this.subTasks.forEach((item: any) => {
             if (item.status == 'pending') {
