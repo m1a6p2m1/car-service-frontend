@@ -144,7 +144,8 @@
     <td mat-cell *matCellDef="let slot">
       <button mat-raised-button color="primary"
               [disabled]="slot.bookedCount >= 3"
-              (click)="selectSlot(slot.time, slot)" 
+              (click)="selectSlot(slot.time, slot)"
+              [disabled]="isSelectButtonDisable" 
               [ngClass]="{ 'selected-button': selectedTime === slot.time }"><!--[disabled]="!appointmentServiceForm.valid"-->
         Select
       </button>
@@ -158,7 +159,7 @@
 
 <div *ngIf="selectedTime" class="confirm-box">
   <p><strong>Selected Slot:</strong> {{ formatTime(selectedTime) }}</p>
-  <button mat-raised-button color="accent" (click)="confirmAppointment()">
+  <button mat-raised-button color="accent" [disabled]="isConfirmButtonDisable" (click)="confirmAppointment()">
     Confirm Appointment
   </button>
 </div>

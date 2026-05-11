@@ -20,7 +20,7 @@ export enum authenticationEnum {
   Customer = 15,
   Item = 16,
   Task_Assign = 17,
-  All_Tasks = 18,
+  // All_Tasks = 18,
   Supplier = 19,
   Task_Introduce = 20,
   User_Profile = 21,

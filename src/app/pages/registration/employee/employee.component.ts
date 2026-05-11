@@ -65,6 +65,7 @@ export class EmployeeComponent implements OnInit {
   isFileSelected = false;
   fileButtonDisable = false;
   selectedEmployee: any;
+  hasLogin?: boolean;
 
   constructor(
     private fb: FormBuilder,
@@ -269,7 +270,7 @@ export class EmployeeComponent implements OnInit {
 
   public confirmDelete(data: any): void {
     const dialogRef = this._dialog.open(ConfirmDialogComponent, {
-      data: 'Are you sure you want to delete this record?',
+      data: 'Are you sure you want to delete this employee permanently?',
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -336,6 +337,8 @@ export class EmployeeComponent implements OnInit {
                 this.messageService.showSuccess(
                   'Login Credentials Add successfully!'
                 );
+
+                // employee.hasLogin = true;
               }
             }
           },
