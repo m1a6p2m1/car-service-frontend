@@ -53,6 +53,8 @@ export class AppointmentServiceComponent implements OnInit{
   userRole: string = '';
   vehicleList: any[] = [];
   task!: Task;
+  isSelectButtonDisable = false;
+  isConfirmButtonDisable = false;
 
   dateFilter = (date: Date | null): boolean => {
     if (!date) return false;
@@ -348,6 +350,8 @@ formatDateLocal(date: Date): string {
       dialogRef.afterClosed().subscribe((result) => {
         if (result) {
           this.submitAppointment();
+          this.isSelectButtonDisable = true;
+          this.isConfirmButtonDisable = true;
         }
       });
   }

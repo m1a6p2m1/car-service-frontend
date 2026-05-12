@@ -30,7 +30,7 @@ export class AppointmentListComponent implements OnInit {
   
     demoForm: FormGroup;
   
-    displayedColumns: string[] = ['customerName', 'appointmentDate', 'appointmentTime','serviceType', 'email', 'phoneNumber', 'totalServicePrice', 'assignee','action'];
+    displayedColumns: string[] = ['customerName', 'appointmentDate', 'appointmentTime','serviceType', 'email', 'phoneNumber', 'totalServicePrice','action'];
     dataSource!: MatTableDataSource<any>;
   
     @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -110,11 +110,11 @@ export class AppointmentListComponent implements OnInit {
     });
   }
 
-    updateStatus(id: any, data: any) {
-          const name = this.superVisorList.find((supervisor: any) => supervisor.id === data)?.name;
-          const updatedData = {id: id, assignee: data, assigneeName: name};
-          this.updatedDataList.push(updatedData);
-    }
+    // updateStatus(id: any, data: any) {
+    //       const name = this.superVisorList.find((supervisor: any) => supervisor.id === data)?.name;
+    //       const updatedData = {id: id, assignee: data, assigneeName: name};
+    //       this.updatedDataList.push(updatedData);
+    // }
 
     updateAssignee(element: any) {
           const updatedData: UpdatedDataI | undefined = this.updatedDataList.find(item => item.id == element.id);

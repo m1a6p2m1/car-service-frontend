@@ -64,6 +64,9 @@ export class TaskAssignComponent implements OnInit {
   showEmailField = false;
   superVisorList: Employee[] = [];
   technicianList: Employee[] = [];
+  allEmployees: any[] = [];
+  attendanceList: any[] = [];
+  isInitializing: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -204,6 +207,7 @@ export class TaskAssignComponent implements OnInit {
   onDateAndTimeChange(){
     const date = this.taskAssignForm.get('date')?.value;
     const time = this.taskAssignForm.get('time')?.value;
+    const currentNo = this.taskAssignForm.get('appointmentUniqueNo')?.value;
 
     console.log("Selected Date:", date);
     console.log("Selected Time:", time);
@@ -211,6 +215,8 @@ export class TaskAssignComponent implements OnInit {
     if (!date || !time) {
       return; // wait until both selected
     }
+
+    if (this.mode === 'edit' && !currentNo) return;
 
     const formattedDate = this.formatDateLocal(date);
     const formattedTime = this.convertTo24Hour(time);
@@ -323,7 +329,22 @@ export class TaskAssignComponent implements OnInit {
     this.getDefinedTasks();
     this.setCreatedByValue();
     this.loadCustomerList();
+
+    // 1. FIRST load attendance from localStorage
+    const storedAttendance = localStorage.getItem('todayAttendance');
+
+    if (storedAttendance) {
+      this.attendanceList = JSON.parse(storedAttendance);
+    } else {
+      this.attendanceList = [];
+    }
+
+    // 2. THEN load employees (so filtering works correctly)
     this.setEmployeeList();
+
+    if (!this.attendanceList.length) {
+      console.warn("No attendance found for today");
+    }
 
     this.taskAssignForm
       .get('taskName')
@@ -332,17 +353,12 @@ export class TaskAssignComponent implements OnInit {
       });
 
       this.taskAssignForm.get('time')?.valueChanges.subscribe(() => {
-        // if (time) {
-        //   const converted = this.convertTo24Hour(time);
-        //   this.taskAssignForm.patchValue(
-        //     { time: converted },
-        //     { emitEvent: false }
-        //   );
-        // }
+        if(this.isInitializing) return;
         this.onDateAndTimeChange();
       });
 
       this.taskAssignForm.get('date')?.valueChanges.subscribe((date) => {
+        if(this.isInitializing) return;
         if (date) {
           this.generateTimeSlots(date);
         }
@@ -452,6 +468,8 @@ export class TaskAssignComponent implements OnInit {
     this.resetData();
     this.mode = 'edit';
 
+    this.isInitializing = true
+
     // Convert date array → Date object
     let formattedDate = null;
     if (data.date) {
@@ -474,11 +492,15 @@ export class TaskAssignComponent implements OnInit {
       ...data,
       customerId: customer ? customer.id : null,
       date: formattedDate,
-      time: formattedTime
-    });
+      time: formattedTime,
+      appointmentUniqueNo: data.appointmentUniqueNo
+    },
+      {emitEvent: false }//stop valuechanges here
+    );
     this.taskAssignForm.enable();
     this.taskAssignForm.get('taskCreatedBy')?.disable();
     this.taskAssignForm.get('status')?.disable();
+    this.taskAssignForm.get('appointmentUniqueNo')?.disable();
 
     // Load time slots for selected date
     if (formattedDate) {
@@ -486,7 +508,7 @@ export class TaskAssignComponent implements OnInit {
     }
 
     // Load appointments for selected date & time
-    if (formattedDate && formattedTime) {
+    if (formattedDate && formattedTime && data.appointmentUniqueNo) {
       const formattedDateStr = this.formatDateLocal(formattedDate);
       const formattedTimeStr = this.convertTo24Hour(formattedTime);
 
@@ -495,12 +517,18 @@ export class TaskAssignComponent implements OnInit {
         .subscribe((res: Appointment[]) => {
           this.appointments = res;
 
-          // Set appointment after loading options
-          this.taskAssignForm.patchValue({
-            appointmentUniqueNo: data.appointmentUniqueNo
-          });
+        //   // Set appointment after loading options
+        //   this.taskAssignForm.patchValue({
+        //     appointmentUniqueNo: data.appointmentUniqueNo
+        //   });
         });
     }
+
+    // Allow events again AFTER everything
+    setTimeout(() => {
+      this.isInitializing = false;
+    }, 0);
+
 
     data.subTasks.forEach((subTask: any) => {
       this.subTasks.push(
@@ -684,37 +712,94 @@ export class TaskAssignComponent implements OnInit {
     // };
   }
 
-  public setEmployeeList(): void {
-    let employeeList: Employee[] = [];
-    this.registrationService.getEmployeeList().subscribe((response: any) => {
-      if (response && response.length > 0) {
-        response.forEach((employee: any) => {
-          const employeeData = {
-            id: employee.id,
-            name: employee.name,
-          };
+  filterEmployeesByAttendance() {
+    this.superVisorList = [];
+    this.technicianList = [];
 
-          employeeList.push(employeeData);
-          // console.log('Position:', employee.position);
-          // console.log('Employee Status:', employee.employeeStatus);
+    if(!this.attendanceList?.length || this.attendanceList.length === 0){
+      console.warn("No attendance found");
+      return;
+    }
 
-          if ( employee.empStatus === 'Active' && employee.position === 'Supervisor' ) {//load supervisor dropdown to employee_status = Active and job_title = Supervisors
-            this.superVisorList.push(employeeData);
-          }
-          if (employee.position === 'Technician' && employee.empStatus === 'Active') {
-            this.technicianList.push(employeeData);
-          }
-        });
+    const presentEmployees = this.attendanceList.filter(
+      (att:any) => att.attendanceStatus === 'PRESENT'
+    );
+
+    presentEmployees.forEach((att: any) => {
+
+      const emp = this.allEmployees.find(
+        (e: any) =>
+          e.id == att.employeeId
+      );
+
+      if (!emp) {
+      console.warn("Employee not found:", att.employeeId);
+      return;
+    }
+
+    const status = (emp.empStatus || '').toLowerCase();
+    const position = (emp.position || '').toLowerCase();
+
+      const employeeData = {
+        id: emp.id,
+        name: emp.name,
+      };
+
+      if (emp.empStatus === 'Active' && emp.position === 'Supervisor') {
+        this.superVisorList.push(employeeData);
+      }
+
+      if (emp.empStatus === 'Active' && emp.position === 'Technician') {
+        this.technicianList.push(employeeData);
       }
     });
+
+    
+  console.log("Supervisor List:", this.superVisorList);
+  console.log("Technician List:", this.technicianList);
+  }
+
+  public setEmployeeList(): void {
+    // let employeeList: Employee[] = [];
+    this.registrationService.getEmployeeList().subscribe((response: any) => {
+      if (response && response.length > 0) {
+
+        this.allEmployees = response;
+
+
+        this.filterEmployeesByAttendance();
+        // response.forEach((employee: any) => {
+        //   const employeeData = {
+        //     id: employee.id,
+        //     name: employee.name,
+        //   };
+
+        //   employeeList.push(employeeData);
+        //   // console.log('Position:', employee.position);
+        //   // console.log('Employee Status:', employee.employeeStatus);
+
+        //   if ( employee.empStatus === 'Active' && employee.position === 'Supervisor' ) {//load supervisor dropdown to employee_status = Active and job_title = Supervisors
+        //     this.superVisorList.push(employeeData);
+        //   }
+        //   if (employee.position === 'Technician' && employee.empStatus === 'Active') {
+        //     this.technicianList.push(employeeData);
+        //   }
+        // });
+      }
+    });
+
+    
 
     //console.log(employeeList);
     // this.employees = employeeList;
     // this.users = employeeList;
     // this.filteredUsers = employeeList;
-    this.superVisorList = employeeList.filter((emp: any) => {})
-    this.technicianList = employeeList.filter((emp: any) => {})
+    // this.superVisorList = employeeList.filter((emp: any) => {})
+    // this.technicianList = employeeList.filter((emp: any) => {})
   }
+
+
+  
 
   public addNotification(details?: any): void {
     this.notificationService.addNotification(

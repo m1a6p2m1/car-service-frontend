@@ -22,6 +22,7 @@ export interface Attendance {
   employeeName: string;
   date: string;
   attendanceStatus: string;
+  position: string;
 }
 
 @Component({
@@ -58,6 +59,9 @@ export class AttendanceMarkComponent implements OnInit {
         // if (savedDate === today) {// Already Saved today Data
         if (response && response.length > 0) {
           this.attendanceList = response;
+
+          localStorage.setItem('todayAttendance', JSON.stringify(this.attendanceList));
+
           this.mode = 'view';
           this.isAttendanceSavedToday = true; // disable dropdown
           this.isButtonDisable = true;
@@ -94,12 +98,15 @@ export class AttendanceMarkComponent implements OnInit {
         const today= new Date().toISOString().split('T')[0];
 
         this.attendanceList = response.map((emp: any)=> ({
-          // employeeId: emp.id,
+          employeeId: emp.id,
           uniqueEmpNo: emp.uniqueEmpNo,
           employeeName: emp.name,
           date: today,
           attendanceStatus: 'PRESENT'   //default value
     }));
+
+    localStorage.setItem('todayAttendance', JSON.stringify(this.attendanceList));
+
       this.dataSource = new MatTableDataSource(this.attendanceList);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -124,6 +131,7 @@ export class AttendanceMarkComponent implements OnInit {
       .subscribe({
         next: () => {
           this.messageService.showSuccess('Attendance saved successfully');
+          console.log("Saving attendance:", this.attendanceList);
           this.afterSave();
         },
         error: (error) => {
@@ -156,6 +164,7 @@ export class AttendanceMarkComponent implements OnInit {
     this.isAttendanceSavedToday = true; //disable dropdown//
     this.isButtonDisable = true;
     this.saveButtonLabel = 'Saved';
+    this.populateData();
   }
 
   enableEdit() {
