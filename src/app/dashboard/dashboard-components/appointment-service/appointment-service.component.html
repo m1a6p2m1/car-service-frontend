@@ -19,11 +19,22 @@
     <div class="selection">
       <mat-form-field class="full-width">
       <mat-label>Vehicle Type</mat-label>
-      <mat-select formControlName="vehicleType" (selectionChange)="onVehicleTypeChange($event.value)">
+      <!-- <mat-select formControlName="vehicleType" (selectionChange)="onVehicleTypeChange($event.value)">
         <mat-option value="Car">Car</mat-option>
         <mat-option value="Jeep">Jeep</mat-option>
         <mat-option value="Van">Van</mat-option>
-      </mat-select>
+      </mat-select> -->
+
+      <!-- Dropdown with Custom Input Enabled -->
+          <input type="text" matInput formControlName="vehicleType" [matAutocomplete]="auto" (blur)="addIfNotExists()" />
+          
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)">
+            <mat-option *ngFor="let option of filteredVehicleTypes" [value]="option">
+              {{ option }}
+            </mat-option>
+          </mat-autocomplete>
+
+
       </mat-form-field>
 
       <!-- <mat-form-field class="full-width">

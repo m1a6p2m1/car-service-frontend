@@ -61,7 +61,10 @@ export class AppointmentServiceComponent implements OnInit{
     return day !== 0; // disables Sundays
   };
 
-  
+  // <!--Fields for Dropdown with Custom Input Enabled -->
+  vehicleTypes: string[] = ['Car', 'Jeep', 'Van'];
+  filteredVehicleTypes: string[] = [];
+
   
 
   // isLoading = false;
@@ -151,6 +154,37 @@ ngOnInit(): void {
   //     this.totalCost = dataObject.totalTaskPrice;
   //   }
   // });
+
+  // <!--Functionas and Initializations for Dropdown with Custom Input Enabled -->
+  this.filteredVehicleTypes = this.vehicleTypes;
+
+  this.appointmentServiceForm.get('vehicleType')!.valueChanges.subscribe(value => {
+    this.filteredVehicleTypes = this.filter(value || '');
+  });
+}
+
+// <!--Functions for Dropdown with Custom Input Enabled -->
+
+filter(value: string): string[] {
+  const filterValue = value.toLowerCase();
+  return this.vehicleTypes.filter(option =>
+    option.toLowerCase().includes(filterValue)
+  );
+}
+
+onOptionSelected(event: any) {
+  const value = event.option.value;
+  this.appointmentServiceForm.get('vehicleType')?.setValue(value);
+}
+
+// Add new value if not exists
+addIfNotExists() {
+  const value = this.appointmentServiceForm.get('vehicleType')?.value?.trim();
+
+  if (value && !this.vehicleTypes.includes(value)) {
+    this.vehicleTypes.push(value);
+    this.filteredVehicleTypes = this.vehicleTypes;
+  }
 }
 
 //load logged customer data
