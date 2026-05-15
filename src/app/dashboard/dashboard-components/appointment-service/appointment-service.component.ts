@@ -96,7 +96,7 @@ export class AppointmentServiceComponent implements OnInit{
       price: new FormControl({value: '', disabled: true }),
       serviceType: new FormControl(''),
       servicePrice: new FormControl({value: '', disabled: true }),
-      totalServicePrice: new FormControl({value: '', disabled: true }),
+      totalServicePrice: new FormControl(''),
       customerName: new FormControl(''),
       email: new FormControl(''),
       contactNumber: new FormControl(''),
@@ -114,14 +114,25 @@ ngOnInit(): void {
 
     console.log("User Role from localStorage:", this.userRole);
 
-    this.loadUserProfile();
+    const contactNumber = localStorage.getItem('contactNumber');
+    if (this.userRole === "CUSTOMER") {
+      const user = JSON.parse(localStorage.getItem('user')!);
+      const customerId = user.id;
 
-    const user = JSON.parse(localStorage.getItem('user')!);
-    const customerId = user.id;
+      this.loadVehicles(customerId);
+      this.loadUserProfile();
 
-    this.loadVehicles(customerId);
-
-    console.log("Customer ID:", customerId);
+      console.log("Customer ID:", customerId);
+    } else if (this.userRole === "EMPLOYEE" && contactNumber) {
+      this.onPhoneChange(contactNumber)
+    }
+    
+    this.appointmentServiceForm.get('contactNumber')?.valueChanges
+        .subscribe(value => {
+          if (this.userRole === "EMPLOYEE" && value && value.length >= 10) {
+            this.onPhoneChange(value);
+          }
+        });
     console.log("Vehicle List:", this.vehicleList);
     
     this.dataSource = new MatTableDataSource<TimeSlot>();
@@ -193,12 +204,15 @@ addIfNotExists() {
 loadUserProfile(): void {
     this.appointmentService.getLoggedInUserDetails().subscribe({
       next: (user: any) => {
-        this.appointmentServiceForm.patchValue({
-          id: user.id,
-          customerName: `${user.firstName} ${user.lastName}`,
-          email: user.email,
-          contactNumber: user.contactNumber
+        setTimeout(() =>{
+          this.appointmentServiceForm.patchValue({
+            id: user.id,
+            customerName: `${user.firstName} ${user.lastName}`,
+            email: user.email,
+            contactNumber: user.contactNumber
+          });
         });
+        console.log("User Loaded:", user);
         console.log("loadUserProfile");
         console.log("Form Name:", this.appointmentServiceForm.get('customerName')?.value);
         console.log("Form Email:", this.appointmentServiceForm.get('email')?.value);
@@ -242,6 +256,47 @@ onVehicleSelect(licencePlate: string) {
       });
     }
   
+}
+
+onPhoneChange(contactNumber: string) {
+  if (!contactNumber || contactNumber === 'null') {
+    console.warn("Phone number is empty");
+    return;
+  }
+
+  console.log("Searching customer by phone:", contactNumber);
+
+  this.appointmentService.getCustomerByPhone(contactNumber).subscribe({
+    next: (res: any) => {
+      console.log("Customer Response:", res);
+
+      // Patch correct fields
+      this.appointmentServiceForm.patchValue({
+        customerName: `${res.firstName} ${res.lastName}`,   
+        email: res.email,
+        contactNumber: res.contactNumber     
+      }, { emitEvent: false }); //prevent triggering
+
+      // Load vehicles using customer ID
+      this.loadVehicles(res.id);
+      // this.vehicleList = res.vehicles || [];
+    },
+
+    error: (err) => {
+      console.error("Customer not found:", err);
+
+      // Optional UX improvement
+      this.messageService.showError("Customer not found for this phone number");
+
+      // Clear fields if not found
+      this.appointmentServiceForm.patchValue({
+        customerName: '',
+        email: ''
+      });
+
+      this.vehicleList = [];
+    }
+  });
 }
 
 

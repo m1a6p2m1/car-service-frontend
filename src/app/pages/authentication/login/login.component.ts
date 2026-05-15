@@ -108,6 +108,7 @@ export class AppSideLoginComponent implements OnInit {
     this.localStorage.setItem('password', userData.password);
     this.localStorage.setItem('email', userData.email);
     this.localStorage.setItem('contactNumber', userData.contactNumber);
+    this.localStorage.setItem('userRole', userData.role);
     this.localStorage.setItem('image', userData.image);
     this.localStorage.setItem('imageName', userData.imageName);
     this.localStorage.setItem('imageType', userData.imageType);

@@ -14,6 +14,37 @@ export class AppointmentService {
 
   constructor(private http: HttpClient, private httpService: HttpService) { }
 
+
+  getCustomersList() { //get registered customer list into the customer dropdown
+    console.log('GET CUSTOMER -- IN Service');
+      const requestUrl = environment.baseUrl + '/register/users';
+      let headers = {};
+  
+      if (this.httpService.getAuthToken() !== null) {
+        headers = {
+          Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+        };
+      }
+  
+      return this.http.get(requestUrl, {headers});
+  }
+
+  getCustomerByPhone(contactNumber: string) {
+    console.log('GET CUSTOMER BY PHONE -- IN Service');
+
+    const requestUrl = environment.baseUrl + '/user/by-phone/' + contactNumber;
+
+    let headers: any = {};
+
+    if (this.httpService.getAuthToken() !== null) {
+      headers = {
+        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+      };
+    }
+
+    return this.http.get(requestUrl, { headers: headers });
+  }
+
   // GET available slots for a given date
   getAvailableSlots(date: string): Observable<TimeSlot[]> {
     console.log('In the Service → get available slots');
