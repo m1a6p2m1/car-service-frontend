@@ -58,6 +58,11 @@
       </mat-form-field>
 
       <mat-form-field class="example-full-width">
+        <mat-label>Service Type</mat-label>
+        <input matInput formControlName="serviceType" readonly />
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
         <mat-label>Task Created By</mat-label>
         <input matInput formControlName="taskCreatedBy" />
       </mat-form-field>
@@ -80,17 +85,17 @@
 
       <mat-form-field class="full-width">
         <mat-label>Customer Name</mat-label>
-        <input type="tel" matInput placeholder=">Customer Name" formControlName="customerName">
+        <input type="tel" matInput placeholder=">Customer Name" formControlName="customerName" readonly>
       </mat-form-field>
 
       <mat-form-field class="full-width">
         <mat-label>Licence Plate</mat-label>
-        <input type="tel" matInput placeholder="Licence Plate Number" formControlName="licencePlate">
+        <input type="tel" matInput placeholder="Licence Plate Number" formControlName="licencePlate" readonly>
       </mat-form-field>
 
       <mat-form-field class="full-width">
         <mat-label>Vehicle Type</mat-label>
-        <input type="tel" matInput placeholder="Vehicle Type" formControlName="vehicleType">
+        <input type="tel" matInput placeholder="Vehicle Type" formControlName="vehicleType" readonly>
       </mat-form-field>
 
       <!-- <mat-form-field class="full-width">

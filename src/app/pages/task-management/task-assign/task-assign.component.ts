@@ -82,6 +82,7 @@ export class TaskAssignComponent implements OnInit {
       time: new FormControl(''),
       appointmentUniqueNo: new FormControl(''),
       taskName: new FormControl(''),
+      serviceType: new FormControl(''),
       taskCreatedBy: new FormControl({ value: '', disabled: true }), //
       customerName: new FormControl(''),
       customerId: new FormControl(''),
@@ -251,6 +252,7 @@ export class TaskAssignComponent implements OnInit {
 
         this.taskAssignForm.patchValue({
           taskName: res.taskName,
+          serviceType: res.serviceType,
           customerName: res.customerName,
           customerId: customer ? customer.id : null,
           licencePlate: res.licencePlate,
@@ -582,9 +584,10 @@ export class TaskAssignComponent implements OnInit {
   }
 
   public resetData() {
+    this.taskAssignForm.reset();
+    this.taskAssignForm.enable();
     const subTasksFormArray = this.subTasks;
     subTasksFormArray.clear();
-    this.taskAssignForm.reset();
     this.resetFormManually();
     this.taskAssignForm.get('taskCreatedBy')?.disable();
     this.taskAssignForm.get('status')?.disable();

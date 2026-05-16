@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HttpService } from '../http.service';
 import { environment } from 'src/app/environments/environment';
@@ -13,6 +13,44 @@ export class CustomerFeedbackService {
     private http:HttpClient , 
     private httpService : HttpService
   ) { }
+
+  getLicenseByDateAndCustomer(date: string, customerId: string){//TaskAssignController
+    let requestUrl = environment.baseUrl + `/task-assign/by-date-customerId?date=${date}&userId=${customerId}`;
+    
+      // if (currentNo) {
+      //   requestUrl += `&currentNo=${currentNo}`;
+      // }
+      
+      // console.log('Current Appointment No:', currentNo);
+      
+      let headers = new HttpHeaders();
+      
+      const token = this.httpService.getAuthToken();
+      // console.log("TOKEN:", token);
+        
+      if (token !== null) {
+              // headers = {
+              //   Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+              // };
+      headers = headers.set('Authorization', 'Bearer ' + token);
+      }
+            // console.log("TOKEN:", this.httpService.getAuthToken());
+      return this.http.get<any[]>(requestUrl, {headers});
+  }
+
+  getDetailsByLicensePlate( date:string, licencePlate: string){//TaskAssignController
+    const requestUrl = environment.baseUrl + `/task-assign/by-date-licensePlate?date=${date}&licencePlate=${licencePlate}`;            // GET /appointments
+
+    let headers = {};
+    if (this.httpService.getAuthToken() !== null) {
+      headers = {
+        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+      };
+    }
+
+    return this.http.get(requestUrl, { headers: headers });
+
+  }
 
   serviceCall(form_details: any){
         console.log('In the Service servicecall');

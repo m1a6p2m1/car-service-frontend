@@ -19,9 +19,9 @@
           <td mat-cell *matCellDef="let element"> {{element.userName}} </td>
         </ng-container>
       
-        <ng-container matColumnDef="taskNumber">
+        <ng-container matColumnDef="uniqueTaskNo">
           <th mat-header-cell *matHeaderCellDef> Task Number </th>
-          <td mat-cell *matCellDef="let element"> {{element.taskNumber}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.uniqueTaskNo}} </td>
         </ng-container>
       
         <ng-container matColumnDef="serviceType">
@@ -31,7 +31,7 @@
       
         <ng-container matColumnDef="serviceDate">
           <th mat-header-cell *matHeaderCellDef> Service Date </th>
-          <td mat-cell *matCellDef="let element"> {{element.serviceDate}} </td>
+          <td mat-cell *matCellDef="let element"> {{ formatDateFromArray(element.serviceDate) }} </td>
         </ng-container>
   
         <ng-container matColumnDef="serviceQuality">

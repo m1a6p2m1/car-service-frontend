@@ -6,6 +6,10 @@ import { MatTableDataSource } from '@angular/material/table';
 import { CustomerFeedbackService } from 'src/app/services/feedback/customer-feedback.service';
 import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
 
+
+interface License {
+  licencePlate: string;
+}
 @Component({
   selector: 'app-customer-feedback',
   standalone: false,
@@ -20,7 +24,7 @@ export class CustomerFeedbackComponent implements OnInit{
   starCount: number = 5;
   ratingUpdated = new EventEmitter();
 
-  displayedColumns: string[] = ['userName','taskNumber', 'serviceDate', 'serviceQuality', 'recommendation', 'complaint','action'];
+  displayedColumns: string[] = ['userName','uniqueTaskNo', 'serviceDate', 'serviceQuality', 'recommendation', 'complaint','action'];
 
   dataSource!: MatTableDataSource<any>;
   
@@ -50,13 +54,78 @@ export class CustomerFeedbackComponent implements OnInit{
 
     this.customerFeedbackForm = this.fb.group({
       userName: new FormControl({ value: this.loggedUserName, disabled: true }),
-      taskNumber: new FormControl(''),
+      licencePlate: new FormControl(''),
+      uniqueTaskNo: new FormControl(''),
       serviceDate: new FormControl(''),
       serviceType: new FormControl(''),
       serviceQuality: new FormControl('', Validators.required),
       // serviceQualityLabel: new FormControl(''),
       recommendation: new FormControl('', Validators.required),
       complaint: new FormControl('')
+    });
+  }
+
+  licenses: License[] = [];
+
+  formatDateLocal(date: Date): string {  //year-month-day(2026-05-06)
+    if(!date){
+      return '';
+    }
+
+    const d = new Date(date);
+
+    const year = d.getFullYear();
+    const month = (d.getMonth() + 1).toString().padStart(2, '0');
+    const day = d.getDate().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
+  formatDateFromArray(dateArray: number[]): string {//get date 2026-05-16 this format into the table
+    if(!dateArray) return '';
+    const [year, month, day] = dateArray;
+    return  `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+  }
+
+  onCustomerAndDateChange(){
+    const date = this.customerFeedbackForm.get('serviceDate')?.value;
+    if (!date) {
+      return;
+    }
+    const formattedDate = this.formatDateLocal(date);
+
+    
+  const customerId = localStorage.getItem('id');
+
+  console.log("Customer ID:", customerId);
+
+    this.customerFeedbackService.getLicenseByDateAndCustomer(formattedDate, customerId!).subscribe({
+      next: (res: License[])=>{
+        this.licenses = res;
+        console.log("License:", res);
+      },
+      error: (err) => {
+        console.log("No Tasks Found");
+        this.licenses = [];
+      }
+    });
+  }
+
+  onLicensePlateSelect(licencePlate: string){
+    const date = this.customerFeedbackForm.get('serviceDate')?.value;
+    if (!date) {
+      return;
+    }
+    const formattedDate = this.formatDateLocal(date);
+    
+    this.customerFeedbackService.getDetailsByLicensePlate(formattedDate, licencePlate)
+    .subscribe((res: any)=>{
+      console.log(res);
+
+      this.customerFeedbackForm.patchValue({
+        uniqueTaskNo: res.uniqueTaskNo,
+        serviceType: res.serviceType
+      });
     });
   }
 
@@ -69,9 +138,7 @@ export class CustomerFeedbackComponent implements OnInit{
 
       formData.userId = user.id;
       if (formData.serviceDate) {
-        formData.serviceDate = new Date(formData.serviceDate)
-            .toISOString()
-            .split('T')[0];   // "2026-04-06"
+        formData.serviceDate = this.formatDateLocal(formData.serviceDate);   // "2026-04-06"
 }
       // this.submitted = true;
       if (this.mode === 'add') {
@@ -177,13 +244,69 @@ export class CustomerFeedbackComponent implements OnInit{
     }
   }
 
-  public editData(data: any):void{
-    this.customerFeedbackForm.patchValue(data);
-    this.saveButtonLabel = 'Edit';
-    this.mode = 'edit';
-    this.selectedData = data;
-    this.isButtonDisable = false;
+  // public editData(data: any):void{
+  //   this.customerFeedbackForm.patchValue(data);
+  //   this.saveButtonLabel = 'Edit';
+  //   this.mode = 'edit';
+  //   this.selectedData = data;
+  //   this.isButtonDisable = false;
+  // }
+
+  public editData(data: any): void {
+
+  // Convert backend date array to Date object
+  let serviceDateObj = null;
+
+  if (Array.isArray(data.serviceDate)) { // check date format from backend
+    serviceDateObj = new Date(   //convert array into java script date
+      data.serviceDate[0],         //year
+      data.serviceDate[1] - 1,     //month
+      data.serviceDate[2]          //date
+    );
   }
+
+  // Patch form
+  this.customerFeedbackForm.patchValue({
+    ...data,
+    serviceDate: serviceDateObj          //replaces the original array date with the converted Date object
+  });
+
+  // Load license dropdown again if we have a valid date
+  const customerId = localStorage.getItem('id');
+
+  if (serviceDateObj && customerId) {
+    const formattedDate = this.formatDateLocal(serviceDateObj); //Convert Date into Backend Format
+
+    this.customerFeedbackService
+      .getLicenseByDateAndCustomer(formattedDate, customerId)
+      .subscribe({
+        next: (res: License[]) => {
+          this.licenses = res;                      // store license list
+
+          // Re-set selected license after options loaded
+          this.customerFeedbackForm.patchValue({
+            licencePlate: data.licencePlate
+          });
+        }
+      });
+  }
+
+  // Restore star rating
+  if (data.serviceQuality) {
+
+    // "5-Excellent" -> 5
+    const ratingValue = parseInt(
+      data.serviceQuality.toString().split('-')[0]
+    );
+
+    this.rating = ratingValue;
+  }
+
+  this.saveButtonLabel = 'Edit';
+  this.mode = 'edit';
+  this.selectedData = data;
+  this.isButtonDisable = false;
+}
 
   public viewData(data: any):void{
     this.customerFeedbackForm.patchValue(data);
@@ -230,5 +353,8 @@ export class CustomerFeedbackComponent implements OnInit{
   public refreshData(): void{
     this.populateData();
   }
+
+
+
 
 }

@@ -17,7 +17,7 @@ export class AllFeedbacksComponent implements OnInit {
 
   selectedData!: { id: number; };
 
-  displayedColumns: string[] = ['userName','taskNumber', 'serviceDate', 'serviceQuality', 'recommendation', 'complaint','action'];
+  displayedColumns: string[] = ['userName','uniqueTaskNo', 'serviceDate', 'serviceQuality', 'recommendation', 'complaint','action'];
   
     dataSource!: MatTableDataSource<any>;
     
@@ -50,6 +50,12 @@ export class AllFeedbacksComponent implements OnInit {
     } catch (error) {
       this.messageService.showError('Action Failed with Error :'+ error); 
     }
+  }
+
+  formatDateFromArray(dateArray: number[]): string {//get date 2026-05-16 this format into the table
+    if(!dateArray) return '';
+    const [year, month, day] = dateArray;
+    return  `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
   }
 
   applyFilter(event: Event) {
