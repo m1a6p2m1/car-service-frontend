@@ -15,6 +15,8 @@ import { DemoMaterialModule } from 'src/app/demo-material-module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { AllFeedbacksComponent } from './all-feedbacks/all-feedbacks.component';
 import { FeedbackDetailsComponent } from './feedback-details/feedback-details.component';
+import { MatDialog, MatDialogActions, MatDialogClose, MatDialogTitle, MatDialogContent, MatDialogModule } from '@angular/material/dialog';
+import { ReviewConfirmDialogComponent } from './review-confirm-dialog/review-confirm-dialog.component';
 
 
 
@@ -22,7 +24,8 @@ import { FeedbackDetailsComponent } from './feedback-details/feedback-details.co
   declarations: [
     CustomerFeedbackComponent,
     AllFeedbacksComponent,
-    FeedbackDetailsComponent
+    FeedbackDetailsComponent,
+    ReviewConfirmDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -39,6 +42,12 @@ import { FeedbackDetailsComponent } from './feedback-details/feedback-details.co
     MatOptionModule,
     MatSelectModule,
     MatButtonModule,
+    MatDialogModule,
+    MatDialogActions,
+    MatDialogClose,
+    MatDialogTitle,
+    MatDialogContent,
+    
   ]
 })
 export class FeedbackModule { }

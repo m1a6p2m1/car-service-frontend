@@ -314,17 +314,22 @@ export class CustomerFeedbackComponent implements OnInit{
   }
 
   public resetData():void{
-    this.customerFeedbackForm.reset();
+    // this.customerFeedbackForm.reset();
+    this.loadUserName();
+    this.customerFeedbackForm.reset({
+      userName: { value: this.loggedUserName, disabled: true }
+    });
     this.saveButtonLabel = 'Save';
     this.isButtonDisable = false;
     this.customerFeedbackForm.enable();
+    this.customerFeedbackForm.get('userName')?.disable();
     this.customerFeedbackForm.setErrors = null!;
     this.customerFeedbackForm.updateValueAndValidity();
     this.rating = 0;
     // this.ratingLabels = [];
     // this.customerFeedbackForm.get('serviceType')?.disable();
     // this.customerFeedbackForm.get('serviceDate')?.disable();
-    this.loadUserName();
+    
   }
 
   public deleteData(data: any):void{

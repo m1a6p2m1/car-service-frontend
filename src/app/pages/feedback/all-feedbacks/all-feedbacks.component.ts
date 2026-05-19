@@ -73,8 +73,17 @@ export class AllFeedbacksComponent implements OnInit {
 
   public viewData(feedback: any): void{
       this.selectedFeedback = feedback;
-      const dialogRef = this._dialog.open(FeedbackDetailsComponent, {
-      data: this.selectedFeedback 
+      const dialogRef = this._dialog.open(
+        FeedbackDetailsComponent, 
+        {
+          data: this.selectedFeedback 
+        }
+      );
+
+      dialogRef.afterClosed().subscribe((result)=>{
+        if(result){
+          this.populateData();
+        }
       });
     }
 

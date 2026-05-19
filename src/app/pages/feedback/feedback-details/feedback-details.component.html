@@ -1,24 +1,24 @@
 <div class="form-section">
-      <form [formGroup]="feedbackDetailsForm" class="example-form" (ngSubmit)="viewData()">
+      <form [formGroup]="feedbackDetailsForm" class="example-form" (ngSubmit)="reviewData(element)">
         <div mat-dialog-content class="content">
         <mat-form-field class="full-width">
           <mat-label>User Name</mat-label>
-          <input matInput placeholder="User Name" formControlName="userName">
+          <input matInput placeholder="User Name" formControlName="userName" readonly>
         </mat-form-field>
       
         <mat-form-field class="full-width">
           <mat-label>Task Number</mat-label>
-          <input matInput placeholder="Task Number" formControlName="taskNumber">
+          <input matInput placeholder="Task Number" formControlName="uniqueTaskNo" readonly>
         </mat-form-field>
       
         <mat-form-field class="full-width">
           <mat-label>Service Type</mat-label>
-          <input matInput placeholder="Service Type" formControlName="serviceType">
+          <input matInput placeholder="Service Type" formControlName="serviceType" readonly>
         </mat-form-field>
       
         <mat-form-field class="full-width">
           <mat-label>Service Date</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="serviceDate">
+          <input matInput [matDatepicker]="picker" formControlName="serviceDate" readonly>
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field><br><br>
@@ -49,13 +49,13 @@
       
         <mat-radio-group aria-label="Select an option" formControlName="recommendation">
           <mat-label class="recommendation-label">Would You Recommended Us?</mat-label>
-          <mat-radio-button value="Yes">Yes</mat-radio-button>
-          <mat-radio-button value="No">No</mat-radio-button>
+          <mat-radio-button [disabled]="isButtonDisable" value="Yes">Yes</mat-radio-button>
+          <mat-radio-button [disabled]="isButtonDisable" value="No">No</mat-radio-button>
         </mat-radio-group><br><br>
       
         <mat-form-field class="full-width">
           <mat-label>Suggesions/ Complaint</mat-label>
-          <textarea matInput placeholder="Suggesions/ Complaint" formControlName="complaint"></textarea>
+          <textarea matInput placeholder="Suggesions/ Complaint" formControlName="complaint" readonly></textarea>
         </mat-form-field>
 
         <div>
@@ -63,6 +63,8 @@
           <mat-label class="recommendation-label">Email: namalvehicleservice&#64;gmail.com</mat-label><br><br>
           <mat-label class="recommendation-label">Phone Number: 0777 256 256</mat-label>
         </div><br><br>
+
+        <button class="btnConfirmReview" type="submit" mat-raised-button color="primary" (click)="confirmReview(element)">Confirm Review</button>
         </div>
       </form>
     </div>

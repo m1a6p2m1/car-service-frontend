@@ -146,4 +146,18 @@ export class CustomerFeedbackService {
         return this.http.delete(requestUrl, {headers: headers} );
   }
 
+  updateReview(id: number){
+    const requestUrl = environment.baseUrl + '/customer-feedback/review/'+ id.toString();
+    
+         let headers = {};
+    
+        if (this.httpService.getAuthToken() !== null) {
+          headers = {
+            Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+          };
+        }
+    
+        return this.http.put(requestUrl, {headers: headers} );
+  }
+
 }
