@@ -52,6 +52,7 @@ export class AppointmentServiceComponent implements OnInit{
   minDate: Date = new Date(); // disables past dates
   userRole: string = '';
   vehicleList: any[] = [];
+  filteredVehicleList: any[] = [];
   task!: Task;
   isSelectButtonDisable = false;
   isConfirmButtonDisable = false;
@@ -174,6 +175,12 @@ ngOnInit(): void {
   this.appointmentServiceForm.get('vehicleType')!.valueChanges.subscribe(value => {
     this.filteredVehicleTypes = this.filter(value || '');
   });
+
+  // this.filteredVehicleList = this.vehicleList;
+
+    this.appointmentServiceForm.get('licencePlate')!.valueChanges.subscribe(value => {
+    this.filteredVehicleList = this.filterPlate(value || '');
+  });
 }
 
 // <!--Functions for Dropdown with Custom Input Enabled -->
@@ -185,9 +192,21 @@ filter(value: string): string[] {
   );
 }
 
+filterPlate(value: string): string[] {
+  const filterValue = value.toLowerCase();
+  return this.vehicleList.filter(option =>
+    option.licencePlate.toLowerCase().includes(filterValue)
+  );
+}
+
 onOptionSelected(event: any) {
   const value = event.option.value;
   this.appointmentServiceForm.get('vehicleType')?.setValue(value);
+}
+
+onPlateOptionSelected(licencePlate: string) {
+  // const value = event.option.value;
+  this.appointmentServiceForm.get('licencePlate')?.setValue(licencePlate);
 }
 
 // Add new value if not exists
@@ -199,6 +218,24 @@ addIfNotExists() {
     this.filteredVehicleTypes = this.vehicleTypes;
   }
 }
+
+addPlateIfNotExists() {
+  const value = this.appointmentServiceForm.get('licencePlate')?.value?.trim();
+
+  if (value && !this.vehicleList.some(vehicle => vehicle.licencePlate.toLowerCase() == value.toLowerCase())) {
+
+    const newItem = {
+      licencePlate: value
+    };
+
+    this.vehicleList.push(newItem);
+    this.filteredVehicleList = this.vehicleList;
+  }
+}
+
+// showAllPlates() {
+//   this.filteredVehicleList = this.vehicleList;
+// }
 
 //load logged customer data
 loadUserProfile(): void {
@@ -230,6 +267,7 @@ loadUserProfile(): void {
   this.appointmentService.getVehiclesByCustomer(customerId).subscribe({
     next: (res: any[]) => {
       this.vehicleList = res;
+      this.filteredVehicleList = this.vehicleList;
       console.log("Vehicles:", this.vehicleList);
     },
     error: (err) => {

@@ -6,13 +6,22 @@
     <div class="selection">
       <mat-form-field class="full-width">
       <mat-label>Select Your Vehicle</mat-label>
-      <mat-select formControlName="licencePlate" (selectionChange)="onVehicleSelect($event.value)">
+      <!-- <mat-select formControlName="licencePlate" (selectionChange)="onVehicleSelect($event.value)">
         
         <mat-option *ngFor="let v of vehicleList" [value]="v.licencePlate">
           {{ v.licencePlate }}
         </mat-option>
 
-      </mat-select>
+      </mat-select> -->
+
+      <input type="text" matInput formControlName="licencePlate" [matAutocomplete]="autoPlate" (blur)="addPlateIfNotExists()"/>
+          
+          <mat-autocomplete #autoPlate="matAutocomplete" (optionSelected)="onPlateOptionSelected($event.option.value)">
+            <mat-option *ngFor="let v of filteredVehicleList" [value]="v.licencePlate">
+              {{ v.licencePlate }}
+            </mat-option>
+          </mat-autocomplete>
+      
       </mat-form-field>
     </div>
 
