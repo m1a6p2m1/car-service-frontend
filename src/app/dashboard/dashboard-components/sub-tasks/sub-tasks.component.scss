@@ -69,7 +69,34 @@
   position: relative;
   height: 200px;
   overflow: hidden;
+  // border-radius: 10px 10px 0 0;
+  // background-size: cover;
+  // background-position: center;
+  // animation: imageAnimation 12s infinite;
 }
+
+// @keyframes imageAnimation {
+
+//   0% {
+//     background-image: url('/assets/images/services/img1.jpg');
+//   }
+
+//   25% {
+//     background-image: url('/assets/images/services/img5.jpg');
+//   }
+
+//   50% {
+//     background-image: url('/assets/images/services/img4.jpg');
+//   }
+
+//   75% {
+//     background-image: url('/assets/images/services/img3.jpg');
+//   }
+
+//   100% {
+//     background-image: url('/assets/images/services/img6.jpg');
+//   }
+// }
 
 .service-image {
   width: 100%;

@@ -100,4 +100,19 @@ export class RegistrationService {
 
     return this.http.get(requestUrl, headers);
   }
+
+  updateEmployeeStatus(empNumber: number){
+    const requestUrl = `${environment.baseUrl}/employee/update-status/${empNumber}`;
+    
+    let headers = {};
+    console.log(this.httpService.getAuthToken());
+
+    if (this.httpService.getAuthToken() !== null) {
+      headers = {
+        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+      };
+    }
+    
+        return this.http.put(requestUrl, {}, {headers: headers} );
+  }
 }

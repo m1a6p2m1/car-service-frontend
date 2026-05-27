@@ -4,22 +4,22 @@
 
         <mat-form-field class="full-width">
         <mat-label>Full Name</mat-label>
-        <input matInput placeholder="Full Name" formControlName="fullName">
+        <input matInput placeholder="Full Name" formControlName="fullName" readonly>
       </mat-form-field>
     
       <mat-form-field class="full-width">
         <mat-label>Calling Name</mat-label>
-        <input matInput placeholder="Calling Name" formControlName="callingName">
+        <input matInput placeholder="Calling Name" formControlName="callingName" readonly>
       </mat-form-field>
     
       <mat-form-field class="full-width">
         <mat-label>Nic Number</mat-label>
-        <input matInput placeholder="Nic Number" formControlName="nic">
+        <input matInput placeholder="Nic Number" formControlName="nic" readonly>
       </mat-form-field>
     
       <mat-form-field class="full-width">
         <mat-label>Birth Date</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="dob">
+        <input matInput [matDatepicker]="picker" formControlName="dob" readonly>
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
@@ -33,25 +33,25 @@
     
       <mat-form-field class="full-width">
         <mat-label>Address</mat-label>
-        <textarea matInput placeholder="Address" formControlName="address"></textarea>
+        <textarea matInput placeholder="Address" formControlName="address" readonly></textarea>
       </mat-form-field>
 
       <mat-form-field class="full-width">
             <mat-label>Email</mat-label>
-            <input matInput placeholder="Email" formControlName="email">
+            <input matInput placeholder="Email" formControlName="email" readonly>
         </mat-form-field><br><br>
     
       <mat-form-field class="full-width">
         <mat-label>Telephone</mat-label>
         <!-- <span matTextPrefix>+94 &nbsp;</span> -->
-        <input type="tel" matInput placeholder="+94 55-555-1234 OR 055-555-1234" formControlName="phoneNumber">
+        <input type="tel" matInput placeholder="+94 55-555-1234 OR 055-555-1234" formControlName="phoneNumber" readonly>
         <mat-icon matSuffix>phone</mat-icon>
       </mat-form-field>
     
       <mat-form-field class="full-width">
         <mat-label>Emergency Phone Number</mat-label>
         <!-- <span matTextPrefix>+94 &nbsp;</span> -->
-        <input type="tel" matInput placeholder="+94 55-555-1234 OR 055-555-1234" formControlName="emergencyPhoneNumber">
+        <input type="tel" matInput placeholder="+94 55-555-1234 OR 055-555-1234" formControlName="emergencyPhoneNumber" readonly>
         <mat-icon matSuffix>phone</mat-icon>
       </mat-form-field>
     
@@ -83,7 +83,6 @@
         <mat-select formControlName="employeeStatus">
           <mat-option value="Active">Active</mat-option>
           <mat-option value="Inactive">Inactive</mat-option>
-          <mat-option value="Delete">Delete</mat-option>
         </mat-select>
       </mat-form-field>
     

@@ -47,7 +47,7 @@ export class AppSidebarComponent implements OnInit, OnDestroy {
       this.data = data;
 
       this.setAuthStatusInNavItems(this.data);
-      console.log(this.navItems);
+      // console.log(this.navItems);
     });
   }
 

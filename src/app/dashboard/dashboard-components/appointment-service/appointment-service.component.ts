@@ -207,6 +207,8 @@ onOptionSelected(event: any) {
 onPlateOptionSelected(licencePlate: string) {
   // const value = event.option.value;
   this.appointmentServiceForm.get('licencePlate')?.setValue(licencePlate);
+  //auto load vehicle type when select license plate
+  this.onVehicleSelect(licencePlate);
 }
 
 // Add new value if not exists

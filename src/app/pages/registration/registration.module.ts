@@ -24,6 +24,7 @@ import { EmployeeDetailsComponent } from './employee-details/employee-details.co
 import { GrnComponent } from './grn/grn.component';
 import { CustomerLoginDetailsComponent } from './customer-login-details/customer-login-details.component';
 import { VehiclesComponent } from './vehicles/vehicles.component';
+import { ConfirmStatusComponent } from './confirm-status/confirm-status.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { VehiclesComponent } from './vehicles/vehicles.component';
     GrnComponent,
     CustomerLoginDetailsComponent,
     VehiclesComponent,
+    ConfirmStatusComponent,
   ],
   imports: [
     CommonModule,

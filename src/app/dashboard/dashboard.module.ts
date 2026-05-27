@@ -20,6 +20,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ConfirmAppointmentComponent } from './dashboard-components/confirm-appointment/confirm-appointment.component';
 import { MatButtonModule } from '@angular/material/button';
+import { CustomerTasksComponent } from './dashboard-components/customer-tasks/customer-tasks.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { MatButtonModule } from '@angular/material/button';
     SubTasksComponent,
     TaskDetailComponent,
     AppointmentServiceComponent,
-    ConfirmAppointmentComponent
+    ConfirmAppointmentComponent,
+    CustomerTasksComponent
   ],
   imports: [
     CommonModule,

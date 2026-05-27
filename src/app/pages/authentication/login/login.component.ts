@@ -53,7 +53,7 @@ export class AppSideLoginComponent implements OnInit {
           try {
             if (data.length > 0) {
               this.cacheService.set(userId.toString(), data);
-              this.router.navigate(['/dashboard']);
+              // this.router.navigate(['/dashboard']);
             } else {
               this._messageService.showError('User does not have privileges');
             }
@@ -90,6 +90,13 @@ export class AppSideLoginComponent implements OnInit {
             this.setUserInfotoLocalStorage(response);
 
             this.getData(response.id);
+
+            // Redirect based on role
+            if (response.role === 'CUSTOMER') {
+              this.router.navigate(['/dashboard/customer-tasks'])
+            } else{
+              this.router.navigate(['/dashboard']);
+            }
           }
         })
         .catch((error) => {
@@ -99,6 +106,9 @@ export class AppSideLoginComponent implements OnInit {
   }
 
   setUserInfotoLocalStorage(userData: any) {
+
+    console.log("USER DATA:", userData);
+    console.log("JOB TITLE:", userData.jobTitle);
 
     this.localStorage.setItem('user', JSON.stringify(userData));
     this.localStorage.setItem('id', userData.id);
@@ -113,6 +123,7 @@ export class AppSideLoginComponent implements OnInit {
     this.localStorage.setItem('imageName', userData.imageName);
     this.localStorage.setItem('imageType', userData.imageType);
     this.localStorage.setItem('employeeId', userData.employeeId);
+    this.localStorage.setItem('jobTitle', userData.jobTitle);
 
   }
 }

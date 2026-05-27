@@ -62,6 +62,15 @@
         <input matInput formControlName="serviceType" readonly />
       </mat-form-field>
 
+      <section class="example-section" >
+        <mat-card-title class="title">Selected Additional Services</mat-card-title><br><br>
+          <p><mat-checkbox 
+              *ngFor="let service of additionalServices" 
+              [checked]="selectedOptions.includes(service)"
+              [disabled]="true"
+              (change)="onAdditionalServiceChange(service, $event)">{{service.additionalServicesName}}</mat-checkbox></p>   
+      </section>
+    
       <mat-form-field class="example-full-width">
         <mat-label>Task Created By</mat-label>
         <input matInput formControlName="taskCreatedBy" />

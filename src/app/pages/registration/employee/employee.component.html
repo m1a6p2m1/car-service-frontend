@@ -115,11 +115,12 @@
     
       <mat-form-field class="full-width">
         <mat-label>Employee Status</mat-label>
-        <mat-select formControlName="employeeStatus">
+        <input matInput placeholder="Status" formControlName="employeeStatus" readonly>
+        <!-- <mat-select formControlName="employeeStatus">
           <mat-option value="Active">Active</mat-option>
           <mat-option value="Inactive">Inactive</mat-option>
           <mat-option value="Delete">Delete</mat-option>
-        </mat-select>
+        </mat-select> -->
       </mat-form-field>
     
       <mat-form-field class="full-width">
@@ -234,7 +235,7 @@
       <ng-container matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef> Action </th>
         <td mat-cell *matCellDef="let element"> 
-          <button mat-icon-button color="warn" (click)="editData(element)" matTooltip="Edit">
+          <button mat-icon-button color="warn" (click)="editData(element)" matTooltip="Edit" [disabled]="element.employeeStatus === 'Inactive'">
             <mat-icon>edit</mat-icon>
           </button>
           <button mat-icon-button color="primary" (click)="viewData(element)" matTooltip="View">
@@ -245,11 +246,15 @@
           <button mat-icon-button color="warn" (click)="confirmDelete(element)" matTooltip="Delete">
             <mat-icon>delete</mat-icon>
           </button><br>
-          <button mat-icon-button matTooltip="Create Login" (click)="addLoginCredentials(element)">
+          <button mat-icon-button matTooltip="Create Login" (click)="addLoginCredentials(element)" [disabled]="element.employeeStatus === 'Inactive'">
             <mat-icon>person_add</mat-icon>
           </button>
-          <button mat-icon-button color="warn" matTooltip="Disable Login">
-            <mat-icon>person_off</mat-icon>
+          <button type="submit" mat-raised-button class="statusButton" 
+          [disabled]="isInactiveButtonDisable" 
+          (click)="inactiveEmployee(element)"
+          [color]="element.employeeStatus === 'Active' ? 'warn' : 'primary'"
+          >
+            {{element.employeeStatus === 'Active' ? 'Disable Login' : 'Enable Login'}}
           </button>
         </td>
       </ng-container>

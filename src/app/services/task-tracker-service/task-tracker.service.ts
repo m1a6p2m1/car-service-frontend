@@ -105,6 +105,36 @@ export class TaskTrackerService {
     return this.http.get(requestUrl, headers); 
   }
 
+  //get tasks assign to the supervisor into the task tracker
+  getSupervisorTasks(employeeId: string | null ,taskNo: string) {
+    if(employeeId == null || employeeId == undefined) {
+      employeeId = '-1';
+    }
+    const requestUrl = environment.baseUrl + '/task-assign/supervisor/tracker/' + employeeId +  '/' + taskNo ;
+    let headers = {};
+          
+    if (this.httpService.getAuthToken() !== null) {
+      headers = {
+        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+      };
+    }
+          
+    return this.http.get(requestUrl, headers);
+  }
+
+  getSupervisorTasksByEmployeeId(employeeId: string){
+    const requestUrl = environment.baseUrl + '/supervisor-task-by-employeeId?employeeId=' + employeeId ;
+    let headers = {};
+          
+    if (this.httpService.getAuthToken() !== null) {
+      headers = {
+        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+      };
+    }
+          
+    return this.http.get(requestUrl, headers); 
+  }
+
   getTodos(): Observable<Todo[]> {
     return this.todos$;
   }

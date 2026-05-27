@@ -10,6 +10,8 @@ import { RegistrationService } from 'src/app/services/registration/registration.
 import { TaskAssignService } from 'src/app/services/task-management/task-assign.service';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { MatCheckboxChange } from '@angular/material/checkbox';
+import { AdditionalServicesService } from 'src/app/services/task-management/additional-services.service';
 
 interface Task {
   id: any;
@@ -51,6 +53,10 @@ export class TaskAssignComponent implements OnInit {
 
   selectedSubtasks: any[] = [];
 
+  selectedOptions: any[] = [];
+  selectedServices: string = "";
+  additionalServices: any[] = [];
+
   // users = [
   //   { id: 1, name: 'Alice' },
   //   { id: 2, name: 'Bob' },
@@ -76,6 +82,7 @@ export class TaskAssignComponent implements OnInit {
     private registrationService: RegistrationService,
     private notificationService: NotificationService,
     private _dialog: MatDialog,
+    private additionalServicesService: AdditionalServicesService,
   ) {
     this.taskAssignForm = this.fb.group({
       date: new FormControl(''),
@@ -93,6 +100,7 @@ export class TaskAssignComponent implements OnInit {
       supervisor: new FormControl(''),
       status: new FormControl({ value: 'Start', disabled: true }), //
       subTasks: this.fb.array([]),
+      additionalServices: new FormControl({ value: '', disabled: true })
     });
   }
 
@@ -257,7 +265,16 @@ export class TaskAssignComponent implements OnInit {
           customerId: customer ? customer.id : null,
           licencePlate: res.licencePlate,
           vehicleType: res.vehicleType,
+          additionalServices: res.additionalServices
         });
+
+        const selectedServiceNames = (res.additionalServices || '')
+        .split(',')                      //"Oil Change,Engine Wash,Filter Change"  ---> ["Oil Change","Engine Wash","Filter Change"]
+        .map((s: string) => s.trim());   //Removes extra spaces from each item.
+
+        this.selectedOptions = this.additionalServices.filter(service =>
+          selectedServiceNames.includes(service.additionalServicesName)
+        );
       });
   }
 
@@ -365,6 +382,12 @@ export class TaskAssignComponent implements OnInit {
           this.generateTimeSlots(date);
         }
       });
+
+      this.additionalServicesService.getData().subscribe((resopnse:any)=>{
+      this.additionalServices = resopnse.filter(
+        (service:any) => service.status === "Yes"
+      );
+    })
 
     // this.filteredUsers = this.users;
   }
@@ -800,6 +823,18 @@ export class TaskAssignComponent implements OnInit {
     // this.superVisorList = employeeList.filter((emp: any) => {})
     // this.technicianList = employeeList.filter((emp: any) => {})
   }
+
+   public onAdditionalServiceChange(service: any, event: MatCheckboxChange): void {
+      if (event.checked) {
+        this.selectedOptions.push(service);
+      } else {
+        this.selectedOptions = this.selectedOptions.filter(item => item.id !== service.id);
+      }
+  
+      this.selectedServices = this.selectedOptions
+      .map(s => s.additionalServicesName)
+      .join(',');
+    }
 
 
   

@@ -9,6 +9,13 @@
         <mat-label>Filter</mat-label>
         <input matInput (keyup)="applyFilter($event)" placeholder="" #input />
       </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <mat-label>Date</mat-label>
+        <input matInput [matDatepicker]="picker" (dateChange)="onDateChange($event.value)" formControlName="date">
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
     </div>
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
       <!--- Note that these columns can be defined in any order.

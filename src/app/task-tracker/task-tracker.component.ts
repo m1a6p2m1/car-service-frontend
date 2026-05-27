@@ -69,31 +69,129 @@ export class TaskTrackerComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {
     }
 
+  // ngAfterViewInit(): void {
+
+  // let uid = '';
+  // this.route.queryParams.subscribe(params => {uid = params['uid'];});
+  // const role = localStorage.getItem('userRole');
+  // const jobTitle = localStorage.getItem('jobTitle');
+  // const employeeId = localStorage.getItem('employeeId');
+
+  //   if (uid == null || uid == '' || uid == undefined) {
+  //     this.todoService.getMainTaskDetails(this.httpService.getUserId(), '-1').subscribe({
+  //       next: (response: any) => {
+  //         this.tasks = response;
+  //         this.cdRef.detectChanges();
+  //       }, 
+  //       error: (error: any) => {
+  //         console.log(error);
+  //       }
+  //     })
+  //   } else if (uid) {
+  //     console.log("User ID:", uid);
+  //     this.todoService.getMainTaskDetailsByUid(uid).subscribe({
+  //       next: (response: any) => {
+  //         this.tasks = response;
+  //         this.cdRef.detectChanges();
+  //       }, 
+  //       error: (error: any) => {
+  //         console.log(error);
+  //       }
+  //     })
+  //   } else  if(role === 'EMPLOYEE' && jobTitle === 'Supervisor') {
+
+  //     console.log("ROLE:", role);
+  //     console.log("JOB TITLE:", jobTitle);
+  //     console.log("EMPLOYEE ID:", employeeId);
+  //     this.todoService.getSupervisorTasks(employeeId, '-1').subscribe({
+  //       next: (res: any) => {
+  //         this.tasks = res;
+  //         this.cdRef.detectChanges();
+  //       },
+  //       error: (error: any)=>{
+  //         console.log(error);
+  //       }
+  //     });
+  //   } else if (employeeId) {
+  //     this.todoService.getSupervisorTasksByEmployeeId(employeeId).subscribe({
+  //       next: (response: any) => {
+  //         this.tasks = response;
+  //         this.cdRef.detectChanges();
+  //       }, 
+  //       error: (error: any) => {
+  //         console.log(error);
+  //       }
+  //     })
+  //   }
+
+    
+  // }
+
   ngAfterViewInit(): void {
 
-  let uid = '';
-  this.route.queryParams.subscribe(params => {uid = params['uid'];});
+    let uid = '';
+    this.route.queryParams.subscribe(params => {
+      uid = params['uid'];
+    });
 
-    if (uid == null || uid == '' || uid == undefined) {
-      this.todoService.getMainTaskDetails(this.httpService.getUserId(), '-1').subscribe({
-        next: (response: any) => {
-          this.tasks = response;
+    const role = localStorage.getItem('userRole');
+    const jobTitle = localStorage.getItem('jobTitle');
+    const employeeId = localStorage.getItem('employeeId');
+
+    console.log("ROLE:", role);
+    console.log("JOB TITLE:", jobTitle);
+    console.log("EMPLOYEE ID:", employeeId);
+    console.log("UID:", uid);
+
+    // 1. Supervisor Login
+    if (role === 'EMPLOYEE' && jobTitle?.toUpperCase() === 'SUPERVISOR') {
+
+      this.todoService.getSupervisorTasks(employeeId, '-1').subscribe({
+        next: (res: any) => {
+          console.log("Supervisor Tasks:", res);
+          this.tasks = res;
           this.cdRef.detectChanges();
-        }, 
+        },
         error: (error: any) => {
           console.log(error);
         }
-      })
-    } else if (uid) {
+      });
+
+    }
+
+    // 2. Task load by UID
+    else if (uid) {
+
       this.todoService.getMainTaskDetailsByUid(uid).subscribe({
         next: (response: any) => {
+          console.log("UID Tasks:", response);
           this.tasks = response;
           this.cdRef.detectChanges();
-        }, 
+        },
         error: (error: any) => {
           console.log(error);
         }
-      })
+      });
+
+    }
+
+    // 3. Normal customer login
+    else {
+
+      this.todoService.getMainTaskDetails(
+        this.httpService.getUserId(),
+        '-1'
+      ).subscribe({
+        next: (response: any) => {
+          console.log("Customer Tasks:", response);
+          this.tasks = response;
+          this.cdRef.detectChanges();
+        },
+        error: (error: any) => {
+          console.log(error);
+        }
+      });
+
     }
   }
 

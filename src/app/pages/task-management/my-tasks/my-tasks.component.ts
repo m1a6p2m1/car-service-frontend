@@ -68,12 +68,36 @@ export class MyTasksComponent implements OnInit{
     this.populateData();
   }
 
+  // formatDateFromArray(dateArray: number[]): string {
+  //   if(!dateArray) return '';
+  //   const [year, month, day] = dateArray;
+  //   return  `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+  // }
+
+  formatDate(date: Date): string {
+
+  const year = date.getFullYear();
+
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+
+  const day = String(date.getDate()).padStart(2, '0');
+
+  return `${year}${month}${day}`;
+}
+
     public populateData(): void{
     try {
       this.taskAssignService.getAssingeSubTaskData(this.httpService.getUserId()).subscribe({
         next: (response: any) => {
           if (response) {
                   this.dataSource = new MatTableDataSource(response);
+                  // this.dataSource.filterPredicate = (data: any, filter: string)=>{
+                  //   if(!data.mainUniqueTaskNo) return false;
+
+                  //   //Get first 8 digits from task no
+                  //   const taskDate = data.mainUniqueTaskNo.toString().substring(0,8);
+                  //   return taskDate === filter;
+                  // }
                   this.dataSource.paginator = this.paginator;
                   this.dataSource.sort = this.sort;
 
@@ -88,6 +112,17 @@ export class MyTasksComponent implements OnInit{
       this.messageService.showError('Action Failed with Error :'+ error);
     }
     
+  }
+
+onDateChange(selectedDate: Date | null) {
+    if(!selectedDate){
+      this.dataSource.filter = '';
+      return;
+    }
+
+    const formattedDate = this.formatDate(selectedDate);
+
+    this.dataSource.filter = formattedDate;
   }
 
 public updateStatus(todoId: number, status: TodoStatus): void {

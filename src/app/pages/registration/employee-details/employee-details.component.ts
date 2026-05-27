@@ -45,16 +45,16 @@ export class EmployeeDetailsComponent implements OnInit{
           fullName: new FormControl(''),
           callingName: new FormControl(''),
           nic: new FormControl(''),
-          dob: new FormControl(''),
-          gender: new FormControl(''),
+          dob: new FormControl({ value: '', disabled: true }),
+          gender: new FormControl({ value: '', disabled: true }),
           address: new FormControl(''),
           email: new FormControl(''),
           phoneNumber: new FormControl(''),
           emergencyPhoneNumber: new FormControl(''),
-          bloodGroup: new FormControl(''),
-          employmentType: new FormControl(''),
-          employeeStatus: new FormControl(''),
-          jobTitle: new FormControl(''),
+          bloodGroup: new FormControl({ value: '', disabled: true }),
+          employmentType: new FormControl({ value: '', disabled: true }),
+          employeeStatus: new FormControl({ value: '', disabled: true }),
+          jobTitle: new FormControl({ value: '', disabled: true }),
           image: new FormControl(''),
           imageName: new FormControl(''),
           imageType: new FormControl(''),
@@ -89,7 +89,7 @@ export class EmployeeDetailsComponent implements OnInit{
         }
 
       // Disable the form to make it view-only
-        this.employeeDetailsForm.disable();
+        // this.employeeDetailsForm.disable();
         },
         error: (err) => {
           console.error("Error fetching employee:", err);

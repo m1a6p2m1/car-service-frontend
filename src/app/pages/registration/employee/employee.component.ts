@@ -15,6 +15,7 @@ import { RegistrationService } from 'src/app/services/registration/registration.
 import { EmployeeLoginDetailsComponent } from '../employee-login-details/employee-login-details.component';
 import { Employee, EmployeeDetailsComponent } from '../employee-details/employee-details.component';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { ConfirmStatusComponent } from '../confirm-status/confirm-status.component';
 
 const ELEMENT_DATA: any[] = [
   {
@@ -60,6 +61,8 @@ export class EmployeeComponent implements OnInit {
   mode = 'add';
   selectedData!: { empNumber: number };
   isButtonDisable = false;
+  isInactiveButtonDisable = false;
+  isEditButtonDisable = false;
   submitted = false;
   selectedImageUrl!: SafeUrl | null;
   isFileSelected = false;
@@ -92,7 +95,7 @@ export class EmployeeComponent implements OnInit {
       ]),
       bloodGroup: new FormControl('', [Validators.required]),
       employmentType: new FormControl(''),
-      employeeStatus: new FormControl(''),
+      employeeStatus: new FormControl({ value: 'Active', disabled: false }),
       jobTitle: new FormControl(''),
       image: new FormControl('', [Validators.required]),
       imageName: new FormControl(''),
@@ -348,6 +351,64 @@ export class EmployeeComponent implements OnInit {
         this.messageService.showError('Action Failed!');
       }
   }
+
+  public inactiveEmployee(data: any): void {
+    
+    const message = 
+      data.employeeStatus === 'Active'
+      ? 'Are You Sure Do You Want to Disable this Employee Login?'
+      : 'Are You Sure Do You Want to Enable this Employee Login?';
+
+        const dialogRef = this._dialog.open(ConfirmStatusComponent, {
+          data: message,
+        });
+    
+        dialogRef.afterClosed().subscribe((result) => {
+          if (result) {
+            this.updateEmpStatus(data);
+          }
+        });
+      }
+  
+    updateEmpStatus(data: any){
+      const employee = data.empNumber;
+  
+      if (!employee) {
+        this.messageService.showError("Employee not found");
+        return;
+      }
+        this.registrationService.updateEmployeeStatus(employee).subscribe({
+          next: (res: any)=>{
+            console.log("Inactive Successfully");
+            // Toggle Status
+            if (data.employeeStatus === 'Active') {
+              data.employeeStatus = 'Inactive';
+              this.messageService.showSuccess("Successfully Disabled Employee Login");
+            }else {
+              data.employeeStatus = 'Active';
+              this.messageService.showSuccess("Successfully Enabled Employee Login");
+            }
+            
+            //Refresh Table
+            this.dataSource = new MatTableDataSource(this.dataSource.data);
+    
+            this.messageService.showSuccess("Successfully Inactive the Employee");
+         
+          },
+          error: (error)=>{
+            console.log('FULL ERROR=>',error);
+
+            const errorMessage =
+              error?.error?.message ||
+              error?.error ||
+              error?.message ||
+              'Unknown Error';
+    
+            this.messageService.showError("Inactive Failed: "+ errorMessage);
+          }
+          
+        });
+    }
 
   public refreshData(): void {
     this.populateData();
