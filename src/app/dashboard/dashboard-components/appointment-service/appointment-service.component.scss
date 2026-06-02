@@ -15,13 +15,14 @@
   width: 100%;
   // padding: 50px;
   border-right: 1px solid #ccc;
+  margin-top: 20px;
 }
-.customer-details{
-  flex: 1;
-  width: 100% !important;
-  padding: 50px !important;
+// .customer-details{
+//   flex: 1;
+//   width: 100% !important;
+//   padding: 50px !important;
   
-}
+// }
 
 
 .status-full {
@@ -85,4 +86,102 @@ p{
 }
 .mat-icon{
   padding-top: 5px;
+}
+
+.customer-details {
+  margin-top: 20px;
+}
+
+mat-card {
+  border-radius: 14px;
+  padding: 18px 20px;
+  background: #ffffff;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  }
+}
+
+mat-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1976d2;
+  margin-bottom: 12px;
+  letter-spacing: 0.3px;
+}
+
+/* Task Name (top heading inside card) */
+.task-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e1e1e;
+  margin-bottom: 12px;
+  border-left: 4px solid #1976d2;
+  padding-left: 10px;
+}
+
+/* Subtask lines */
+.task-card p {
+  font-size: 15px;
+  color: #444;
+  padding: 6px 0;
+  margin: 0;
+
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px dashed #e0e0e0;
+}
+
+/* Price highlight */
+.task-card p span {
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+/* Total section */
+.task-card strong {
+  display: block;
+  margin-top: 12px;
+  font-size: 16px;
+  text-align: right;
+  color: #000;
+  background: #f5f7ff;
+  padding: 10px;
+  border-radius: 8px;
+  border-left: 4px solid #1976d2;
+}
+
+/* Dropdown styling improvement */
+mat-form-field {
+  width: 100%;
+}
+
+.mat-mdc-form-field {
+  font-size: 14px;
+}
+
+/* Task container spacing */
+.selection,
+.customer-detail {
+  margin-bottom: 15px;
+}
+
+/* Smooth card appearance animation */
+.task-card {
+  animation: fadeIn 0.25s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

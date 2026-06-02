@@ -55,7 +55,13 @@ taski = {
     }
   };
 
-      this.router.navigate(['/dashboard', 'appointment-service'], navigationExtras);
+      this.router.navigate(['/dashboard/appointment-service'], {
+        state: {
+          taskId: this.task.id,
+          taskName: this.task.taskName,
+          totalTaskPrice: this.task.totalTaskPrice
+        }
+      });
   }
 
   public previous(): void {

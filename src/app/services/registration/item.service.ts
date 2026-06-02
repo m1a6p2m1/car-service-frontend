@@ -72,4 +72,20 @@ export class ItemService {
     return this.http.delete(requestUrl, {headers: headers} );     
             
   }
+
+  getItemCodes() {
+    console.log("get data");
+
+    const requestUrl = environment.baseUrl + '/item-code'; //'http://localhost:8080/grn'
+
+    //get authtoken and set it to header
+    let headers = {};
+
+    if (this.httpService.getAuthToken() !== null) {
+      headers = {
+        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+      };
+    }
+    return this.http.get(requestUrl,{headers:headers});
+  }
 }

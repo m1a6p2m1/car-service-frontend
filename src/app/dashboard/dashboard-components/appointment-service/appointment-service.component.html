@@ -95,25 +95,58 @@
   </div>
   
 
-  <div class="customer-detail">
-    <mat-card-title class="title">Customer Details</mat-card-title><br><br>
-    <mat-form-field class="full-width">
-      <mat-label>Customer Name</mat-label>
-      <input matInput placeholder="Customer Name" formControlName="customerName">
-    </mat-form-field>
-         
+  <div class="customer-details">
+    <div *ngIf="isEditMode === true">
+      <mat-card-title class="title">Task Details</mat-card-title>
+      <mat-form-field class="full-width">
+        <mat-label>Task Name</mat-label>
+        <mat-select formControlName="taskName" (selectionChange)="onTaskChange($event.value)">
+          <mat-option *ngFor="let task of taskList" [value]="task.id">
+            {{task.taskName}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-    <mat-form-field class="full-width">
-      <mat-label>Email</mat-label>
-      <input matInput placeholder="Email" formControlName="email">
-    </mat-form-field>
+      <mat-card *ngIf="selectedTask" class="task-card">
 
-    <mat-form-field class="full-width">
-          <mat-label>Telephone</mat-label>
-          <!-- <span matTextPrefix>+94 &nbsp;</span> -->
-          <input type="tel" matInput placeholder="+94 55-555-1234 OR 055-555-1234" formControlName="contactNumber">
-          <mat-icon matSuffix>phone</mat-icon>
-        </mat-form-field>
+        <h3>{{ selectedTask.taskName }}</h3>
+
+        <div *ngFor="let subTask of selectedTask.subTasks">
+
+          <p>
+            {{ subTask.subTaskName }}
+            -
+            Rs. {{ subTask.subTaskPrice }}
+          </p>
+
+        </div>
+
+        <strong>
+          Total : Rs. {{ selectedTask.totalTaskPrice }}
+        </strong>
+
+      </mat-card>
+    </div>
+    <div >
+      <mat-card-title class="title">Customer Details</mat-card-title><br><br>
+      <mat-form-field class="full-width">
+        <mat-label>Customer Name</mat-label>
+        <input matInput placeholder="Customer Name" formControlName="customerName">
+      </mat-form-field>
+          
+
+      <mat-form-field class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput placeholder="Email" formControlName="email">
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+            <mat-label>Telephone</mat-label>
+            <!-- <span matTextPrefix>+94 &nbsp;</span> -->
+            <input type="tel" matInput placeholder="+94 55-555-1234 OR 055-555-1234" formControlName="contactNumber">
+            <mat-icon matSuffix>phone</mat-icon>
+          </mat-form-field>
+    </div>
   </div>
 
   </div>
@@ -121,7 +154,7 @@
   <mat-card-title class="title">Select Appointment Date</mat-card-title><br><br>
   <div class="datepicker">
     <mat-form-field appearance="fill">
-    <input matInput [matDatepicker]="picker" [min]="minDate" [matDatepickerFilter]="dateFilter"
+    <input matInput formControlName="date" [matDatepicker]="picker" [min]="minDate" [matDatepickerFilter]="dateFilter"
     placeholder="Choose date" (dateChange)="onDateChange($event)">
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker touchUi #picker></mat-datepicker>

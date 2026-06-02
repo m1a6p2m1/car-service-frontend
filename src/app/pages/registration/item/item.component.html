@@ -3,7 +3,7 @@
     <form [formGroup]="itemForm" class="example-form" (ngSubmit)="onSubmit()">
       <mat-form-field class="full-width">
         <mat-label>Item Code</mat-label>
-        <input matInput placeholder="Item Code" formControlName="itemCode" />
+        <input matInput placeholder="Item Code" formControlName="itemCode" readonly=""/>
       </mat-form-field>
 
       <mat-form-field class="full-width">
@@ -18,6 +18,92 @@
           "
         >
           Item Name is Required....!
+        </span>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Category</mat-label>
+
+        <mat-select
+          formControlName="itemCategory"
+        >
+          <mat-option
+            *ngFor="let category of itemCategories"
+            [value]="category.name"
+          >
+            {{ category.name }}
+          </mat-option>
+
+        </mat-select>
+        <span
+          class="text-danger"
+          *ngIf="
+            (itemForm.get('itemCategory')?.touched || submitted) &&
+            itemForm.get('itemCategory')?.errors &&
+            (itemForm.get('itemCategory')?.errors)!['required']
+          "
+        >
+          Category Name is Required....!
+        </span>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Unit Of Measure</mat-label>
+
+        <mat-select
+          formControlName="unitOfMeasure"
+        >
+          <mat-option
+            *ngFor="let unitOfMeasure of unitOfMeasures"
+            [value]="unitOfMeasure.name"
+          >
+            {{ unitOfMeasure.name }}
+          </mat-option>
+
+        </mat-select>
+        <span
+          class="text-danger"
+          *ngIf="
+            (itemForm.get('unitOfMeasure')?.touched || submitted) &&
+            itemForm.get('unitOfMeasure')?.errors &&
+            (itemForm.get('unitOfMeasure')?.errors)!['required']
+          "
+        >
+          Unit Of Measure is Required....!
+        </span>
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Brand Name</mat-label>
+        <input matInput placeholder="Brand Name" formControlName="brandName" />
+        <span
+          class="text-danger"
+          *ngIf="
+            (itemForm.get('brandName')?.touched || submitted) &&
+            itemForm.get('brandName')?.errors &&
+            (itemForm.get('brandName')?.errors)!['required']
+          "
+        >
+          Brand Name is Required....!
+        </span>
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Description</mat-label>
+        <textarea matInput placeholder="Description" formControlName="description"></textarea>
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Reorder Level</mat-label>
+        <input matInput placeholder="Reorder Level" formControlName="reorderLevel" />
+        <span
+          class="text-danger"
+          *ngIf="
+            (itemForm.get('reorderLevel')?.touched || submitted) &&
+            itemForm.get('reorderLevel')?.errors &&
+            (itemForm.get('reorderLevel')?.errors)!['required']
+          "
+        >
+          Reorder Level is Required....!
         </span>
       </mat-form-field>
 
@@ -109,9 +195,9 @@
         <td mat-cell *matCellDef="let element">{{ element.itemCategory }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="supplierName">
-        <th mat-header-cell *matHeaderCellDef>Supplier Name</th>
-        <td mat-cell *matCellDef="let element">{{ element.supplierName }}</td>
+      <ng-container matColumnDef="reorderLevel">
+        <th mat-header-cell *matHeaderCellDef>Reorder Level</th>
+        <td mat-cell *matCellDef="let element">{{ element.reorderLevel }}</td>
       </ng-container>
 
       <ng-container matColumnDef="description">

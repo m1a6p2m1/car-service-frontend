@@ -16,6 +16,17 @@ import { MatDialog } from '@angular/material/dialog';
 
 //  const ELEMENT_DATA: any[] = [{ itemCode: '', itemName: '', itemCategory: '', supplierName: '', brandName:'', description:''}];
 
+interface ItemCategory {
+  id:number;
+  name: string;
+  // selectedOption: string;
+}
+
+interface UnitOfMeasure {
+  id: number;
+  name: string;
+}
+
 @Component({
   selector: 'app-item',
   standalone: false,
@@ -28,7 +39,7 @@ export class ItemComponent implements OnInit {
     'itemCode',
     'itemName',
     'itemCategory',
-    'supplierName',
+    'reorderLevel',
     'brandName',
     'action',
   ];
@@ -44,6 +55,7 @@ export class ItemComponent implements OnInit {
   selectedImageUrl!: SafeUrl | null;
   isFileSelected = false;
   fileButtonDisable = false; //<----
+  lastItemCode: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -53,20 +65,81 @@ export class ItemComponent implements OnInit {
     private _dialog: MatDialog,
   ) {
     this.itemForm = this.fb.group({
-      itemCode: new FormControl(''),
+      itemCode: new FormControl({value:'', disabled:false}, [Validators.required]),
       itemName: new FormControl('', [Validators.required]),
-      itemCategory: new FormControl(''),
-      supplierName: new FormControl(''),
-      brandName: new FormControl(''),
+      itemCategory: new FormControl('', [Validators.required]),
+      brandName: new FormControl('', [Validators.required]),
       description: new FormControl(''),
+      unitOfMeasure: new FormControl('',[Validators.required]),
+      reorderLevel: new FormControl('', [Validators.required]),
       image: new FormControl('', [Validators.required]),
       imageName: new FormControl(''),
       imageType: new FormControl(''),
     });
   }
 
+  itemCategories: ItemCategory[] = [
+    {id:1, name:'Washing Equipments'},
+    {id:2, name:'Cleaning Chemicals'},
+    {id:3, name:'Cleaning Equipments'},
+    {id:4, name:'Drying Equipments'},
+    {id:5, name:'Spare Parts'},
+    {id:6, name:'Break Systems'},
+    {id:7, name:'Electrical'},
+    {id:8, name:'Lubricants & Oils'},
+    {id:9, name:'Filters'},
+    {id:10, name:'Other'},
+  ];
+
+  unitOfMeasures: UnitOfMeasure[] = [
+    {id:1, name:'Piece'},
+    {id:2, name:'Set'},
+    {id:3, name:'Liter'},
+    {id:4, name:'Milliliter'},
+    {id:5, name:'Kilogram'},
+    {id:6, name:'Gram'},
+    {id:7, name:'Box'},
+    {id:8, name:'Pair'},
+    {id:9, name:'Roll'},
+    {id:10, name:'Meter'},
+    {id:11, name:'Other'}
+  ];
+
+  getItemCode(): void {
+    this.itemService.getItemCodes().subscribe({
+      next: (response: any) => {
+
+        if (!response || response.length === 0) {
+          this.itemForm.patchValue({ itemCode: 'ITM00001' });
+        } else {
+          // Get the last element of the array
+          const lastItemCode = response[response.length - 1].itemCode;
+          //Extract Numaric part
+          const numberPart = parseInt(lastItemCode.replace('ITM', ''), 10);
+          //Increment
+          const nextNumber = numberPart + 1;
+          //Format back to ITM00002
+          const nextCode = 'ITM' + nextNumber.toString().padStart(5, '0');
+
+          this.itemForm.patchValue({
+            itemCode: nextCode
+          })
+          console.log(lastItemCode.itemCode);
+
+          console.log('Last itemCode Number:', this.lastItemCode);
+        }
+
+
+      },
+      error: (error: any) => {
+        console.log(error);
+      }
+    });
+  }
+
   ngOnInit(): void {
     this.populateData();
+    this.getItemCode();
   }
 
   get formControl() {
@@ -80,6 +153,7 @@ export class ItemComponent implements OnInit {
           this.dataSource = new MatTableDataSource(response);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
+          this.getItemCode();
         },
         (error) => {
           this.messageService.showError('Action Failed with Error :' + error);
@@ -157,6 +231,8 @@ export class ItemComponent implements OnInit {
             }
             this.dataSource = new MatTableDataSource([response]);
             this.messageService.showSuccess('Data Saved Successfully !');
+            //generate next item code
+            // this.getItemCode();
           },
           error: (error) => {
             this.messageService.showError('Action Failed with Error :' + error);
@@ -201,6 +277,7 @@ export class ItemComponent implements OnInit {
 
   public resetData() {
     this.itemForm.reset();
+    this.getItemCode();
     this.saveButtonLabel = 'Save';
     this.itemForm.enable();
     this.isButtonDisable = false;

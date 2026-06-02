@@ -11,6 +11,7 @@ import { AdditionalServicesService } from 'src/app/services/task-management/addi
 import { ConfirmAppointmentComponent } from '../confirm-appointment/confirm-appointment.component';
 import { MatDialog } from '@angular/material/dialog';
 import { V } from '@angular/cdk/keycodes';
+import { TaskIntroduceService } from 'src/app/services/task-management/task-introduce.service';
 
 
 @Component({
@@ -56,6 +57,10 @@ export class AppointmentServiceComponent implements OnInit{
   task!: Task;
   isSelectButtonDisable = false;
   isConfirmButtonDisable = false;
+  isEditMode: boolean = false;
+  taskList: any[] = [];
+  selectedTask: any;
+  appointmentData: any;
 
   dateFilter = (date: Date | null): boolean => {
     if (!date) return false;
@@ -67,6 +72,7 @@ export class AppointmentServiceComponent implements OnInit{
   // <!--Fields for Dropdown with Custom Input Enabled -->
   vehicleTypes: string[] = ['Car', 'Jeep', 'Van'];
   filteredVehicleTypes: string[] = [];
+  
 
   
 
@@ -76,6 +82,7 @@ export class AppointmentServiceComponent implements OnInit{
     private fb: FormBuilder,
     private appointmentService: AppointmentService,
     private additionalServicesService: AdditionalServicesService,
+    private taskIntroduceService: TaskIntroduceService,
     private messageService: MessageServiceService,
     private route: ActivatedRoute,
     private router: Router,
@@ -84,11 +91,13 @@ export class AppointmentServiceComponent implements OnInit{
   if (this.router.getCurrentNavigation()?.extras.state) {
     const navigation = this.router.getCurrentNavigation();
     const taskData = navigation?.extras?.state?.['dataObject'];
-    if (taskData) {
-    this.totalCost = taskData.totalTaskPrice;
-    this.taskName = taskData.taskName;
-    this.taskId = taskData.id;
-  }
+    const state = history.state;
+
+      if (state) {
+        this.taskId = state.taskId;
+        this.taskName = state.taskName;
+        this.totalCost = state.totalTaskPrice;
+      }
   }
     this.appointmentServiceForm = this.fb.group({
       date: new FormControl(null),
@@ -104,7 +113,7 @@ export class AppointmentServiceComponent implements OnInit{
       licencePlate: new FormControl(''),
       taskId: new FormControl(''),
       taskName: new FormControl(''),
-      additionalServices: new FormControl('')
+      additionalServices: new FormControl(''),
     });
   }
 
@@ -154,6 +163,10 @@ ngOnInit(): void {
       this.additionalServices = resopnse.filter(
         (service:any) => service.status === "Yes"
       );
+
+      if(this.appointmentData){
+        this.loadSelectedAdditionalServices();
+      }
     })
 
     this.appointmentServiceForm.patchValue({
@@ -181,6 +194,124 @@ ngOnInit(): void {
     this.appointmentServiceForm.get('licencePlate')!.valueChanges.subscribe(value => {
     this.filteredVehicleList = this.filterPlate(value || '');
   });
+
+  console.log("taskId =", this.taskId);
+  console.log("taskName =", this.taskName);
+  console.log("totalCost =", this.totalCost);
+
+  this.loadEditData();
+  this.loadTasks();
+}
+
+convertArrayToDate(dateArray: number[]): Date {
+
+  const year = dateArray[0];
+  const month = dateArray[1] - 1; // JS months start at 0
+  const day = dateArray[2];
+
+  return new Date(year, month, day);
+}
+
+convertArrayToTime(timeArray: number[]): string {
+
+  const hour = String(timeArray[0]).padStart(2, '0');
+  const minute = String(timeArray[1]).padStart(2, '0');
+
+  return `${hour}:${minute}:00`;
+}
+
+//when click the edit button
+onTaskChange(taskId: number):void {
+  this.selectedTask = this.taskList.find(t => t.id === taskId);
+}
+
+loadEditData(): void {
+  const state = history.state;
+  if (state?.appointmentData) {
+    this.appointmentData = state.appointmentData;
+    this.isEditMode = state.isEditMode;
+
+    console.log("EDIT DATA:", this.appointmentData);
+    console.log("date:", this.appointmentData.date);
+    console.log("time:", this.appointmentData.time);
+    console.log("taskId:", this.appointmentData.taskId);
+    console.log("additionalServices:", this.appointmentData.additionalServices);
+    console.log("FULL TASK OBJECT:", this.appointmentData);
+
+    this.totalCost = this.appointmentData.totalServicePrice;
+    this.taskName = this.appointmentData.taskName;
+    this.taskId = this.appointmentData.taskId;
+  }
+}
+
+loadTasks(): void{
+  this.taskIntroduceService.getData().subscribe((res: any) => {
+    this.taskList = res;
+
+    console.log("Task List Loaded", this.taskList);
+
+      // ONLY PATCH AFTER DATA IS READY
+    if (this.appointmentData) {
+      this.patchAppointmentData();
+    }
+  });
+}
+
+patchEditData(): void {
+  this.appointmentServiceForm.patchValue({
+    taskId: this.appointmentData.taskId
+  });
+    this.onTaskChange(this.appointmentData.taskId);
+}
+
+patchAppointmentData(): void{
+  if (!this.appointmentData) return;
+
+  const appointmentDate = this.convertArrayToDate(this.appointmentData.date);
+  const appointmentTime =
+    this.convertArrayToTime(this.appointmentData.time);
+
+  this.selectedDate = appointmentDate;
+  this.selectedTime = appointmentTime;
+
+  this.appointmentServiceForm.patchValue({
+
+    date: appointmentDate,
+    time: appointmentTime,
+
+    vehicleType: this.appointmentData.vehicleType,
+    licencePlate: this.appointmentData.licencePlate,
+
+    serviceType: this.appointmentData.serviceType,
+    totalServicePrice: this.appointmentData.totalServicePrice,
+
+    customerName: this.appointmentData.customerName,
+    email: this.appointmentData.email,
+    contactNumber: this.appointmentData.contactNumber,
+
+    taskId: this.appointmentData.taskId,
+    taskName: this.appointmentData.taskId, // important for dropdown
+    additionalServices: this.appointmentData.additionalServices
+  });
+  // load task details card
+  this.onTaskChange(this.appointmentData.taskId);
+
+  this.onDateChange({
+    value: appointmentDate
+  } as MatDatepickerInputEvent<Date>);
+}
+
+loadSelectedAdditionalServices(): void {
+  if (!this.appointmentData?.additionalServices) {
+    return;
+  }
+
+  const selectedNames = this.appointmentData.additionalServices
+                            .split(',')
+                            .map((item:string) => item.trim());
+  
+  this.selectedOptions = this.additionalServices.filter(service => 
+    selectedNames.includes(service.additionalServicesName));                         
 }
 
 // <!--Functions for Dropdown with Custom Input Enabled -->
@@ -251,11 +382,11 @@ loadUserProfile(): void {
             contactNumber: user.contactNumber
           });
         });
-        console.log("User Loaded:", user);
-        console.log("loadUserProfile");
-        console.log("Form Name:", this.appointmentServiceForm.get('customerName')?.value);
-        console.log("Form Email:", this.appointmentServiceForm.get('email')?.value);
-        console.log("Form PN:", this.appointmentServiceForm.get('contactNumber')?.value);
+        // console.log("User Loaded:", user);
+        // console.log("loadUserProfile");
+        // console.log("Form Name:", this.appointmentServiceForm.get('customerName')?.value);
+        // console.log("Form Email:", this.appointmentServiceForm.get('email')?.value);
+        // console.log("Form PN:", this.appointmentServiceForm.get('contactNumber')?.value);
         // this.selectedData = response;
       },
       error: (error) => {
@@ -455,6 +586,10 @@ formatDateLocal(date: Date): string {
   submitAppointment(): void {
     console.log('In the Service → save appointment-> ts file');
     if (!this.selectedDate || !this.selectedTime) return;
+    if (!this.taskId) {
+      this.messageService.showError("Task is required. Please select a task again.");
+      return;
+    }
     let roleToSave = '';
 
     if (this.userRole === 'EMPLOYEE') {
@@ -475,7 +610,12 @@ formatDateLocal(date: Date): string {
       login: login
     };
 
-    this.appointmentService.bookAppointment(this.processObjects(booking)).subscribe({
+    const payload = this.processObjects(booking);
+
+    // console.log("BOOKING OBJECT:", booking);
+    // console.log("FINAL PAYLOAD:", payload);
+
+    this.appointmentService.bookAppointment(payload).subscribe({
       next: (resp) => {
         const updatedSlot = this.timeSlots.find(slot => slot.time === this.selectedTime);
         if (updatedSlot) {

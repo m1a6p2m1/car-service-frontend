@@ -6,6 +6,7 @@ import { AppointmentService } from 'src/app/services/appointment.service';
 import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-all-appointments',
@@ -25,6 +26,7 @@ export class AllAppointmentsComponent implements OnInit{
     private appointmentService: AppointmentService,
     private messageService: MessageServiceService,
     private _dialog: MatDialog,
+    private router: Router,
   ){}
 
   ngOnInit(): void{
@@ -122,7 +124,14 @@ export class AllAppointmentsComponent implements OnInit{
     return '';
   }
 
-  public editData(data: any): void {}
+  public editData(data: any): void {
+    this.router.navigate(['/dashboard/appointment-service'],{
+      state: {
+        appointmentData: data,
+        isEditMode: true
+      }
+    });
+  }
   
 
   public confirmDelete(data: any): void {
