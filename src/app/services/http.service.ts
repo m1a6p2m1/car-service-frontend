@@ -131,4 +131,17 @@ export class HttpService {
   
       return this.http.post(requestUrl, data, { headers: headers });
   }
+
+  checkUsername(username: string): Observable<{ taken: boolean }> {
+    const requestUrl = environment.baseUrl + `/check-username?username=${username}`;
+
+    let headers = {};
+      if (this.getAuthToken() !== null) {
+        headers = {
+          Authorization: 'Bearer ' + this.getAuthToken(),
+        };
+      }
+
+    return this.http.get<{ taken: boolean }>(requestUrl, { headers: headers });
+  }
 }
