@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { HttpService } from 'src/app/services/http.service';
@@ -7,6 +7,7 @@ import { CommonDataServiceService } from 'src/app/services/common-data-service/c
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { environment } from 'src/app/environments/environment';
 import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-add-remove-table',
@@ -24,6 +25,9 @@ export class AddRemoveTableComponent implements OnInit {
   oldAvailableData: any;
   oldAssignedData: any;
   isDisableButton = false;
+
+  @ViewChild('sourcePaginator') sourcePaginator!: MatPaginator;
+    @ViewChild('targetPaginator') targetPaginator!: MatPaginator;
 
   constructor(
     private httpService: HttpService,
@@ -44,6 +48,7 @@ export class AddRemoveTableComponent implements OnInit {
       .then((responseSource: any) => {
         this.sourceTableData.data = responseSource;
         this.sourceTableData.data = [...this.sourceTableData.data];
+        this.sourceTableData.paginator = this.sourcePaginator;
         this.commonDataService
           .getAssignedPrivilegeList(
             'get',
@@ -53,6 +58,7 @@ export class AddRemoveTableComponent implements OnInit {
           .then((responseTarget: any) => {
             this.targetTableData.data = responseTarget;
             this.targetTableData.data = [...this.targetTableData.data];
+            this.targetTableData.paginator = this.targetPaginator;
 
             this.oldAvailableData = this.sourceTableData.data;
             this.oldAssignedData = this.targetTableData.data;
@@ -165,6 +171,9 @@ export class AddRemoveTableComponent implements OnInit {
     };
 
     this.commonDataService.saveData('post', url, body).then((response: any) => {
+      this._messageService.showSuccess(
+            'Data saved successfully'
+          );
       this.cacheService.refreshCache(this.httpService.getUserId()!);
     });
 

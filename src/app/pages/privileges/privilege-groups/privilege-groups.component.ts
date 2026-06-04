@@ -9,6 +9,7 @@ import { AddRemoveTableComponent } from '../../add-remove-table/add-remove-table
 import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
 import { AuthServiceService } from 'src/app/services/auth-service/auth-service.service';
 import { authenticationEnum } from 'src/app/guards/auth.enum';
+import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-privilege-groups',
@@ -38,7 +39,8 @@ export class PrivilegeGroupsComponent implements OnInit {
     private _dialog: MatDialog,
     private _privilegesService: PrivilegesService, // private _empService: EmployeeService, // private _coreService: CoreService
     private _messageService: MessageServiceService,
-    private _authService: AuthServiceService
+    private _authService: AuthServiceService,
+    private messageService: MessageServiceService,
   ) {}
 
   ngOnInit(): void {
@@ -51,7 +53,7 @@ export class PrivilegeGroupsComponent implements OnInit {
 
   public checkAuthorization() {
     this.display = this._authService.checkAuthorization(
-      authenticationEnum.Privilege_Groups
+      authenticationEnum.Privilege_Groups,
     );
     if (!this.display) {
       return;
@@ -85,7 +87,7 @@ export class PrivilegeGroupsComponent implements OnInit {
               this.getPrivilegeGroupList();
 
               this._messageService.showSuccess(
-                'Privilege group added successfully!'
+                'Privilege group added successfully!',
               );
             }
           }
@@ -106,7 +108,7 @@ export class PrivilegeGroupsComponent implements OnInit {
       next: (val) => {
         if (val) {
           this._messageService.showSuccess(
-            'Privilege group edited successfully!'
+            'Privilege group edited successfully!',
           );
           this.getPrivilegeGroupList();
         }
@@ -116,15 +118,42 @@ export class PrivilegeGroupsComponent implements OnInit {
 
   public onDeletePrivilageGroupClick(id: number, data: any): void {
     try {
-      this._privilegesService
-        .deletePrivilegeGroup(id, data)
-        .then((response) => {
-          console.log(response);
-          this.getPrivilegeGroupList();
-        });
+      /* Check for Privileges and Users Availability */
+      this._privilegesService.isUsersOrPrivilegesAssignedToGroup(id).subscribe({
+        next: (response) => {
+          if (response && response.isAssigned) {
+            this.messageService.showWarining(
+              'Please remove all users and all privileges from the group before delete!',
+            );
+            return;
+          } else {
+            this.confirmDelete(id, data);
+          }
+        },
+        error: (error) => {
+          console.error('Error checking group assignment', error);
+        },
+      });
     } catch (error) {
       console.log(error);
     }
+  }
+
+  public confirmDelete(id: number, data: any) {
+    const dialogRef = this._dialog.open(ConfirmDialogComponent, {
+      data: 'Are you sure you want to Delete this Privilege Group?',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this._privilegesService
+          .deletePrivilegeGroup(id, data)
+          .then((response) => {
+            console.log(response);
+            this.getPrivilegeGroupList();
+          });
+      }
+    });
   }
 
   public handleCatch(): void {
@@ -222,14 +251,16 @@ export class PrivilegeGroupsComponent implements OnInit {
     try {
       console.log(this.selectedRecord);
       const groupId = this.selectedRecord.id;
-      this._privilegesService.setAsCustomerDefault(groupId, this.selectedRecord).then((response: any) => {
-        if (response) {
-          // const data = this.dataSource.data;
-          // const index = data.findIndex(data => data.id === groupId);
-          // data[index].isDefault = true;
-          this.getPrivilegeGroupList();
-        }
-      });
+      this._privilegesService
+        .setAsCustomerDefault(groupId, this.selectedRecord)
+        .then((response: any) => {
+          if (response) {
+            // const data = this.dataSource.data;
+            // const index = data.findIndex(data => data.id === groupId);
+            // data[index].isDefault = true;
+            this.getPrivilegeGroupList();
+          }
+        });
     } catch (error) {
       console.log(error);
     }

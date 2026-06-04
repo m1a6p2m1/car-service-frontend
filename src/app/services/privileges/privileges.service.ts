@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/app/environments/environment';
 import { HttpService } from '../http.service';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -89,5 +90,18 @@ export class PrivilegesService {
     return this.http
       .put(requestUrl, privilegeGroup, { headers: headers })
       .toPromise();
+  }
+
+  isUsersOrPrivilegesAssignedToGroup(grpId: number): Observable<{ isAssigned: boolean }> {
+    const requestUrl = environment.baseUrl + `/privilege-groups/check-user-privil?grpId=${grpId}`;
+
+    let headers = {};
+    if (this.httpService.getAuthToken() !== null) {
+      headers = {
+        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+      };
+    }
+
+    return this.http.get<{ isAssigned: boolean }>(requestUrl, { headers: headers });
   }
 }
