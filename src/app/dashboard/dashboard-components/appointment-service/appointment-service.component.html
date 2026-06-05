@@ -87,7 +87,7 @@
     </div>
 
     <div>
-      <button class="buttons btnBack" (click)="previous()">
+      <button type="button" class="buttons btnBack" [disabled]="isBackButtonDisable" (click)="previous()">
       <mat-icon>arrow_back</mat-icon>
       <span>Back</span>
     </button>
@@ -100,7 +100,7 @@
       <mat-card-title class="title">Task Details</mat-card-title>
       <mat-form-field class="full-width">
         <mat-label>Task Name</mat-label>
-        <mat-select formControlName="taskName" (selectionChange)="onTaskChange($event.value)">
+        <mat-select formControlName="taskId" (selectionChange)="onTaskChange($event.value)">
           <mat-option *ngFor="let task of taskList" [value]="task.id">
             {{task.taskName}}
           </mat-option>
@@ -197,24 +197,36 @@
     <th mat-header-cell *matHeaderCellDef> Action </th>
     <td mat-cell *matCellDef="let slot">
       <button mat-raised-button color="primary"
-              [disabled]="slot.bookedCount >= 3"
               (click)="selectSlot(slot.time, slot)"
-              [disabled]="isSelectButtonDisable" 
-              [ngClass]="{ 'selected-button': selectedTime === slot.time }"><!--[disabled]="!appointmentServiceForm.valid"-->
-        Select
+              [disabled]="slot.bookedCount >= 3 
+                          || isSelectButtonDisable 
+                          || isOriginalRow(slot.time)"
+              [ngClass]="{ 
+                'orginal-slot': originalSelectedTime === slot.time,
+                'new-slot': selectedTime === slot.time 
+                    }">
+        {{
+          originalSelectedTime === slot.time?
+          'current Appointment': selectedTime === slot.time?
+           'Selected': 'Select'}}
       </button>
     </td>
   </ng-container>
 
   <!-- Header and Row Definitions -->
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;" 
+  [ngClass]="{
+    'current-appointment-row': isOriginalRow(row.time),
+    'new-selected-row':  row.time === selectedTime ||
+    row.time === savedTime
+    }"></tr>
 </table>
 
 <div *ngIf="selectedTime" class="confirm-box">
   <p><strong>Selected Slot:</strong> {{ formatTime(selectedTime) }}</p>
   <button mat-raised-button color="accent" [disabled]="isConfirmButtonDisable" (click)="confirmAppointment()">
-    Confirm Appointment
+    {{appointmentButtonLabel}}
   </button>
 </div>
 

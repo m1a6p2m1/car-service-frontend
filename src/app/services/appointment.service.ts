@@ -160,6 +160,20 @@ export class AppointmentService {
     return this.http.get<any[]>(requestUrl, { headers: headers });
   }
 
+  updateAppointment(id: number, appointment: any){
+    console.log('Appintment Edit In the Service');
+    const requestUrl = environment.baseUrl + '/edit-appointments/' + id.toString();            // POST /appointments
+
+    let headers = {};
+    if (this.httpService.getAuthToken() !== null) {
+      headers = {
+        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+      };
+    }
+
+    return this.http.put(requestUrl, appointment, { headers: headers });
+  }
+
   deleteAppointment(id: number){
     const requestUrl = environment.baseUrl + '/all-appointments/' + id.toString(); //http://localhost:8080
 

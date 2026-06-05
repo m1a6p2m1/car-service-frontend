@@ -162,4 +162,19 @@ export class AllAppointmentsComponent implements OnInit{
   });
 }
 
+//disable edit and delete button date before today
+isActionAllowed(appointmentDate: string |Date): boolean {
+
+  console.log('appointmentDate:', appointmentDate);
+  console.log('converted:', new Date(appointmentDate));
+
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  const appDate = new Date(appointmentDate);
+  appDate.setHours(0,0,0,0);
+
+  return appDate.getTime() >= today.getTime(); //allows today + future 
+}
+
 }

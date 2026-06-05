@@ -32,6 +32,7 @@ export class AppointmentServiceComponent implements OnInit{
 
   appointmentServiceForm: FormGroup;
 
+  appointmentButtonLabel = 'Confirm Appointment'
   displayedColumns: string[] = ['time', 'status', 'available', 'action'];
   dataSource!: MatTableDataSource<TimeSlot>;
   timeSlots: TimeSlot[] = [];
@@ -57,10 +58,19 @@ export class AppointmentServiceComponent implements OnInit{
   task!: Task;
   isSelectButtonDisable = false;
   isConfirmButtonDisable = false;
+  isBackButtonDisable: boolean  = false;
   isEditMode: boolean = false;
   taskList: any[] = [];
   selectedTask: any;
   appointmentData: any;
+  originalTotalCost: number = 0;
+  originalTaskId: number = 0;
+  // originalTaskPrice: number = 0;
+  additionalServiceCost: number = 0;
+  currentTaskPrice = 0;
+  originalSelectedTime: string | null = null;
+  selectedData!: { id: number };
+  savedTime: string | null = null;
 
   dateFilter = (date: Date | null): boolean => {
     if (!date) return false;
@@ -72,6 +82,7 @@ export class AppointmentServiceComponent implements OnInit{
   // <!--Fields for Dropdown with Custom Input Enabled -->
   vehicleTypes: string[] = ['Car', 'Jeep', 'Van'];
   filteredVehicleTypes: string[] = [];
+
   
 
   
@@ -96,7 +107,9 @@ export class AppointmentServiceComponent implements OnInit{
       if (state) {
         this.taskId = state.taskId;
         this.taskName = state.taskName;
-        this.totalCost = state.totalTaskPrice;
+        // this.totalCost = state.totalTaskPrice;
+        this.currentTaskPrice = state.totalTaskPrice || 0;
+        this.totalCost = this.currentTaskPrice;
       }
   }
     this.appointmentServiceForm = this.fb.group({
@@ -199,6 +212,17 @@ ngOnInit(): void {
   console.log("taskName =", this.taskName);
   console.log("totalCost =", this.totalCost);
 
+  if (!this.isEditMode && this.currentTaskPrice > 0) {
+    this.totalCost = this.currentTaskPrice;
+
+    this.appointmentServiceForm.patchValue({
+      taskId: this.taskId,
+      taskName:this.taskName,
+      totalServicePrice: this.totalCost
+    });
+    
+  }
+
   this.loadEditData();
   this.loadTasks();
 }
@@ -220,30 +244,105 @@ convertArrayToTime(timeArray: number[]): string {
   return `${hour}:${minute}:00`;
 }
 
-//when click the edit button
-onTaskChange(taskId: number):void {
-  this.selectedTask = this.taskList.find(t => t.id === taskId);
+normalizeTime(time: string): string {
+  if (!time) return '';
+  return time.length === 5 ? time + ':00' : time;
 }
 
+
+//when click the edit button
+// onTaskChange(taskId: number):void {
+//   this.selectedTask = this.taskList.find(t => t.id === taskId);
+
+//   if (!this.taskList || this.taskList.length === 0) return;
+
+//   const newTask = this.taskList.find(t => t.id === taskId);
+//   const oldTask = this.taskList.find(t => t.id === this.originalTaskId);
+
+//   const oldAdditionalServicePrice = this.additionalServiceCost ;
+
+
+//   if(!newTask || !oldTask) return;
+  
+//   const oldTaskPrice = oldTask.totalTaskPrice || 0;
+//   const newTaskPrice = newTask.totalTaskPrice || 0;
+
+//   // only calculate difference when edit mode is ON
+//   if (this.isEditMode && newTask) {
+//     this.totalCost = this.originalTotalCost - oldTaskPrice + newTaskPrice;
+//     console.log("totalCost =", this.totalCost);
+//     console.log("newTask =", newTask);
+//     console.log("oldTask =", oldTask);
+//     console.log("oldTaskPrice =", oldTaskPrice);
+//   } else if(this.isEditMode &&  ) {
+//     this.totalCost = newTaskPrice;
+//   }
+
+  
+
+//   this.appointmentServiceForm.patchValue({
+//     taskId: newTask.id,
+//     taskName: newTask.taskName,
+//     totalServicePrice: this.totalCost
+//   });
+
+//   this.selectedTask = newTask;
+  
+// }
+
+onTaskChange(taskId: number): void {
+
+  const newTask = this.taskList.find(t => t.id === taskId);
+
+  if (!newTask) return;
+
+  this.currentTaskPrice = newTask.totalTaskPrice || 0;
+
+  this.totalCost =
+        this.currentTaskPrice +
+        this.additionalServiceCost;
+  
+  this.appointmentServiceForm.patchValue({
+    taskId: newTask.id,
+    taskName: newTask.taskName,
+    totalServicePrice: this.totalCost
+  });
+
+  this.selectedTask = newTask;
+}
+
+//load editMode when click the edit button in all appointments table
 loadEditData(): void {
+  console.log('loadEditData called');
+
+  this.isBackButtonDisable = true;
+  console.log('Button disabled:', this.isBackButtonDisable);
   const state = history.state;
   if (state?.appointmentData) {
+    console.log('Edit mode detected');
     this.appointmentData = state.appointmentData;
     this.isEditMode = state.isEditMode;
-
+    this.isBackButtonDisable = true;
+    console.log('Button disabled after edit:', this.isBackButtonDisable);
+    this.appointmentButtonLabel = 'Edit Appointment';
+    
     console.log("EDIT DATA:", this.appointmentData);
-    console.log("date:", this.appointmentData.date);
-    console.log("time:", this.appointmentData.time);
-    console.log("taskId:", this.appointmentData.taskId);
-    console.log("additionalServices:", this.appointmentData.additionalServices);
-    console.log("FULL TASK OBJECT:", this.appointmentData);
+    console.log("taskId:", this.taskId);
+    console.log("form taskId:", this.appointmentServiceForm.get('taskId')?.value);
+    console.log("isEditMode:", this.isEditMode);
 
-    this.totalCost = this.appointmentData.totalServicePrice;
-    this.taskName = this.appointmentData.taskName;
-    this.taskId = this.appointmentData.taskId;
+    this.originalTotalCost = this.appointmentData.totalServicePrice || 0;
+    this.originalTaskId = Number(this.appointmentData.taskId);
+
+    this.totalCost = this.originalTotalCost;
+
+    // this.totalCost = this.appointmentData.totalServicePrice;
+    // this.taskName = this.appointmentData.taskId;
+    // this.taskId = this.appointmentData.taskId;
   }
 }
 
+//load tasks to the task dropdown
 loadTasks(): void{
   this.taskIntroduceService.getData().subscribe((res: any) => {
     this.taskList = res;
@@ -253,17 +352,24 @@ loadTasks(): void{
       // ONLY PATCH AFTER DATA IS READY
     if (this.appointmentData) {
       this.patchAppointmentData();
+      // this.onTaskChange(this.appointmentData.taskId);
+
+      setTimeout(() => {
+        this.onTaskChange(this.appointmentData.taskId);
+      });
     }
   });
 }
 
-patchEditData(): void {
-  this.appointmentServiceForm.patchValue({
-    taskId: this.appointmentData.taskId
-  });
-    this.onTaskChange(this.appointmentData.taskId);
-}
+// patchEditData(): void {
+//   console.log('taskId before patch:', this.appointmentData.taskId);
+//   this.appointmentServiceForm.patchValue({
+//     taskId: Number(this.appointmentData.taskId)
+//   });
+//     this.onTaskChange(this.appointmentData.taskId);
+// }
 
+//load appointed data into the form fields
 patchAppointmentData(): void{
   if (!this.appointmentData) return;
 
@@ -272,7 +378,8 @@ patchAppointmentData(): void{
     this.convertArrayToTime(this.appointmentData.time);
 
   this.selectedDate = appointmentDate;
-  this.selectedTime = appointmentTime;
+  this.selectedTime = this.normalizeTime(appointmentTime);
+  this.originalSelectedTime = this.normalizeTime(appointmentTime);
 
   this.appointmentServiceForm.patchValue({
 
@@ -289,18 +396,24 @@ patchAppointmentData(): void{
     email: this.appointmentData.email,
     contactNumber: this.appointmentData.contactNumber,
 
-    taskId: this.appointmentData.taskId,
-    taskName: this.appointmentData.taskId, // important for dropdown
+    taskId: Number(this.appointmentData.taskId),
+    // taskName: this.appointmentData.taskId, // important for dropdown
     additionalServices: this.appointmentData.additionalServices
+    
   });
   // load task details card
   this.onTaskChange(this.appointmentData.taskId);
+
+  console.log("taskId:", this.taskId);
+  console.log("form taskId:", this.appointmentServiceForm.get('taskId')?.value);
+  console.log("isEditMode:", this.isEditMode);
 
   this.onDateChange({
     value: appointmentDate
   } as MatDatepickerInputEvent<Date>);
 }
 
+//load selected additional servicers to appointment form when click edit button
 loadSelectedAdditionalServices(): void {
   if (!this.appointmentData?.additionalServices) {
     return;
@@ -311,7 +424,17 @@ loadSelectedAdditionalServices(): void {
                             .map((item:string) => item.trim());
   
   this.selectedOptions = this.additionalServices.filter(service => 
-    selectedNames.includes(service.additionalServicesName));                         
+    selectedNames.includes(service.additionalServicesName));
+    
+  this.additionalServiceCost =
+  this.selectedOptions.reduce(
+    (sum, item) => sum + item.additionalServicePrice,
+    0
+  );
+}
+//disable appointed time selected time row select button
+isOriginalRow(slotTime: string): boolean {
+  return this.normalizeTime(slotTime) === this.originalSelectedTime;
 }
 
 // <!--Functions for Dropdown with Custom Input Enabled -->
@@ -586,7 +709,8 @@ formatDateLocal(date: Date): string {
   submitAppointment(): void {
     console.log('In the Service → save appointment-> ts file');
     if (!this.selectedDate || !this.selectedTime) return;
-    if (!this.taskId) {
+    const taskId = this.appointmentServiceForm.get('taskId')?.value;
+    if (!taskId) {
       this.messageService.showError("Task is required. Please select a task again.");
       return;
     }
@@ -605,34 +729,51 @@ formatDateLocal(date: Date): string {
       timeSlot: this.selectedTime,
       price: this.totalCost,
       taskName: this.taskName,
-      taskId: this.taskId,
+      taskId: taskId,
       role: roleToSave,
-      login: login
+      login: login,
+
     };
 
     const payload = this.processObjects(booking);
 
     // console.log("BOOKING OBJECT:", booking);
     // console.log("FINAL PAYLOAD:", payload);
-
-    this.appointmentService.bookAppointment(payload).subscribe({
-      next: (resp) => {
-        const updatedSlot = this.timeSlots.find(slot => slot.time === this.selectedTime);
-        if (updatedSlot) {
-          updatedSlot.bookedCount += 1;
-          this.dataSource.data = [...this.timeSlots];
+    if (this.isEditMode) {
+      this.appointmentService.updateAppointment(this.appointmentData.id, payload)
+      .subscribe({
+        next: (res) => {
+          this.appointmentServiceForm.disable();
+          this.savedTime = this.selectedTime;
+          this.messageService.showSuccess("Appointment update Successfully");
+          this.onDateChange({value: this.selectedDate} as any)
+        },error: (error) =>{
+          this.messageService.showError("Update Failed. Try Again...!")
         }
-        this.selectedTime = null;
-        this.onDateChange({ value: this.selectedDate } as MatDatepickerInputEvent<Date>);
+      })
+    } else{
+        this.appointmentService.bookAppointment(payload).subscribe({
+        next: (resp) => {
+          const updatedSlot = this.timeSlots.find(slot => slot.time === this.selectedTime);
+          if (updatedSlot) {
+            updatedSlot.bookedCount += 1;
+            this.dataSource.data = [...this.timeSlots];
+          }
+          this.savedTime = this.selectedTime;
+          this.selectedTime = null;
+          this.onDateChange({ value: this.selectedDate } as MatDatepickerInputEvent<Date>);
 
-        this.appointmentServiceForm.disable();
-        this.messageService.showSuccess("Your Appointment Successfully Scheduled!");
-      },
-      error: (err) => {
-        console.error(err);
-        this.messageService.showError("Error Occured. Please try again!");
-      }
-    });
+          this.appointmentServiceForm.disable();
+          this.messageService.showSuccess("Your Appointment Successfully Scheduled!");
+        },
+        error: (err) => {
+          console.error(err);
+          this.messageService.showError("Error Occured. Please try again!");
+        }
+      });
+    }
+
+    
   }
 
   public processObjects(booking: Appointment): Appointment  {
@@ -675,67 +816,6 @@ formatDateLocal(date: Date): string {
     }
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // onDateChange(date: Date) {
-  //   this.selectedDate = date;
-  //   this.selectedTime = null;
-  //   this.fetchAvailableSlots(date);
-  // }
-
-  // fetchAvailableSlots(date: Date) {
-  //   this.isLoading = true;
-  //   const dateStr = date.toISOString().split('T')[0];
-  //   this.appointmentService.getAvailableSlots(dateStr).subscribe({
-  //     next: (slots) => {
-  //       this.availableSlots = slots;
-  //       this.isLoading = false;
-  //     },
-  //     error: (err) => {
-  //       console.error(err);
-  //       this.availableSlots = [];
-  //       this.isLoading = false;
-  //     }
-  //   });
-  // }
-
-  // selectTimeSlot(slot: string) {
-  //   this.selectedTime = slot;
-  //   this.appointmentServiceForm.patchValue({ time: slot });
-  // }
-
-  // submitAppointment() {
-  //   if (this.appointmentServiceForm.valid) {
-  //     const data = this.appointmentServiceForm.value;
-  //     console.log('Booking Appointment:', data);
-  //     // call backend booking API here
-  //   }
-  // }
-
   public onVehicleTypeChange(vehicle: any): void {
       if (this.selectedVehicle) {
         if(this.selectedVehicle == 'Car') {
@@ -769,11 +849,20 @@ formatDateLocal(date: Date): string {
   public onAdditionalServiceChange(service: any, event: MatCheckboxChange): void {
     if (event.checked) {
       this.selectedOptions.push(service);
-      this.totalCost = this.totalCost + service.additionalServicePrice;
+      this.additionalServiceCost  = this.additionalServiceCost  + service.additionalServicePrice;
     } else {
       this.selectedOptions = this.selectedOptions.filter(item => item.id !== service.id);
-      this.totalCost = this.totalCost - service.additionalServicePrice;
+      this.additionalServiceCost  = this.additionalServiceCost  - service.additionalServicePrice;
     }
+
+    this.totalCost =
+      this.currentTaskPrice +
+      this.additionalServiceCost;
+
+    this.appointmentServiceForm.patchValue({
+      totalServicePrice: this.totalCost
+    });
+
 
     this.selectedServices = this.selectedOptions
     .map(s => s.additionalServicesName)

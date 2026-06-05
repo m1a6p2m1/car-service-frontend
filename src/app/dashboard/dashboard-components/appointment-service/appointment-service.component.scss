@@ -175,6 +175,27 @@ mat-form-field {
   animation: fadeIn 0.25s ease-in-out;
 }
 
+.selected-row {
+  background-color: #e8f5e9 !important;
+}
+
+.current-appointment-row {
+  background-color: #9ad9f9 !important;  /* light yellow */
+  border-left: 5px solid #057eff;
+}
+
+.new-selected-row {
+  background-color: #a0d2a3 !important;
+  border-left: 5px solid #34a93c;
+  font-weight: 600;
+  // color: white !important;
+}
+
+.orginal-slot {
+  background-color: #fff3cd !important;
+  color: black !important;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
