@@ -4,9 +4,32 @@ import {
   FormControl,
   Validators,
   FormBuilder,
+  AsyncValidatorFn,
+  ValidationErrors,
+  AbstractControl,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { catchError, debounceTime, first, map, Observable, of, switchMap } from 'rxjs';
 import { HttpService } from 'src/app/services/http.service';
+
+export function usernameAvailableValidator(authService: HttpService): AsyncValidatorFn {
+  return (control: AbstractControl): Observable<ValidationErrors | null> => {
+    if (!control.value || control.value.length < 3) {
+      return of(null);
+    }
+
+    return control.valueChanges.pipe(
+      debounceTime(400),        // wait 400ms after user stops typing
+      switchMap(value =>        // cancel previous request if new one comes in
+        authService.checkUsername(value).pipe(
+          map(res => res.taken ? { usernameTaken: true } : null),
+          catchError(() => of(null))
+        )
+      ),
+      first()                  // complete the observable after one emission
+    );
+  };
+}
 
 @Component({
   selector: 'app-register',
@@ -30,7 +53,7 @@ export class AppSideRegisterComponent implements OnInit {
       contactNumber: ['', [Validators.required, Validators.pattern('^(\\+94|0)[1-9]{2}[0-9]{7}$|^(\\+94|0)?7[0-9]{8}$')]],
       address: [''],
       email: ['', [Validators.email, Validators.required]],
-      login: ['', [Validators.required]],
+      login: ['', [Validators.required], [usernameAvailableValidator(this.httpService)]],
       password: ['', [Validators.required]],
     });
   }

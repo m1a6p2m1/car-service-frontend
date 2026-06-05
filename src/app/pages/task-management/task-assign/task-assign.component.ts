@@ -12,6 +12,7 @@ import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.comp
 import { MatDialog } from '@angular/material/dialog';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { AdditionalServicesService } from 'src/app/services/task-management/additional-services.service';
+import { AttendanceMarkService } from 'src/app/services/attendance/attendance-mark.service';
 
 interface Task {
   id: any;
@@ -83,6 +84,7 @@ export class TaskAssignComponent implements OnInit {
     private notificationService: NotificationService,
     private _dialog: MatDialog,
     private additionalServicesService: AdditionalServicesService,
+    private attendanceMarkService: AttendanceMarkService,
   ) {
     this.taskAssignForm = this.fb.group({
       date: new FormControl(''),
@@ -344,22 +346,23 @@ export class TaskAssignComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.populateAttendanceData();
     this.populateData();
     this.getDefinedTasks();
     this.setCreatedByValue();
     this.loadCustomerList();
 
     // 1. FIRST load attendance from localStorage
-    const storedAttendance = localStorage.getItem('todayAttendance');
+   /* const storedAttendance = localStorage.getItem('todayAttendance');
 
     if (storedAttendance) {
       this.attendanceList = JSON.parse(storedAttendance);
     } else {
       this.attendanceList = [];
-    }
+    }*/
 
     // 2. THEN load employees (so filtering works correctly)
-    this.setEmployeeList();
+    // this.setEmployeeList();
 
     if (!this.attendanceList.length) {
       console.warn("No attendance found for today");
@@ -846,5 +849,48 @@ export class TaskAssignComponent implements OnInit {
       1,
       'd.mendisat@gmail.com'
     );
+  }
+
+
+    // Load Active Employees
+  public populateAttendanceData(): void {
+
+    const today = new Date().toISOString().split('T')[0];//
+
+    // check in data base if attendances are already marked
+    this.attendanceMarkService.getAttendanceByDate(today).subscribe({
+      next: (response: any[]) => {
+        if (response && response.length > 0) {
+          this.attendanceList = response;
+          localStorage.setItem('todayAttendance', JSON.stringify(this.attendanceList));
+        } else {
+          this.setAttendanceData();
+          return;
+        }
+        this.setEmployeeList();
+      },
+      error: () => {
+        this.setAttendanceData();
+        this.setEmployeeList();
+      }    
+    });
+  }
+
+  public setAttendanceData(): void {
+    this.attendanceMarkService.getAllActiveEmployees()
+      .subscribe((response: any) => {
+
+        const today= new Date().toISOString().split('T')[0];
+
+        this.attendanceList = response.map((emp: any)=> ({
+          employeeId: emp.id,
+          uniqueEmpNo: emp.uniqueEmpNo,
+          employeeName: emp.name,
+          date: today,
+          attendanceStatus: 'PRESENT'   //default value
+    }));
+
+    localStorage.setItem('todayAttendance', JSON.stringify(this.attendanceList));
+    });
   }
 }
