@@ -1,10 +1,12 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { CustomerFeedbackService } from 'src/app/services/feedback/customer-feedback.service';
 import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
+import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 
 
 interface License {
@@ -47,7 +49,8 @@ export class CustomerFeedbackComponent implements OnInit{
   constructor(
     private fb: FormBuilder,
     private customerFeedbackService: CustomerFeedbackService,
-    private messageService:MessageServiceService
+    private messageService:MessageServiceService,
+    private _dialog: MatDialog,
   ){
 
     this.loadUserName();
@@ -331,6 +334,18 @@ export class CustomerFeedbackComponent implements OnInit{
     // this.customerFeedbackForm.get('serviceDate')?.disable();
     
   }
+
+  public confirmDelete(data: any): void {
+      const dialogRef = this._dialog.open(ConfirmDialogComponent, {
+        data: 'Are you sure you want to delete this Feedback....?',
+      });
+  
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.deleteData(data);
+        }
+      });
+    }
 
   public deleteData(data: any):void{
       try {

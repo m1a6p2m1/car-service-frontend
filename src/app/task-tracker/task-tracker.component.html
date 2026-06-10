@@ -8,15 +8,23 @@
           <mat-card-subtitle>Monitor progress and completion rates</mat-card-subtitle>
         </mat-card-header>
       </mat-card>
+      <div class="filter-row">
+        <mat-form-field appearance="fill" class="date-field">
+          <mat-label>Date</mat-label>
+          <input matInput [matDatepicker]="picker" (dateChange)="onDateChange($event.value)">
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
 
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="fill" class="task-field">
             <mat-label>Select Your Task</mat-label>
             <mat-select [(ngModel)]="selectedOption"  name="task" (selectionChange)="onTaskChange($event)">
-              <mat-option *ngFor="let task of tasks" [value]="task.id">
-                {{ task.taskName + ' - ' + task.uniqueTaskNo }}
+              <mat-option *ngFor="let task of filteredTasks" [value]="task.id">
+                {{ task.taskName + ' - ' + task.uniqueTaskNo + '---' + task.customerName + '-' + task.licencePlate}}
               </mat-option>
             </mat-select>
-        </mat-form-field>
+        </mat-form-field>   
+    </div>
 
       <div class="stats-grid">
         <mat-card class="stat-card pending">

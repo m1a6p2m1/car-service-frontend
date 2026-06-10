@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
 })
 export class AllAppointmentsComponent implements OnInit{
 
-  displayedColumns: string[] = ['customerName', 'appointmentDate', 'appointmentTime','serviceType', 'email', 'phoneNumber', 'totalServicePrice', 'action'];
+  displayedColumns: string[] = ['customerName', 'appointmentDate', 'appointmentTime','serviceType', 'licencePlate', 'contactNumber', 'totalServicePrice', 'action'];
       dataSource!: MatTableDataSource<any>;
     
       @ViewChild(MatPaginator) paginator!: MatPaginator;

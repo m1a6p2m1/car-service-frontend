@@ -203,3 +203,18 @@ mat-divider {
         justify-self: start;
     }
 }
+
+.filter-row {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  width: 100%;
+}
+
+.date-field {
+  width: 250px;
+}
+
+.task-field {
+  flex: 1;
+}

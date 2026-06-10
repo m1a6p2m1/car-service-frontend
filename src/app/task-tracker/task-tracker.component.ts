@@ -27,6 +27,9 @@ interface Task {
   taskName: string;
   subTasks: any;
   uniqueTaskNo?: any;
+  licencePlate: string;
+  customerName: string;
+  date: string;
 }
 
 interface SubTask {
@@ -46,6 +49,7 @@ interface SubTask {
 export class TaskTrackerComponent implements OnInit, AfterViewInit {
   subTasks: SubTask[] = [];
   tasks: Task[] = [];
+  filteredTasks: Task[] = [];
 
   /* correct variable start */
 
@@ -185,6 +189,7 @@ export class TaskTrackerComponent implements OnInit, AfterViewInit {
         next: (response: any) => {
           console.log("Customer Tasks:", response);
           this.tasks = response;
+          this.filteredTasks = [...response];
           this.cdRef.detectChanges();
         },
         error: (error: any) => {
@@ -250,5 +255,21 @@ export class TaskTrackerComponent implements OnInit, AfterViewInit {
           }
 
           this.setPercentages();
+  }
+  formatDate(date: Date): string {
+    return date.toISOString().split('T')[0];
+  }
+
+  onDateChange(selectedDate: Date | null) {
+    if(!selectedDate){
+      this.filteredTasks = [...this.tasks];
+      return;
+    }
+
+    const formattedDate = this.formatDate(selectedDate);
+
+    this.filteredTasks = this.tasks.filter(task =>
+    this.formatDate(new Date(task.date!)) === formattedDate
+  );
   }
 }
