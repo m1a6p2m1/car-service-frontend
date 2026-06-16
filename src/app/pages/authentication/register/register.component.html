@@ -145,22 +145,45 @@
 
             <mat-label for="contactNumber" class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 m-t-12 d-block">Contact Number</mat-label>
             <mat-form-field appearance="outline" class="w-100" color="primary">
-              <input type="text" id="contactNumber" name="contactNumber" formControlName="contactNumber" matInput />
+              <input type="text" id="contactNumber" name="contactNumber" formControlName="contactNumber" matInput/>
             </mat-form-field>
         
-            <span class="text-danger"
+            <!-- <span class="text-danger"
               *ngIf="(formControl['contactNumber'].touched || submitted) && 
               formControl['contactNumber'].errors as errors">
-              <!-- Required -->
+              
               <ng-container *ngIf="errors['required']; else contactNumberInvalid">
                 Contact Number is required
               </ng-container>
 
-              <!-- Pattern -->
               <ng-template #contactNumberInvalid>
                 Please Insert a Valid Contact Number
               </ng-template>
+            </span> -->
+
+            <span class="text-danger"
+              *ngIf="(formControl['contactNumber'].touched || submitted) &&
+                    formControl['contactNumber'].hasError('required')">
+
+              Contact Number is required
             </span>
+
+            <!-- PATTERN -->
+            <span class="text-danger"
+              *ngIf="(formControl['contactNumber'].touched || submitted) &&
+                    formControl['contactNumber'].hasError('pattern')">
+
+              Please Insert a Valid Contact Number
+            </span>
+
+            <span class="text-danger"
+                *ngIf="
+                  (formControl['contactNumber']?.touched || submitted) &&
+                  formControl['contactNumber']?.errors &&
+                  formControl['contactNumber']?.errors!['contactExists']">
+
+            Contact number already exists.
+          </span>
 
             <mat-label for="address" class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 m-t-12 d-block">Address</mat-label>
             <mat-form-field appearance="outline" class="w-100" color="primary">

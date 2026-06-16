@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpService } from '../http.service';
 import { environment } from 'src/app/environments/environment';
 import { Employee } from 'src/app/pages/registration/employee-details/employee-details.component';
+import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -13,7 +14,6 @@ export class RegistrationService {
     private httpService:HttpService
   ) {}
   serviceCall(form_details: any){
-     console.log('In the Service 1');
      const requestUrl = environment.baseUrl + '/employee';
 
      let headers = {};
@@ -28,7 +28,7 @@ export class RegistrationService {
   }
 
   getData(){
-    console.log('In the Service 2');
+    
      const requestUrl = environment.baseUrl + '/employee';
 
      let headers = {};
@@ -43,7 +43,7 @@ export class RegistrationService {
   }
 
   getEmployeeById(id: number){
-    console.log('In the Service 2');
+    
      const requestUrl = environment.baseUrl + '/employee/' + id.toString();
 
      let headers = {};
@@ -113,6 +113,48 @@ export class RegistrationService {
       };
     }
     
-        return this.http.put(requestUrl, {}, {headers: headers} );
+      return this.http.put(requestUrl, {}, {headers: headers} );
+  }
+
+  checkPhoneNumber(phoneNumber: string): Observable<boolean>{
+    console.log('In the Service.................');
+    const requestUrl = `${environment.baseUrl}/check-phone`;
+    
+    let headers = {};
+
+    if (this.httpService.getAuthToken() !== null) {
+      headers = {
+        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+      };
+    }
+    
+      return this.http.get<boolean>(requestUrl, {
+        headers,
+        params: {
+          phoneNumber: phoneNumber
+        }
+      });
+
+  }
+
+  checkNicNumber(nic: string): Observable<boolean>{
+    console.log('In the Service.................2');
+    const requestUrl = `${environment.baseUrl}/check-nic`;
+    
+    let headers = {};
+
+    if (this.httpService.getAuthToken() !== null) {
+      headers = {
+        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+      };
+    }
+    
+      return this.http.get<boolean>(requestUrl, {
+        headers,
+        params: {
+          nic: nic
+        }
+      });
+
   }
 }

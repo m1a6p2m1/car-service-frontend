@@ -144,4 +144,14 @@ export class HttpService {
 
     return this.http.get<{ taken: boolean }>(requestUrl, { headers: headers });
   }
+
+  checkContactNumber(contactNumber: string): Observable<boolean> {
+
+    return this.http.get<boolean>(
+      `${environment.baseUrl}/check-contact`,
+      {
+        params: { contactNumber }
+      }
+    );
+  }
 }

@@ -7,6 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
 import { VehiclesService } from 'src/app/services/registration/vehicles.service';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { debounceTime } from 'rxjs';
 
 
 @Component({
@@ -199,6 +200,29 @@ export class VehiclesComponent implements OnInit{
         vehicleType: [''], 
         vehicleModel: [''] 
       });
+
+      vehiclesGroup.get('licencePlate')?.valueChanges
+        .pipe(debounceTime(400)).subscribe(value => {
+          const control = vehiclesGroup.get('licencePlate');
+
+          if(!control || control.invalid || !value) {
+            return;
+          }
+
+          this.vehiclesService.checkLicencePlate(value).subscribe((exists: any) => {
+            const errors = { ...(control.errors || {}) };
+
+              if (exists) {
+                errors['plateExists'] = true;
+              } else {
+                delete errors['plateExists'];
+              }
+
+              control.setErrors(
+                Object.keys(errors).length ? errors : null
+              );
+          })
+        })
 
       this.vehicles.push(vehiclesGroup);
     }

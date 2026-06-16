@@ -69,6 +69,7 @@ export class EmployeeComponent implements OnInit {
   fileButtonDisable = false;
   selectedEmployee: any;
   hasLogin?: boolean;
+  phoneExists = false;
 
   constructor(
     private fb: FormBuilder,
@@ -409,6 +410,50 @@ export class EmployeeComponent implements OnInit {
           
         });
     }
+
+  checkPhoneNumber(): void{
+    const control  = this.employeeForm.get('phoneNumber');
+
+    if(!control || control.invalid || !control.value) {
+      return;
+    }
+
+    this.registrationService.checkPhoneNumber(control.value).subscribe((exists: boolean)  => {
+      // this.phoneExists = exists ;
+
+      const errors = { ...(control.errors || {}) };
+
+      if (exists) {
+        errors['phoneExists'] = true;
+      } else {
+        delete errors['phoneExists'];
+      }
+
+      control.setErrors(Object.keys(errors).length ? errors :null);
+    });
+  }
+
+  checkNicNumber():void {
+    const control  = this.employeeForm.get('nic');
+
+    if(!control || control.invalid || !control.value) {
+      return;
+    }
+
+    this.registrationService.checkNicNumber(control.value).subscribe((exists: boolean)  => {
+      // this.phoneExists = exists ;
+
+      const errors = { ...(control.errors || {}) };
+
+      if (exists) {
+        errors['nicExists'] = true;
+      } else {
+        delete errors['nicExists'];
+      }
+
+      control.setErrors(Object.keys(errors).length ? errors :null);
+    });
+  }
 
   public refreshData(): void {
     this.populateData();

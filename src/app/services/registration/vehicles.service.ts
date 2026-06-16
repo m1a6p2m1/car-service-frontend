@@ -100,4 +100,23 @@ export class VehiclesService {
 
     return this.http.get(requestUrl, { headers: headers });
   }
+
+  checkLicencePlate(licencePlate: string): Observable<boolean> {
+    const requestUrl = `${environment.baseUrl}/check-plate`;
+    
+    let headers = {};
+
+    if (this.httpService.getAuthToken() !== null) {
+      headers = {
+        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+      };
+    }
+    
+      return this.http.get<boolean>(requestUrl, {
+        headers,
+        params: {
+          licencePlate
+        }
+      });
+  }
 }

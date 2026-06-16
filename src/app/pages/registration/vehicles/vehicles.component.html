@@ -24,8 +24,14 @@
                 <input
                   matInput
                   formControlName="licencePlate"
-                  placeholder="Licence Plate"
+                  placeholder="License Plate"
                 />
+                <span class="text-danger"
+                  *ngIf="vehicle.get('licencePlate')?.touched &&
+                          vehicle.get('licencePlate')?.hasError('plateExists')"
+                >
+                License Plate Already Exists
+                </span>
               </mat-form-field>
 
               <mat-form-field class="vehicle-details">

@@ -217,6 +217,51 @@ export class CustomerComponent implements OnInit{
     this.submitted = false;
   }
 
+  checkContactNumber(): void{
+    const control  = this.customerForm.get('contactNumber');
+
+    if(!control || control.invalid || !control.value) {
+      return;
+    }
+
+    this.customerService.checkContactNumber(control.value).subscribe((exists: boolean)  => {
+      // this.phoneExists = exists ;
+
+      const errors = { ...(control.errors || {}) };
+
+      if (exists) {
+        errors['contactExists'] = true;
+      } else {
+        delete errors['contactExists'];
+      }
+
+      control.setErrors(Object.keys(errors).length ? errors :null);
+    });
+  }
+
+  checkNicNumber():void {
+    const control  = this.customerForm.get('nic');
+
+    if(!control || control.invalid || !control.value) {
+      return;
+    }
+
+    this.customerService.checkNicNumber(control.value).subscribe((exists: boolean)  => {
+      // this.phoneExists = exists ;
+
+      const errors = { ...(control.errors || {}) };
+
+      if (exists) {
+        errors['nicExists'] = true;
+      } else {
+        delete errors['nicExists'];
+      }
+
+      control.setErrors(Object.keys(errors).length ? errors :null);
+    });
+  }
+
+
   public refreshData(): void{
     this.populateData();
   }

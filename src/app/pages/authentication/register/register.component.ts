@@ -9,7 +9,7 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { catchError, debounceTime, first, map, Observable, of, switchMap } from 'rxjs';
+import { catchError, debounceTime, first, map, Observable, of, switchMap, timer } from 'rxjs';
 import { HttpService } from 'src/app/services/http.service';
 
 export function usernameAvailableValidator(authService: HttpService): AsyncValidatorFn {
@@ -27,6 +27,33 @@ export function usernameAvailableValidator(authService: HttpService): AsyncValid
         )
       ),
       first()                  // complete the observable after one emission
+    );
+  };
+}
+
+export function contactNumberAvailableValidator(httpService: HttpService): AsyncValidatorFn {
+  return (control: AbstractControl): Observable<ValidationErrors | null> => {
+
+    const value = control.value;
+
+    if (!value) {
+      return of(null);
+    }
+
+    // Skip API call if sync validators already failed
+    if (control.errors && !control.errors['contactExists']) {
+      return of(null);
+    }
+
+    return timer(400).pipe(
+      switchMap(() =>
+        httpService.checkContactNumber(value).pipe(
+          map((exists: boolean) =>
+            exists ? { contactExists: true } : null
+          ),
+          catchError(() => of(null))
+        )
+      )
     );
   };
 }
@@ -50,7 +77,7 @@ export class AppSideRegisterComponent implements OnInit {
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
       nic: ['', [Validators.required, Validators.pattern('^([0-9]{9}[x|X|v|V]|[0-9]{12})$')]],
-      contactNumber: ['', [Validators.required, Validators.pattern('^(\\+94|0)[1-9]{2}[0-9]{7}$|^(\\+94|0)?7[0-9]{8}$')]],
+      contactNumber: ['', [Validators.required, Validators.pattern('^(\\+94|0)[1-9]{2}[0-9]{7}$|^(\\+94|0)?7[0-9]{8}$')], [contactNumberAvailableValidator(this.httpService)]],
       address: [''],
       email: ['', [Validators.email, Validators.required]],
       login: ['', [Validators.required], [usernameAvailableValidator(this.httpService)]],
@@ -92,4 +119,29 @@ export class AppSideRegisterComponent implements OnInit {
         });
     }
   }
+
+  // checkContactNumber():void {
+  //   const control  = this.registerForm.get('contactNumber');
+
+  //   if(!control || control.invalid || !control.value) {
+  //     return;
+  //   }
+
+  //   this.httpService.request('POST', '/check-contact', {
+  //     contactNumber: control.value
+  //   })
+  //   .then((exists: boolean)  => {
+  //     // this.phoneExists = exists ;
+
+  //     const errors = { ...(control.errors || {}) };
+
+  //     if (exists) {
+  //       errors['contactExists'] = true;
+  //     } else {
+  //       delete errors['contactExists'];
+  //     }
+
+  //     control.setErrors(Object.keys(errors).length ? errors :null);
+  //   });
+  // }
 }

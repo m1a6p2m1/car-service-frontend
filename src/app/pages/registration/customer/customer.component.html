@@ -26,13 +26,19 @@
       
         <mat-form-field class="full-width">
           <mat-label>Nic Number</mat-label>
-          <input matInput placeholder="Nic Number" formControlName="nic">
+          <input matInput placeholder="Nic Number" formControlName="nic" (blur)="checkNicNumber()">
           <span class="text-danger" *ngIf="
               (customerForm.get('nic')?.touched || submitted) && 
               customerForm.get('nic')?.errors && 
               customerForm.get('nic')?.errors!['pattern']">
             Please Insert a Valid NIC Number......
           </span>
+          <span class="text-danger" *ngIf="
+            (customerForm.get('nic')?.touched || submitted) && 
+              customerForm.get('nic')?.errors && 
+              customerForm.get('nic')?.errors!['nicExists']">
+              NIC Number Already Exists
+            </span>
         </mat-form-field>
       
         <mat-form-field class="full-width">
@@ -53,21 +59,30 @@
         </mat-radio-group><br><br>
       
         <mat-form-field class="full-width">
-          <mat-label>Address</mat-label>
-          <textarea matInput placeholder="Address" formControlName="address"></textarea>
-        </mat-form-field>
-      
-        <mat-form-field class="full-width">
           <mat-label>Telephone</mat-label>
           <!-- <span matTextPrefix>+94 &nbsp;</span> -->
-          <input type="tel" matInput placeholder="+94 55-555-1234 OR 055-555-1234" formControlName="contactNumber">
+          <input type="tel" matInput placeholder="+94 55-555-1234 OR 055-555-1234" formControlName="contactNumber" (blur)="checkContactNumber()">
           <span class="text-danger" *ngIf="
               (customerForm.get('contactNumber')?.touched || submitted) && 
               customerForm.get('contactNumber')?.errors && 
               customerForm.get('contactNumber')?.errors!['pattern']">
             Please Insert a Valid Phone Number......
           </span>
+
+          <span class="text-danger"
+                *ngIf="
+                  (customerForm.get('contactNumber')?.touched || submitted) &&
+                  customerForm.get('contactNumber')?.errors &&
+                  customerForm.get('contactNumber')?.errors!['contactExists']">
+
+            Phone number already exists.
+          </span>
           <mat-icon matSuffix>phone</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Address</mat-label>
+          <textarea matInput placeholder="Address" formControlName="address"></textarea>
         </mat-form-field>
 
         <!-- <mat-form-field class="full-width">
