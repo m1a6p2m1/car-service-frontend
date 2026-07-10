@@ -116,6 +116,32 @@ export class RegistrationService {
       return this.http.put(requestUrl, {}, {headers: headers} );
   }
 
+  getEmployeeLogin(employeeId: number) {
+    const requestUrl = environment.baseUrl + '/employee-login/get-credentials/' + employeeId;
+    let headers = {};
+
+    if (this.httpService.getAuthToken() !== null) {
+      headers = {
+        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+      };
+    }
+
+    return this.http.get(requestUrl, headers);
+  }
+
+  updateEmployeeLogin(employeeId: number, data: any) {
+    const requestUrl = environment.baseUrl + '/employee-login/edit-credentials/' + employeeId;
+    let headers = {};
+
+    if (this.httpService.getAuthToken() !== null) {
+      headers = {
+        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+      };
+    }
+
+    return this.http.put(requestUrl, data, {headers: headers});
+  }
+
   checkPhoneNumber(phoneNumber: string): Observable<boolean>{
     console.log('In the Service.................');
     const requestUrl = `${environment.baseUrl}/check-phone`;

@@ -1,0 +1,102 @@
+<div mat-dialog-title>
+  <h5>Generate Bill Details</h5>
+</div>
+
+<form [formGroup]="billGeneratedetailsForm">
+
+  <div mat-dialog-content class="content">
+
+    <div class="row">
+
+
+      <!-- Task Name -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Task Name</mat-label>
+        <input 
+          matInput
+          formControlName="taskName"
+          readonly>
+      </mat-form-field>
+
+
+      <!-- Service Type -->
+      <div class="service-row">
+
+        <mat-form-field appearance="outline">
+            <mat-label>Service Type</mat-label>
+            <input 
+            matInput
+            formControlName="serviceType"
+            readonly>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline">
+            <mat-label>Service Amount</mat-label>
+
+            <input 
+            matInput
+            type="number"
+            formControlName="servicePrice"
+            (input)="calculateTotal()">
+
+        </mat-form-field>
+
+      </div>
+
+
+      <!-- Sub Tasks -->
+      <div formArrayName="subTasks">
+
+        <h4>Sub Tasks</h4>
+
+        <div
+          *ngFor="let subTask of subTasks.controls; let i=index"
+          [formGroupName]="i"
+          class="subtask-row">
+
+          <!-- Description -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Sub Task</mat-label>
+            <input
+              matInput
+              formControlName="description"
+              readonly>
+          </mat-form-field>
+
+
+
+          <!-- Price -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Amount</mat-label>
+            <input
+              matInput
+              type="number"
+              formControlName="subTaskPrice"
+              (input)="calculateTotal()">
+          </mat-form-field>
+        </div>
+
+      </div>
+
+      <!-- Total -->
+      <mat-form-field appearance="outline" class="full-width">
+
+        <mat-label>Total Cost</mat-label>
+        <input
+          matInput
+          formControlName="totalCost"
+          readonly>
+      </mat-form-field>
+    </div>
+
+  </div>
+  <div mat-dialog-actions class="action">
+    <button
+      mat-raised-button
+      color="primary"
+      type="button">
+      Generate Bill
+    </button>
+  </div>
+</form>

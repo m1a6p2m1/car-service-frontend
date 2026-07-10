@@ -48,7 +48,7 @@
       Cancel
     </button>
     <button mat-raised-button color="primary" type="submit">
-      Save
+      {{ data.loginCreated ? 'Update Login' : 'Save' }}
     </button>
   </div>
 </form>

@@ -264,9 +264,14 @@
           <button mat-icon-button color="warn" (click)="confirmDelete(element)" matTooltip="Delete">
             <mat-icon>delete</mat-icon>
           </button><br>
-          <button mat-icon-button matTooltip="Create Login" (click)="addLoginCredentials(element)" [disabled]="element.employeeStatus === 'Inactive'">
-            <mat-icon>person_add</mat-icon>
+
+          <button type="submit" mat-raised-button 
+            [ngClass]="element.loginCreated ? 'edit-btn' : 'create-btn'" 
+            (click)="addLoginCredentials(element)" 
+            [disabled]="element.employeeStatus === 'Inactive'">
+            {{ element.loginCreated ? 'Edit Login' : 'Create Login' }}
           </button>
+
           <button type="submit" mat-raised-button class="statusButton" 
           [disabled]="isInactiveButtonDisable" 
           (click)="inactiveEmployee(element)"
@@ -274,6 +279,7 @@
           >
             {{element.employeeStatus === 'Active' ? 'Disable Login' : 'Enable Login'}}
           </button>
+          
         </td>
       </ng-container>
     

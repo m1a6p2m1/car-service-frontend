@@ -35,18 +35,74 @@ export class EmployeeLoginDetailsComponent implements OnInit{
 
     console.log('Dialog Data:', this.data);
     if (this.data) {
-    this.selectedEmployeeId = this.data.employeeId;
-    this.employeeLoginDetailsForm.patchValue({
-      firstName: this.data.firstName,
-      lastName: this.data.lastName,
-    });
+      this.selectedEmployeeId = this.data.employeeId;
+      this.employeeLoginDetailsForm.patchValue({
+        firstName: this.data.firstName,
+        lastName: this.data.lastName,
+      });
+    
+      // Load login details only when editing
+      if (this.data.loginCreated) {
+
+        this.registrationService
+          .getEmployeeLogin(this.selectedEmployeeId)
+          .subscribe({
+
+            next: (res: any) => {
+
+              console.log("Employee Login:", res);
+
+              this.employeeLoginDetailsForm.patchValue({
+                login: res.login,
+                password: ''
+              });
+
+            },
+
+            error: (err) => {
+              console.log(err);
+            }
+
+          });
+
+      }
+  
   }
 
   }
 
   public createLogin(): void {
     try {
-      // if (this.employeeLoginDetailsForm?.valid) {
+      const request = {
+        employeeId: this.selectedEmployeeId,
+        firstName: this.employeeLoginDetailsForm.getRawValue().firstName,
+        lastName: this.employeeLoginDetailsForm.getRawValue().lastName,
+        login: this.employeeLoginDetailsForm.value.login,
+        password: this.employeeLoginDetailsForm.value.password,
+      };
+      // UPDATE LOGIN
+    if (this.data.loginCreated) {
+
+      this.registrationService
+        .updateEmployeeLogin(this.selectedEmployeeId, request)
+        .subscribe({
+
+          next: (response: any) => {
+
+            this._dialogRef.close(true);
+
+          },
+
+          error: (err) => {
+            console.log(err);
+          }
+
+        });
+
+    }
+
+    // CREATE LOGIN
+    else {
       this.httpService
         .request('POST', '/employee-register', {
           employeeId: this.selectedEmployeeId,
@@ -60,7 +116,7 @@ export class EmployeeLoginDetailsComponent implements OnInit{
           this._dialogRef.close(true);
           // this.router.navigate(['/authentication/login']);
         });
-    // }
+    }
     } catch (error) {
       console.log('create login error:',error);
     }

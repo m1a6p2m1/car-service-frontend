@@ -105,6 +105,20 @@ export class TaskTrackerService {
     return this.http.get(requestUrl, headers); 
   }
 
+  getAllTasks() {
+  const requestUrl = environment.baseUrl + '/all-assign-tasks/manager/tracker';
+
+  let headers = {};
+
+  if (this.httpService.getAuthToken() !== null) {
+    headers = {
+      Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+    };
+  }
+
+  return this.http.get(requestUrl, headers);
+}
+
   //get tasks assign to the supervisor into the task tracker
   getSupervisorTasks(employeeId: string | null ,taskNo: string) {
     if(employeeId == null || employeeId == undefined) {

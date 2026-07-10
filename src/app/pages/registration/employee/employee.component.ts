@@ -331,7 +331,8 @@ export class EmployeeComponent implements OnInit {
     data: {
       employeeId: employee.empNumber,
       firstName: employee.fullName?.split(' ')[0] ?? '',
-      lastName: employee.fullName?.split(' ')[1] ?? ''
+      lastName: employee.fullName?.split(' ')[1] ?? '',
+      loginCreated: employee.loginCreated
     }
     });
         dialogRef.afterClosed().subscribe({

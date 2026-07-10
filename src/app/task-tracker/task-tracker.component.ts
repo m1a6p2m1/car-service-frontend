@@ -163,7 +163,22 @@ export class TaskTrackerComponent implements OnInit, AfterViewInit {
 
     }
 
-    // 2. Task load by UID
+    // 2. Manager Login
+  else if (role === 'EMPLOYEE' && jobTitle?.toUpperCase() === 'MANAGER') {
+
+    this.todoService.getAllTasks().subscribe({
+      next: (res: any) => {
+        console.log("Manager Tasks:", res);
+        this.tasks = res;
+        this.filteredTasks = [...res];
+        this.cdRef.detectChanges();
+      },
+      error: (error: any) => console.log(error)
+    });
+
+  }
+
+    // 3. Task load by UID
     else if (uid) {
 
       this.todoService.getMainTaskDetailsByUid(uid).subscribe({
@@ -179,7 +194,7 @@ export class TaskTrackerComponent implements OnInit, AfterViewInit {
 
     }
 
-    // 3. Normal customer login
+    // 4. Normal customer login
     else {
 
       this.todoService.getMainTaskDetails(

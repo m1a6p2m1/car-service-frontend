@@ -234,5 +234,20 @@ export class TaskAssignService {
 
     return this.http.put(requestUrl,data, headers);
   }
+
+  //get Done Assign tasks for generate the bill
+  getAllDoneStatus(){
+    const requestUrl = environment.baseUrl + '/task-assign/done-status';
+
+    let headers = {};
+
+    if (this.httpService.getAuthToken() !== null) {
+      headers = {
+        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+      };
+    }
+
+    return this.http.get(requestUrl, headers);
+  }
   
 }

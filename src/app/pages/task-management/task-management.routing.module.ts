@@ -4,6 +4,7 @@ import { AllTaskComponent } from "./all-task/all-task.component";
 import { TaskIntroduceComponent } from "./task-introduce/task-introduce.component";
 import { MyTasksComponent } from "./my-tasks/my-tasks.component";
 import { AdditionalServicesComponent } from "./additional-services/additional-services.component";
+import { BillGenerateComponent } from "./bill-generate/bill-generate.component";
 
 export const TaskManagementRoutes: Routes = [
     {
@@ -28,6 +29,10 @@ export const TaskManagementRoutes: Routes = [
             {
                 path: 'additional-services',
                 component: AdditionalServicesComponent
+            },
+            {
+                path: 'bill-generate',
+                component: BillGenerateComponent
             }
             
         ]

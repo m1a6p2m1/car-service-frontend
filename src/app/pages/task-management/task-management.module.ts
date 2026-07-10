@@ -15,6 +15,8 @@ import { TaskIntroduceComponent } from './task-introduce/task-introduce.componen
 import { MyTasksComponent } from './my-tasks/my-tasks.component';
 import { AdditionalServicesComponent } from './additional-services/additional-services.component';
 import { MatRadioModule } from '@angular/material/radio';
+import { BillGenerateComponent } from './bill-generate/bill-generate.component';
+import { BillGenerateDetailsComponent } from './bill-generate-details/bill-generate-details.component';
 
 
 
@@ -25,6 +27,8 @@ import { MatRadioModule } from '@angular/material/radio';
     TaskIntroduceComponent,
     MyTasksComponent,
     AdditionalServicesComponent,
+    BillGenerateComponent,
+    BillGenerateDetailsComponent,
   ],
   imports: [
     CommonModule,

@@ -496,6 +496,15 @@ const MENUITEMS: Menu[] = [
       isVisible: false,
       auth: authenticationEnum.Additional_Services,
     },
+    {
+      state: 'task-management',
+      childState: 'bill-generate',
+      name: 'Generate Bill',
+      type: 'link',
+      icon: 'receipt_long',
+      isVisible: false,
+      auth: authenticationEnum.Generate_Bill,
+    },
   ]
 },
 {

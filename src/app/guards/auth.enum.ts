@@ -35,5 +35,6 @@ export enum authenticationEnum {
   Vehicles = 30,
   Additional_Services = 31,
   Appointment_List = 32,
-  All_Appointments = 33
+  All_Appointments = 33,
+  Generate_Bill = 34
 }

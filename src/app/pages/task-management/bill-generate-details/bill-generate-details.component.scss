@@ -1,0 +1,56 @@
+.content {
+width: 100%;
+  min-width: 550px;
+}
+
+
+.row {
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:15px;
+
+}
+
+
+.full-width {
+
+  width:100%;
+
+}
+
+
+.subtask-row {
+  display:flex;
+  gap:15px;
+  width:100%;
+}
+.subtask-row mat-form-field {
+  flex:1;
+}
+
+
+.action {
+  display:flex;
+  justify-content:flex-end;
+
+}
+
+.service-row {
+
+  display: flex;
+
+  gap: 15px;
+
+  width: 100%;
+
+}
+
+
+.service-row mat-form-field {
+
+  flex: 1;
+
+}
