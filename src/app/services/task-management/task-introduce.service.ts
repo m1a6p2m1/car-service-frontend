@@ -88,4 +88,18 @@ export class TaskIntroduceService {
   
       return this.http.delete(requestUrl, { headers: headers });
     }
+
+    tasksDetailsByTaskName(taskName:string): Observable<Task[]>{
+      const requestUrl = environment.baseUrl + '/task-introduce/get-task-details-by-name/'+ taskName;
+      let headers = {};
+          
+      if (this.httpService.getAuthToken() !== null) {
+        headers = {
+          Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+        };
+      }
+  
+      return this.http.get<Task[]>(requestUrl, headers );    
+              
+    }
 }

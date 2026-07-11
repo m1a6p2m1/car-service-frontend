@@ -1,6 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, FormArray } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { AdditionalServicesService } from 'src/app/services/task-management/additional-services.service';
+import { TaskIntroduceService } from 'src/app/services/task-management/task-introduce.service';
 
 @Component({
   selector: 'app-bill-generate-details',
@@ -10,9 +12,13 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class BillGenerateDetailsComponent implements OnInit{
   billGeneratedetailsForm: FormGroup;
+  taskBillDetails: any;
+  totalCost = 0;
   constructor(
     private fb: FormBuilder,
-    @Inject(MAT_DIALOG_DATA) public data:any
+    @Inject(MAT_DIALOG_DATA) public data:any,
+    private taskIntroduceService: TaskIntroduceService,
+    private additionalServicesService: AdditionalServicesService
   ){
     this.billGeneratedetailsForm = this.fb.group({
       taskName: [''],
@@ -68,5 +74,54 @@ export class BillGenerateDetailsComponent implements OnInit{
   }
 
   calculateTotal(){
+    this.popultePriceDetails();
+  }
+
+  public popultePriceDetails(): void {
+    this.populateSubTasksPriceDetails();
+  }
+
+  public populateSubTasksPriceDetails(): void {
+    const normalize = (s: string) => s?.trim().toLowerCase();
+    this.taskIntroduceService.tasksDetailsByTaskName(this.data?.taskName).subscribe((response: any) => {
+      this.taskBillDetails = response;
+      const subTasksBillDetails: any[] = this.taskBillDetails?.subTasks;
+
+      this.subTasks.controls.forEach(control => {
+        const description = control.get('description')?.value;
+        const match = subTasksBillDetails.find(p => normalize(p.subTaskName) === normalize(description));
+        if (match) {
+          control.patchValue({ subTaskPrice: match.subTaskPrice });
+        }
+      });
+      this.populateAdditinalServicePriceDetails();
+    });
+  }
+
+  public populateAdditinalServicePriceDetails(): void {
+    const normalize = (s: string) => s?.trim().toLowerCase();
+
+      this.additionalServicesService.getData().subscribe((resopnse:any)=>{
+        const additionalServices: any[] = resopnse;
+
+        this.subTasks.controls.forEach(control => {
+          const description = control.get('description')?.value;
+          const match = additionalServices.find(p => normalize(p.additionalServicesName) === normalize(description));
+          if (match) {
+            control.patchValue({ subTaskPrice: match.additionalServicePrice });
+          }
+        });
+        this.calculateTotalCost();
+      })
+  }
+
+  public calculateTotalCost(): void {
+    this.subTasks.controls.forEach(control => {
+        const cost = +control.get('subTaskPrice')?.value;
+        this.totalCost = this.totalCost + cost;
+    });
+    this.billGeneratedetailsForm.patchValue({
+      totalCost: this.totalCost
+    });
   }
 }
