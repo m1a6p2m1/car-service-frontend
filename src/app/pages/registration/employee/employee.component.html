@@ -6,7 +6,8 @@
         <mat-label>Full Name</mat-label>
         <input matInput placeholder="Full Name" formControlName="fullName">
        <!-- required validation -->
-       <span class="text-danger" *ngIf="(employeeForm.get('fullName')?.touched || submitted) && employeeForm.get('fullName')?.errors && employeeForm.get('fullName')?.errors!['required']">
+       <span class="text-danger" *ngIf="(employeeForm.get('fullName')?.touched || submitted) && employeeForm.get('fullName')?.errors && 
+       employeeForm.get('fullName')?.errors!['required']">
         Full Name is Required....!
       </span>
       </mat-form-field>
@@ -22,15 +23,11 @@
 
         <!-- pattern validation -->
        <span class="text-danger" *ngIf="
-       (employeeForm.get('nic')?.touched || submitted) && 
-        employeeForm.get('nic')?.errors && 
-        employeeForm.get('nic')?.errors!['pattern']">
+       (employeeForm.get('nic')?.touched || submitted) && employeeForm.get('nic')?.errors && employeeForm.get('nic')?.errors!['pattern']">
         Please Insert a Valid NIC Number
       </span>
       <span class="text-danger" *ngIf="
-       (employeeForm.get('nic')?.touched || submitted) && 
-        employeeForm.get('nic')?.errors && 
-        employeeForm.get('nic')?.errors!['nicExists']">
+       (employeeForm.get('nic')?.touched || submitted) && employeeForm.get('nic')?.errors && employeeForm.get('nic')?.errors!['nicExists']">
         NIC Number Already Exists
       </span>
       </mat-form-field>
@@ -62,9 +59,7 @@
             <mat-label>Email</mat-label>
             <input matInput placeholder="Email" formControlName="email">
             <span class="text-danger" *ngIf="
-              (employeeForm.get('email')?.touched || submitted) && 
-              employeeForm.get('email')?.errors && 
-              employeeForm.get('email')?.errors!['email']">
+              (employeeForm.get('email')?.touched || submitted) && employeeForm.get('email')?.errors && employeeForm.get('email')?.errors!['email']">
             Please Insert a Valid Email Address......
           </span>
         </mat-form-field><br><br>
@@ -74,17 +69,12 @@
         <!-- <span matTextPrefix>+94 &nbsp;</span> -->
         <input type="tel" matInput placeholder="+94 55-555-1234 OR 055-555-1234" formControlName="phoneNumber" (blur)="checkPhoneNumber()">
           <span class="text-danger" *ngIf="
-              (employeeForm.get('phoneNumber')?.touched || submitted) &&
-              employeeForm.get('phoneNumber')?.errors &&
-              employeeForm.get('phoneNumber')?.errors!['pattern']">
+              (employeeForm.get('phoneNumber')?.touched || submitted) && employeeForm.get('phoneNumber')?.errors && employeeForm.get('phoneNumber')?.errors!['pattern']">
             Please Insert a Valid Phone Number......
           </span>
-
           <span class="text-danger"
                 *ngIf="
-                  (employeeForm.get('phoneNumber')?.touched || submitted) &&
-                  employeeForm.get('phoneNumber')?.errors &&
-                  employeeForm.get('phoneNumber')?.errors!['phoneExists']">
+                  (employeeForm.get('phoneNumber')?.touched || submitted) && employeeForm.get('phoneNumber')?.errors && employeeForm.get('phoneNumber')?.errors!['phoneExists']">
 
             Phone number already exists.
           </span>
@@ -96,9 +86,7 @@
         <!-- <span matTextPrefix>+94 &nbsp;</span> -->
         <input type="tel" matInput placeholder="+94 55-555-1234 OR 055-555-1234" formControlName="emergencyPhoneNumber">
         <span class="text-danger" *ngIf="
-              (employeeForm.get('emergencyPhoneNumber')?.touched || submitted) && 
-              employeeForm.get('emergencyPhoneNumber')?.errors && 
-              employeeForm.get('emergencyPhoneNumber')?.errors!['pattern']">
+              (employeeForm.get('emergencyPhoneNumber')?.touched || submitted) && employeeForm.get('emergencyPhoneNumber')?.errors && employeeForm.get('emergencyPhoneNumber')?.errors!['pattern']">
             Please Insert a Valid Phone Number......
           </span>
         <mat-icon matSuffix>phone</mat-icon>
@@ -134,11 +122,6 @@
       <mat-form-field class="full-width">
         <mat-label>Employee Status</mat-label>
         <input matInput placeholder="Status" formControlName="employeeStatus" readonly>
-        <!-- <mat-select formControlName="employeeStatus">
-          <mat-option value="Active">Active</mat-option>
-          <mat-option value="Inactive">Inactive</mat-option>
-          <mat-option value="Delete">Delete</mat-option>
-        </mat-select> -->
       </mat-form-field>
     
       <mat-form-field class="full-width">
@@ -168,7 +151,6 @@
     </form>
   </div>
   <div class="table-section">
-    
     <div class="refresh-button-filter-section">
       <div class="refresh-button">
         <button mat-icon-button color="primary" (click)="refreshData()">
@@ -180,76 +162,55 @@
         <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
       </mat-form-field>
     </div>
-    
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-
-      <!--- Note that these columns can be defined in any order.
-            The actual rendered columns are set as a property on the row definition" -->
-    
-      <!-- Position Column -->
       <ng-container matColumnDef="fullName">
         <th mat-header-cell *matHeaderCellDef> Full Name </th>
         <td mat-cell *matCellDef="let element"> {{element.fullName}} </td>
       </ng-container>
-    
-      <!-- Name Column -->
       <ng-container matColumnDef="callingName">
         <th mat-header-cell *matHeaderCellDef> Calling Name </th>
         <td mat-cell *matCellDef="let element"> {{element.callingName}} </td>
       </ng-container>
-    
-      <!-- Weight Column -->
       <ng-container matColumnDef="nic">
         <th mat-header-cell *matHeaderCellDef> Nic Number </th>
         <td mat-cell *matCellDef="let element"> {{element.nic}} </td>
       </ng-container>
-    
-      <!-- Symbol Column -->
       <ng-container matColumnDef="dob">
         <th mat-header-cell *matHeaderCellDef> Birth Date </th>
         <td mat-cell *matCellDef="let element"> {{element.dob}} </td>
       </ng-container>
-
       <ng-container matColumnDef="gender">
         <th mat-header-cell *matHeaderCellDef> Gender </th>
         <td mat-cell *matCellDef="let element"> {{element.gender}} </td>
       </ng-container>
-
       <ng-container matColumnDef="address">
         <th mat-header-cell *matHeaderCellDef> Address </th>
         <td mat-cell *matCellDef="let element"> {{element.address}} </td>
       </ng-container>
-
       <ng-container matColumnDef="phoneNumber">
         <th mat-header-cell *matHeaderCellDef> Phone Number </th>
         <td mat-cell *matCellDef="let element"> {{element.phoneNumber}} </td>
       </ng-container>
-
       <ng-container matColumnDef="emergencyPhoneNumber">
         <th mat-header-cell *matHeaderCellDef> Energency Phone Number </th>
         <td mat-cell *matCellDef="let element"> {{element.emergencyPhoneNumber}} </td>
       </ng-container>
-
       <ng-container matColumnDef="bloodGroup">
         <th mat-header-cell *matHeaderCellDef> Blood Group </th>
         <td mat-cell *matCellDef="let element"> {{element.bloodGroup}} </td>
       </ng-container>
-
       <ng-container matColumnDef="employmentType">
         <th mat-header-cell *matHeaderCellDef> Employeement Type </th>
         <td mat-cell *matCellDef="let element"> {{element.employmentType}} </td>
       </ng-container>
-
       <ng-container matColumnDef="employeeStatus">
         <th mat-header-cell *matHeaderCellDef> Employee Status </th>
         <td mat-cell *matCellDef="let element"> {{element.employeeStatus}} </td>
       </ng-container>
-
       <ng-container matColumnDef="jobTitle">
         <th mat-header-cell *matHeaderCellDef> Job Title </th>
         <td mat-cell *matCellDef="let element"> {{element.jobTitle}} </td>
       </ng-container>
-
       <ng-container matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef> Action </th>
         <td mat-cell *matCellDef="let element"> 
@@ -259,8 +220,6 @@
           <button mat-icon-button color="primary" (click)="viewData(element)" matTooltip="View">
             <mat-icon>visibility</mat-icon>
           </button>
-          <!-- <button type="submit" mat-raised-button class="action-button"  >Create Login</button><br><br>
-          <button type="submit" mat-raised-button class="action-button" >Disable Login</button> -->
           <button mat-icon-button color="warn" (click)="confirmDelete(element)" matTooltip="Delete">
             <mat-icon>delete</mat-icon>
           </button><br>

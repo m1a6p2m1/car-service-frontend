@@ -37,9 +37,9 @@
         <td mat-cell *matCellDef="let element">{{ element.customer }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="assigneUserName">
+      <ng-container matColumnDef="assignUserName">
         <th mat-header-cell *matHeaderCellDef>Assignee</th>
-        <td mat-cell *matCellDef="let element">{{ element.assigneUserName }}</td>
+        <td mat-cell *matCellDef="let element">{{ element.assignUserName }}</td>
       </ng-container>
 
       <!-- lastName Column -->
@@ -74,12 +74,10 @@
         <th mat-header-cell *matHeaderCellDef>Action</th>
         <td mat-cell *matCellDef="let element">
           <button
-            mat-icon-button
-            color="warn"
+            class="btnUpdate"
             (click)="changeSubTaskStatus(element)"
-            matTooltip="Status Update"
           >
-            <mat-icon>edit</mat-icon>
+          Update Status
           </button>
         </td>
       </ng-container>

@@ -164,7 +164,7 @@ export class AttendanceMarkComponent implements OnInit {
     this.isAttendanceSavedToday = true; //disable dropdown//
     this.isButtonDisable = true;
     this.saveButtonLabel = 'Saved';
-    this.populateData();
+    // this.populateData();
   }
 
   enableEdit() {

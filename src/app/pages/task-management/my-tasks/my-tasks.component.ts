@@ -29,7 +29,7 @@ export interface UpdatedData {
 })
 export class MyTasksComponent implements OnInit{
 
-    displayedColumns: string[] = ['mainUniqueTaskNo','uniqueSubTaskNo', 'customer', 'assigneUserName', 'description', 'status', 'action'];
+    displayedColumns: string[] = ['mainUniqueTaskNo','uniqueSubTaskNo', 'customer', 'assignUserName', 'description', 'status', 'action'];
     dataSource!: MatTableDataSource<any>;
     updatedDataList: UpdatedData[] = [];
 

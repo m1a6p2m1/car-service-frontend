@@ -116,10 +116,21 @@ export class BillGenerateDetailsComponent implements OnInit{
   }
 
   public calculateTotalCost(): void {
+    // Reset total
+  this.totalCost = 0;
+
+  // Get service price
+  const servicePrice = +this.billGeneratedetailsForm.get('servicePrice')?.value || 0;
+
+  // Add service price first
+  this.totalCost += servicePrice;
+
+  // Add all subtask prices
     this.subTasks.controls.forEach(control => {
         const cost = +control.get('subTaskPrice')?.value;
         this.totalCost = this.totalCost + cost;
     });
+    // Update form
     this.billGeneratedetailsForm.patchValue({
       totalCost: this.totalCost
     });

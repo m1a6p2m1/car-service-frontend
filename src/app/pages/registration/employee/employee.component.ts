@@ -52,7 +52,6 @@ export class EmployeeComponent implements OnInit {
     'action',
   ];
 
-  // displayedColumns: string[] = ['fullName', 'callingName', 'nic', 'dob', 'gender', 'address', 'phoneNumber', 'emergencyPhoneNumber', 'bloodGroup', 'employmentType', 'employeeStatus', 'jobTitle', 'action'];
   dataSource!: MatTableDataSource<any>;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -353,7 +352,6 @@ export class EmployeeComponent implements OnInit {
         this.messageService.showError('Action Failed!');
       }
   }
-
   public inactiveEmployee(data: any): void {
     
     const message = 
@@ -370,9 +368,9 @@ export class EmployeeComponent implements OnInit {
             this.updateEmpStatus(data);
           }
         });
-      }
-  
-    updateEmpStatus(data: any){
+  }
+
+  updateEmpStatus(data: any){
       const employee = data.empNumber;
   
       if (!employee) {
@@ -410,7 +408,7 @@ export class EmployeeComponent implements OnInit {
           }
           
         });
-    }
+  }
 
   checkPhoneNumber(): void{
     const control  = this.employeeForm.get('phoneNumber');

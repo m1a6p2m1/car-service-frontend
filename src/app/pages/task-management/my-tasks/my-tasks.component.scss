@@ -123,3 +123,18 @@
         width: 120px;
     }
 }
+
+.btnUpdate{
+    width: 150px;
+    height: 38px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    background-color: rgb(231, 116, 34);
+    color: #1a1717;
+}
+.btnUpdate:hover{
+  background-color: rgb(107, 48, 5);
+  color: #eadede;
+}

@@ -162,8 +162,8 @@
                   placeholder="Search for User Here..."
                 />
               </mat-form-field> -->
-              <mat-option *ngFor="let technician of technicianList" [value]="technician.id">
-                {{ technician.name }}
+              <mat-option *ngFor="let employee of getEmployeeForSubTasks(i)" [value]="employee.id">
+                {{ employee.name }}
               </mat-option>
             </mat-select>
           </mat-form-field>

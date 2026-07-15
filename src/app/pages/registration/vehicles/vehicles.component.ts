@@ -8,6 +8,7 @@ import { MessageServiceService } from 'src/app/services/message-service/message-
 import { VehiclesService } from 'src/app/services/registration/vehicles.service';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { debounceTime } from 'rxjs';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -34,11 +35,14 @@ export class VehiclesComponent implements OnInit{
     customers: any = [];
     isEditMode: any;
 
+    userRole: string | null = '';
+
   constructor(
     private fb: FormBuilder,
     private vehiclesService: VehiclesService,
     private messageService: MessageServiceService,
     private _dialog: MatDialog,
+    private router: Router,
   ){
     this.vehiclesForm = this.fb.group({
       customerName: new FormControl(''),
@@ -52,6 +56,7 @@ export class VehiclesComponent implements OnInit{
     this.loadCustomerList();
     this.populateData();
     this.addVehicle(); // add first row automatically
+    this.userRole = localStorage.getItem('userRole');
   }
 
   onSubmit(){
@@ -233,6 +238,10 @@ export class VehiclesComponent implements OnInit{
 
     public refreshData(): void{
       this.populateData();
+    }
+
+    goBack() {
+      this.router.navigate(['/dashboard/customer-tasks'])
     }
 
     public resetData():void{

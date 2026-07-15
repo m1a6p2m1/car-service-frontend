@@ -66,3 +66,25 @@
 .btnReset{
   width: 280px;
 }
+.btnBack{
+  margin-top: 8px;
+  width: 570px;
+  height: 38px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  align-items: flex-end;
+  justify-content: center;
+  align-content: center;
+  background-color: #191b1b;
+  color: #d2d8d9;
+  
+}
+.btnBack:hover{
+  background-color: #9e9b9b;
+  color: #222020;
+}
+.mat-icon{
+  padding-top: 5px;
+}

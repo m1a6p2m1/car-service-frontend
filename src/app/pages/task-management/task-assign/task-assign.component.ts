@@ -56,7 +56,7 @@ export class TaskAssignComponent implements OnInit {
 
   selectedOptions: any[] = [];
   selectedServices: string = "";
-  additionalServices: any[] = [];
+  additionalServices: any[] = []; 
 
   // users = [
   //   { id: 1, name: 'Alice' },
@@ -71,6 +71,7 @@ export class TaskAssignComponent implements OnInit {
   showEmailField = false;
   superVisorList: Employee[] = [];
   technicianList: Employee[] = [];
+  driverList: Employee[] = [];
   allEmployees: any[] = [];
   attendanceList: any[] = [];
   isInitializing: boolean = false;
@@ -253,7 +254,8 @@ export class TaskAssignComponent implements OnInit {
   onAppointmentSelect(appointmentUniqueNo: string){
     this.taskAssignService.getDetailsByAppointmentNo(appointmentUniqueNo)
       .subscribe((res:any)=>{
-        console.log(res);
+        console.log("Appointment Details:", res);
+
 
         const customer = this.customers.find(
           (c: any) => 
@@ -267,8 +269,11 @@ export class TaskAssignComponent implements OnInit {
           customerId: customer ? customer.id : null,
           licencePlate: res.licencePlate,
           vehicleType: res.vehicleType,
-          additionalServices: res.additionalServices
+          // additionalServices: res.additionalServices
         });
+
+        this.addAdditioanlServicesToSubTasks(res.additionalServices);
+        this.addServiceTypeToSubTasks(res.serviceType);
 
         const selectedServiceNames = (res.additionalServices || '')
         .split(',')                      //"Oil Change,Engine Wash,Filter Change"  ---> ["Oil Change","Engine Wash","Filter Change"]
@@ -278,71 +283,6 @@ export class TaskAssignComponent implements OnInit {
           selectedServiceNames.includes(service.additionalServicesName)
         );
       });
-  }
-
-  onSubmit() {
-    try {
-      let formData = this.taskAssignForm.getRawValue();
-
-      if(formData.time) {
-        formData.time = this.convertTo24Hour(formData.time);
-      }
-
-      if (formData.date instanceof Date) {
-        formData.date = this.formatDateLocal(formData.date);
-      }
-      formData.status = 'Start';
-
-      console.log("Final Payload:", formData);
-
-      if (this.mode === 'add') {
-        this.taskAssignService.serviceCall(formData).subscribe(
-          (response) => {
-            if (
-              this.dataSource &&
-              this.dataSource.data &&
-              this.dataSource.data.length > 0
-            ) {
-              this.dataSource = new MatTableDataSource([
-                response,
-                ...this.dataSource.data,
-              ]);
-            }
-            this.dataSource = new MatTableDataSource([response]);
-            this.messageService.showSuccess('Data Saved Successfully !');
-          },
-          (error) => {
-            this.messageService.showError('Action Failed with Error :' + error);
-          }
-        );
-      } else if (this.mode === 'edit') {
-        this.taskAssignService
-          .editData(this.selectData.id, formData)
-          .subscribe({
-            next: (response: any) => {
-              let elementIndex = this.dataSource.data.findIndex(
-                (element) => element.id === this.selectData?.id
-              );
-
-              response.date = response.date;
-              response.time = response.time;
-
-              this.dataSource.data[elementIndex] = response;
-              this.dataSource = new MatTableDataSource(this.dataSource.data);
-              this.messageService.showSuccess('Data Edited Successfully !');
-            },
-            error: (error) => {
-              this.messageService.showError(
-                'Action Failed with Error :' + error
-              );
-            },
-          });
-      }
-    } catch (error) {
-      this.messageService.showError('Action Failed with Error:' + error);
-    }
-    this.isButtonDisable = true;
-    this.taskAssignForm.disable();
   }
 
   ngOnInit(): void {
@@ -386,13 +326,191 @@ export class TaskAssignComponent implements OnInit {
         }
       });
 
-      this.additionalServicesService.getData().subscribe((resopnse:any)=>{
+      this.taskAssignForm.patchValue({
+        date: new Date() //show today date
+      });
+      this.loadAdditionalServices();
+
+    // this.filteredUsers = this.users;
+  }
+
+  loadAdditionalServices() {
+    this.additionalServicesService.getData().subscribe((resopnse:any)=>{
+        console.log("Available services:", this.additionalServices);
       this.additionalServices = resopnse.filter(
         (service:any) => service.status === "Yes"
       );
     })
+  }
 
-    // this.filteredUsers = this.users;
+  loadSavedSubTasks(subTasks: any[]) {
+
+    const subTasksArray = this.subTasks;
+
+    // clear existing subtasks
+    subTasksArray.clear();
+
+    // add saved subtasks
+    subTasks.forEach((subTask: any) => {
+
+      subTasksArray.push(
+        this.fb.group({
+          id: [subTask.id],
+          description: [
+            { value: subTask.description, disabled: true }
+          ],
+          assignedUserId: [
+            subTask.assignedUserId
+          ],
+          assigneUserName: [
+            subTask.assigneUserName
+          ]
+        })
+      );
+
+    });
+
+  }
+
+  disableAssignToField() {
+
+  const subTaskArray = this.taskAssignForm.get('subTasks') as FormArray;
+
+  subTaskArray.controls.forEach((subTaskGroup: any) => {
+
+    subTaskGroup.get('assignedUserId')?.disable();
+    subTaskGroup.get('assignUserName')?.disable();
+
+  });
+
+}
+
+  onSubmit() {
+    try {
+      let formData = this.taskAssignForm.getRawValue();
+
+      if(formData.time) {
+        formData.time = this.convertTo24Hour(formData.time);
+      }
+
+      if (formData.date instanceof Date) {
+        formData.date = this.formatDateLocal(formData.date);
+      }
+      formData.status = 'Start';
+
+      console.log("Final Payload:", formData);
+
+      if (this.mode === 'add') {
+        this.taskAssignService.serviceCall(formData).subscribe(
+          (response: any) => {
+            console.log("Saved Response:", response);
+            console.log(response.subTasks);
+            if(response.subTasks && response.subTasks.length > 0){
+                this.loadSavedSubTasks(response.subTasks);
+            }
+
+            if (
+              this.dataSource &&
+              this.dataSource.data &&
+              this.dataSource.data.length > 0
+            ) {
+              this.dataSource = new MatTableDataSource([
+                response,
+                ...this.dataSource.data,
+              ]);
+            } 
+            // else{
+            //     this.dataSource = new MatTableDataSource([response]);
+            // }
+            // this.dataSource.paginator = this.paginator;
+            // this.dataSource.sort = this.sort;
+             this.dataSource = new MatTableDataSource([response]);
+             this.disableAssignToField();
+            this.messageService.showSuccess('Data Saved Successfully !');
+          },
+          (error) => {
+            this.messageService.showError('Action Failed with Error :' + error);
+          }
+        );
+      } else if (this.mode === 'edit') {
+        this.taskAssignService
+          .editData(this.selectData.id, formData)
+          .subscribe({
+            next: (response: any) => {
+              let elementIndex = this.dataSource.data.findIndex(
+                (element) => element.id === this.selectData?.id
+              );
+
+              response.date = response.date;
+              response.time = response.time;
+
+              this.dataSource.data[elementIndex] = response;
+              this.dataSource = new MatTableDataSource(this.dataSource.data);
+              this.messageService.showSuccess('Data Edited Successfully !');
+            },
+            error: (error) => {
+              this.messageService.showError(
+                'Action Failed with Error :' + error
+              );
+            },
+          });
+      }
+    } catch (error) {
+      this.messageService.showError('Action Failed with Error:' + error);
+    }
+    this.isButtonDisable = true;
+    this.taskAssignForm.disable();
+    console.log(this.subTasks.value);
+    
+  }
+  
+  //auto load selected additional services in to the sub task array form
+  private addAdditioanlServicesToSubTasks(additionalServices: string): void {
+    if(!additionalServices) {
+      return;
+    }
+    const services = additionalServices
+                          .split(',')
+                          .map(service => service.trim());
+
+    services.forEach(service => {
+
+      //Avoid Duplicates
+      const exists = this.subTasks.controls.some(control =>
+        control.get('description')?.value === service
+      );
+
+      if(!exists) {
+        this.subTasks.push(
+          this.fb.group({
+            description: [{value: service, disabled: true}],
+            assignedUserId: [''],
+            assignUserName: ['']
+          })
+        );
+      }
+    });
+  }
+
+  //add Drive Vehicle field in to the subtask array form when select the pick-up/drop-off and remote service
+  private addServiceTypeToSubTasks(serviceType: string) {
+    if(serviceType === 'Pick-up/ Drop-off Service' ||
+       serviceType === 'Remote Service'
+    ) {
+      const exists = this.subTasks.controls.some(control =>
+        control.get('description')?.value === 'Drive Vehicle'
+      );
+
+      if(!exists) {
+        this.subTasks.insert(0,
+          this.fb.group({
+          description: [{value: 'Drive Vehicle', disabled: true }],
+          assignedUserId: [''],
+          assignUserName: ['']
+        })
+      );
+      }
+    }
   }
 
   public setCreatedByValue(): void {
@@ -444,7 +562,7 @@ export class TaskAssignComponent implements OnInit {
     return this.fb.group({
       description: { disabled: true, value: item.subTaskName },
       assignedUserId: '',
-      assigneUserName: ''
+      assignUserName: ''
     });
   }
 
@@ -458,7 +576,7 @@ export class TaskAssignComponent implements OnInit {
         id: [null],
         description: [''],
         assignedUserId: [''],
-        assigneUserName: ['']
+        assignUserName: ['']
       })
     );
   }
@@ -493,8 +611,12 @@ export class TaskAssignComponent implements OnInit {
   }
 
   public editData(data: any) {
+    console.log("Edit Data:", data);
     this.resetData();
     this.mode = 'edit';
+
+    console.log("data.additionalServices =", data.additionalServices);
+    console.log("additionalServices list =", this.additionalServices);
 
     this.isInitializing = true
 
@@ -525,6 +647,31 @@ export class TaskAssignComponent implements OnInit {
     },
       {emitEvent: false }//stop valuechanges here
     );
+
+    // Load Additional Services
+    this.additionalServicesService.getData().subscribe((response: any) => {
+
+      this.additionalServices = response.filter(
+        (service: any) => service.status === "Yes"
+      );
+
+
+      // Get additional services from subTasks
+      const additionalServiceNames = data.subTasks.map(
+        (subTask: any) => subTask.description
+      );
+
+
+      this.selectedOptions = this.additionalServices.filter(
+        (service: any) =>
+          additionalServiceNames.includes(service.additionalServicesName)
+      );
+
+
+      console.log("Additional Service Names:", additionalServiceNames);
+      console.log("Selected Services:", this.selectedOptions);
+
+    });
     this.taskAssignForm.enable();
     this.taskAssignForm.get('taskCreatedBy')?.disable();
     this.taskAssignForm.get('status')?.disable();
@@ -557,14 +704,14 @@ export class TaskAssignComponent implements OnInit {
       this.isInitializing = false;
     }, 0);
 
-
+    //load subtasks
     data.subTasks.forEach((subTask: any) => {
       this.subTasks.push(
         this.fb.group({
           id: [subTask.id],
           description: [subTask.description],
           assignedUserId: [subTask.assignedUserId],
-          assigneUserName: [subTask.assigneUserName]
+          assignUserName: [subTask.assignUserName]
         })
       );
     });
@@ -686,7 +833,7 @@ export class TaskAssignComponent implements OnInit {
     const empName = emp?.name;
 
     const itemGroup = this.subTasks.at(index) as FormGroup;
-    itemGroup.get('assigneUserName')?.patchValue(empName);
+    itemGroup.get('assignUserName')?.patchValue(empName);
   }
 
   onTaskFilterKeyPress(eventTarget: any) {
@@ -741,9 +888,11 @@ export class TaskAssignComponent implements OnInit {
     // };
   }
 
+  //filter Active employees to supervisor, driver and technician assign to fields
   filterEmployeesByAttendance() {
     this.superVisorList = [];
     this.technicianList = [];
+    this.driverList = [];
 
     if(!this.attendanceList?.length || this.attendanceList.length === 0){
       console.warn("No attendance found");
@@ -781,12 +930,25 @@ export class TaskAssignComponent implements OnInit {
       if (emp.empStatus === 'Active' && emp.position === 'Technician') {
         this.technicianList.push(employeeData);
       }
+
+      if (emp.empStatus === 'Active' && emp.position === 'Driver') {
+        this.driverList.push(employeeData);
+      }
     });
 
     
   console.log("Supervisor List:", this.superVisorList);
   console.log("Technician List:", this.technicianList);
   }
+
+  //get assign-to field to driver or technician
+  getEmployeeForSubTasks(index: number): Employee[] {
+    const description = this.subTasks.at(index).get('description')?.value;
+    if(description === 'Drive Vehicle') {
+      return this.driverList;
+    }
+    return this.technicianList;
+  } 
 
   public setEmployeeList(): void {
     // let employeeList: Employee[] = [];
@@ -827,7 +989,7 @@ export class TaskAssignComponent implements OnInit {
     // this.technicianList = employeeList.filter((emp: any) => {})
   }
 
-   public onAdditionalServiceChange(service: any, event: MatCheckboxChange): void {
+  public onAdditionalServiceChange(service: any, event: MatCheckboxChange): void {
       if (event.checked) {
         this.selectedOptions.push(service);
       } else {
@@ -837,7 +999,7 @@ export class TaskAssignComponent implements OnInit {
       this.selectedServices = this.selectedOptions
       .map(s => s.additionalServicesName)
       .join(',');
-    }
+  }
 
 
   
