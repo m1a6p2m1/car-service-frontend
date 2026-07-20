@@ -1,7 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, FormArray } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
 import { AdditionalServicesService } from 'src/app/services/task-management/additional-services.service';
+import { TaskAssignService } from 'src/app/services/task-management/task-assign.service';
 import { TaskIntroduceService } from 'src/app/services/task-management/task-introduce.service';
 
 @Component({
@@ -14,11 +16,15 @@ export class BillGenerateDetailsComponent implements OnInit{
   billGeneratedetailsForm: FormGroup;
   taskBillDetails: any;
   totalCost = 0;
+  isButtonDisable = false;
+  billGeneratedButtonLabel = 'Bill Generate';
   constructor(
     private fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data:any,
     private taskIntroduceService: TaskIntroduceService,
-    private additionalServicesService: AdditionalServicesService
+    private additionalServicesService: AdditionalServicesService,
+    private taskAssignService: TaskAssignService,
+    private messageService: MessageServiceService,
   ){
     this.billGeneratedetailsForm = this.fb.group({
       taskName: [''],
@@ -40,7 +46,7 @@ export class BillGenerateDetailsComponent implements OnInit{
 
   createSubTask(task:any):FormGroup{
     return this.fb.group({
-
+      id: [task.id],
       description:[task.description],
       subTaskPrice:[task.subTaskPrice]
 
@@ -52,7 +58,7 @@ export class BillGenerateDetailsComponent implements OnInit{
   loadTaskDetails(){
 
     this.billGeneratedetailsForm.patchValue({
-
+      
       taskName: this.data.taskName,
       serviceType: this.data.serviceType,
       servicePrice: this.data.servicePrice
@@ -72,6 +78,8 @@ export class BillGenerateDetailsComponent implements OnInit{
     this.calculateTotal();
 
   }
+
+  
 
   calculateTotal(){
     this.popultePriceDetails();
@@ -134,5 +142,65 @@ export class BillGenerateDetailsComponent implements OnInit{
     this.billGeneratedetailsForm.patchValue({
       totalCost: this.totalCost
     });
+
+    console.log(this.billGeneratedetailsForm.value);
+  }
+
+  generateBill(){
+
+    const requestData = {
+
+    subTasks:
+    this.billGeneratedetailsForm.value.subTasks
+
+  };
+
+
+  this.taskAssignService
+      .updateSubTaskPrices(
+          this.data.id,
+          requestData
+      )
+      .subscribe({
+
+        next:()=>{
+
+          console.log("Step 1: Prices updated successfully");
+         //2nd step
+         this.taskAssignService.generateBill(this.data.id).subscribe({
+          next: (response) => {
+            console.log("Step 2: Bill generated", response);
+            this.messageService.showSuccess("Bill Generated and Saves Successfully..")
+            
+          },
+          error: (err) =>  {
+            console.log("Bill generation error:", err);
+            this.messageService.showError("Bill Generation Failed...");
+            this.afterSave();
+          }
+         });
+
+        },
+
+        error:(err)=>{
+          console.log("Full error:", JSON.stringify(err));
+          console.log("Error status:", err?.status);
+          console.log("Error message:", err?.message);
+          console.log("Error body:", err?.error);
+
+          this.messageService.showError("Failed to Save Sub Tasks Prices.")
+
+        }
+
+      });
+
+  }
+
+  afterSave() {
+
+    // this.mode = 'view';
+    this.billGeneratedetailsForm.disable(); 
+    this.isButtonDisable = true;
+    this.billGeneratedButtonLabel = 'Bill Generated';
   }
 }

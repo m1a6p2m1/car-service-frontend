@@ -95,8 +95,10 @@
     <button
       mat-raised-button
       color="primary"
-      type="button">
-      Generate Bill
+      type="button"
+      (click)="generateBill()"
+      [disabled]="isButtonDisable">
+      {{billGeneratedButtonLabel}}
     </button>
   </div>
 </form>

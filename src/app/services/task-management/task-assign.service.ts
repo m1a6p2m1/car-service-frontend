@@ -249,5 +249,37 @@ export class TaskAssignService {
 
     return this.http.get(requestUrl, headers);
   }
+
+
+  //update subtask prices
+  updateSubTaskPrices(id:number, requestData:any){
+
+    let requestUrl = environment.baseUrl + `/task-assign/${id}/sub-task-prices`;
+    
+
+    const headers = {
+    Authorization: 'Bearer ' + this.httpService.getAuthToken()
+  };
+    return this.http.put(requestUrl, requestData, {
+      headers: headers,
+      responseType: 'text'
+    });
+
+  }
+
+  //generate bill and save bill
+  generateBill(id: number){
+     let requestUrl = environment.baseUrl + `/task-assign/${id}/generate-bill`;
+     
+
+    const headers = {
+    Authorization: 'Bearer ' + this.httpService.getAuthToken()
+  };
+
+    return this.http.post(requestUrl,{}, { 
+      headers: headers,
+      responseType: 'text'
+     });
+  }
   
 }

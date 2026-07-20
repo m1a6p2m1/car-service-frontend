@@ -177,4 +177,24 @@ isActionAllowed(appointmentDate: string |Date): boolean {
   return appDate.getTime() >= today.getTime(); //allows today + future 
 }
 
+//display bill
+viewBill(id: number) {
+
+  this.appointmentService.viewBill(id)
+    .subscribe((response: Blob) => {
+
+      const fileURL = URL.createObjectURL(response);
+
+      const pdfWindow = window.open(fileURL, '_blank');
+
+      if (pdfWindow) {
+        pdfWindow.onload = () => {
+          URL.revokeObjectURL(fileURL);
+        };
+      }
+
+    });
+
+}
+
 }

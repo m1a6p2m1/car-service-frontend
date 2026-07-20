@@ -312,7 +312,54 @@ export class CustomerFeedbackComponent implements OnInit{
 }
 
   public viewData(data: any):void{
-    this.customerFeedbackForm.patchValue(data);
+    // Convert backend date array to Date object
+    let serviceDateObj = null;
+
+    if (Array.isArray(data.serviceDate)) { // check date format from backend
+      serviceDateObj = new Date(   //convert array into java script date
+        data.serviceDate[0],         //year
+        data.serviceDate[1] - 1,     //month
+        data.serviceDate[2]          //date
+      );
+    }
+
+    // Patch form
+    this.customerFeedbackForm.patchValue({
+      ...data,
+      serviceDate: serviceDateObj          //replaces the original array date with the converted Date object
+    });
+
+    // Load license dropdown again if we have a valid date
+    const customerId = localStorage.getItem('id');
+
+    if (serviceDateObj && customerId) {
+      const formattedDate = this.formatDateLocal(serviceDateObj); //Convert Date into Backend Format
+
+      this.customerFeedbackService
+        .getLicenseByDateAndCustomer(formattedDate, customerId)
+        .subscribe({
+          next: (res: License[]) => {
+            this.licenses = res;                      // store license list
+
+            // Re-set selected license after options loaded
+            this.customerFeedbackForm.patchValue({
+              licencePlate: data.licencePlate
+            });
+          }
+        });
+    }
+
+    // Restore star rating
+    if (data.serviceQuality) {
+
+      // "5-Excellent" -> 5
+      const ratingValue = parseInt(
+        data.serviceQuality.toString().split('-')[0]
+      );
+
+      this.rating = ratingValue;
+    }
+    this.customerFeedbackForm.disable();
     this.isButtonDisable = true;
   }
 

@@ -187,6 +187,17 @@ export class AppointmentService {
 
     return this.http.delete(requestUrl, {headers: headers});
   }
+
+  viewBill(id:number){
+
+    return this.http.get(
+      `http://localhost:8080/appointment/${id}/bill`,
+      {
+        responseType:'blob'
+      }
+    );
+
+  }
   
 
 }

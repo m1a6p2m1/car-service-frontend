@@ -63,6 +63,9 @@
           <button mat-icon-button color="warn" [disabled]="!isActionAllowed(element.date)" (click)="confirmDelete(element)" matTooltip="Delete">
             <mat-icon>delete</mat-icon>
           </button>
+          <button type="submit" mat-raised-button color="primary" (click)="viewBill(element.id)">
+            View Bill
+          </button>
         </td>
       </ng-container>
 
