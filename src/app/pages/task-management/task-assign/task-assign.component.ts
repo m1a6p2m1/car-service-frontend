@@ -362,8 +362,8 @@ export class TaskAssignComponent implements OnInit {
           assignedUserId: [
             subTask.assignedUserId
           ],
-          assigneUserName: [
-            subTask.assigneUserName
+          assignUserName: [
+            subTask.assignUserName
           ]
         })
       );
@@ -433,6 +433,8 @@ export class TaskAssignComponent implements OnInit {
           }
         );
       } else if (this.mode === 'edit') {
+
+        console.log("Edit Payload:", formData);
         this.taskAssignService
           .editData(this.selectData.id, formData)
           .subscribe({
@@ -709,12 +711,14 @@ export class TaskAssignComponent implements OnInit {
       this.subTasks.push(
         this.fb.group({
           id: [subTask.id],
-          description: [subTask.description],
+          description: [{value: subTask.description, disabled: true}],
           assignedUserId: [subTask.assignedUserId],
           assignUserName: [subTask.assignUserName]
         })
       );
     });
+
+    this.setEmployeeList();
 
     this.selectData = data;
     this.saveButtonLabel = 'Edit';

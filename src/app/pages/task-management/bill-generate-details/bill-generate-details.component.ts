@@ -170,13 +170,13 @@ export class BillGenerateDetailsComponent implements OnInit{
          this.taskAssignService.generateBill(this.data.id).subscribe({
           next: (response) => {
             console.log("Step 2: Bill generated", response);
-            this.messageService.showSuccess("Bill Generated and Saves Successfully..")
+            this.messageService.showSuccess("Bill Generated and Saves Successfully..");
+            this.afterSave();
             
           },
           error: (err) =>  {
             console.log("Bill generation error:", err);
             this.messageService.showError("Bill Generation Failed...");
-            this.afterSave();
           }
          });
 

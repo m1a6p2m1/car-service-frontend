@@ -279,14 +279,14 @@ export class AppointmentServiceComponent implements OnInit{
   loadEditData(): void {
     console.log('loadEditData called');
 
-    this.isBackButtonDisable = true;
+    // this.isBackButtonDisable = true;
     console.log('Button disabled:', this.isBackButtonDisable);
     const state = history.state;
     if (state?.appointmentData) {
       console.log('Edit mode detected');
       this.appointmentData = state.appointmentData;
       this.isEditMode = state.isEditMode;
-      this.isBackButtonDisable = true;
+      this.isBackButtonDisable = false;
       console.log('Button disabled after edit:', this.isBackButtonDisable);
       // this.appointmentButtonLabel = 'Edit Appointment';
       
@@ -777,6 +777,13 @@ export class AppointmentServiceComponent implements OnInit{
   }
 
   previous(): void {
+  
+    if (this.isEditMode) {
+    // Go back to all appointments page when editing
+      this.router.navigate(['/appointment/all-appointments']);
+      return;
+    }
+
     if (this.taskId >= 1) {
       this.router.navigate(['/dashboard/task-detail', this.taskId]);
     }
