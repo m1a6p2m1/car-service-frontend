@@ -777,6 +777,10 @@ export class TaskAssignComponent implements OnInit {
     while (subTasksFormArray.length !== 0) {
         subTasksFormArray.removeAt(0);
     }
+
+    this.taskAssignForm.patchValue({
+        date: new Date() //show today date
+      });
   }
 
   public refreshData(): void {

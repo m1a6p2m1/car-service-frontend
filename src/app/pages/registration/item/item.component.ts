@@ -72,9 +72,9 @@ export class ItemComponent implements OnInit {
       description: new FormControl(''),
       unitOfMeasure: new FormControl('',[Validators.required]),
       reorderLevel: new FormControl('', [Validators.required]),
-      image: new FormControl('', [Validators.required]),
-      imageName: new FormControl(''),
-      imageType: new FormControl(''),
+      // image: new FormControl('', [Validators.required]),
+      // imageName: new FormControl(''),
+      // imageType: new FormControl(''),
     });
   }
 
@@ -164,52 +164,53 @@ export class ItemComponent implements OnInit {
     }
   }
 
-  public prepareItemData(): FormData {
-    const itemFormData = new FormData();
-    // demoFormData.append('demoForm', this.demoForm.value);
-    itemFormData.append(
-      'itemForm',
-      new Blob([JSON.stringify(this.itemForm.value)], {
-        type: 'application/json',
-      })
-    );
+  // public prepareItemData(): FormData {
+  //   const itemFormData = new FormData();
+  //   // demoFormData.append('demoForm', this.demoForm.value);
+  //   itemFormData.append(
+  //     'itemForm',
+  //     new Blob([JSON.stringify(this.itemForm.value)], {
+  //       type: 'application/json',
+  //     })
+  //   );
 
-    if (this.isFileSelected) {
-      itemFormData.append(
-        'image',
-        this.itemForm.get('image')?.value,
-        this.itemForm.get('image')?.value.name
-      );
-    } else {
-      const imageBlob = this.base64ToBlob(
-        this.itemForm.get('image')?.value,
-        this.itemForm.get('imageType')?.value
-      );
-      const file = new File(
-        [imageBlob],
-        this.itemForm.get('imageName')?.value,
-        { type: this.itemForm.get('imageType')?.value }
-      );
-      itemFormData.append('image', file, file.name);
-      this.fileButtonDisable = false;
-    }
-    return itemFormData;
-  }
+  //   if (this.isFileSelected) {
+  //     itemFormData.append(
+  //       'image',
+  //       this.itemForm.get('image')?.value,
+  //       this.itemForm.get('image')?.value.name
+  //     );
+  //   } else {
+  //     const imageBlob = this.base64ToBlob(
+  //       this.itemForm.get('image')?.value,
+  //       this.itemForm.get('imageType')?.value
+  //     );
+  //     const file = new File(
+  //       [imageBlob],
+  //       this.itemForm.get('imageName')?.value,
+  //       { type: this.itemForm.get('imageType')?.value }
+  //     );
+  //     itemFormData.append('image', file, file.name);
+  //     this.fileButtonDisable = false;
+  //   }
+  //   return itemFormData;
+  // }
 
-  base64ToBlob(base64: string, mimeType: string): Blob {
-    const byteCharacters = atob(base64);
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
-    return new Blob([byteArray], { type: mimeType });
-  }
+  // base64ToBlob(base64: string, mimeType: string): Blob {
+  //   const byteCharacters = atob(base64);
+  //   const byteNumbers = new Array(byteCharacters.length);
+  //   for (let i = 0; i < byteCharacters.length; i++) {
+  //     byteNumbers[i] = byteCharacters.charCodeAt(i);
+  //   }
+  //   const byteArray = new Uint8Array(byteNumbers);
+  //   return new Blob([byteArray], { type: mimeType });
+  // }
 
   onSubmit() {
     // console.log('form submited');
     // console.log('this.itemForm.value');
     try {
+      let formData = this.itemForm.getRawValue();
       this.submitted = true;
       if (this.itemForm.invalid) {
         return;
@@ -217,7 +218,7 @@ export class ItemComponent implements OnInit {
 
       if (this.mode === 'add') {
         console.log('Mode:' + this.mode);
-        this.itemService.serviceCall(this.prepareItemData()).subscribe({
+        this.itemService.serviceCall(formData).subscribe({
           next: (response) => {
             if (
               this.dataSource &&
@@ -241,7 +242,7 @@ export class ItemComponent implements OnInit {
       } else if (this.mode === 'edit') {
         console.log('Mode:' + this.mode);
         this.itemService
-          .editData(this.selectData.itemId, this.prepareItemData())
+          .editData(this.selectData.itemId, formData)
           .subscribe({
             next: (response) => {
               let elementIndex = this.dataSource.data.findIndex(

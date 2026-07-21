@@ -64,11 +64,27 @@
         <mat-form-field class="full-width">
           <mat-label>Product Supplied</mat-label>
           <mat-select formControlName="productSupplied"  multiple>
-            <mat-option value="Car Wash Chemicals">Car Wash Chemicals</mat-option>
+            <mat-option
+            *ngFor="let category of itemCategories"
+            [value]="category.name"
+          >
+            {{ category.name }}
+          </mat-option>
+            <!-- <mat-option value="Car Wash Chemicals">Car Wash Chemicals</mat-option>
             <mat-option value="Oils">Oils</mat-option>
             <mat-option value="Spare Parts">Spare Parts</mat-option>
-            <mat-option value="Cleaning Equipments">Cleaning Equipments</mat-option>
+            <mat-option value="Cleaning Equipments">Cleaning Equipments</mat-option> -->
           </mat-select>
+          <span
+          class="text-danger"
+          *ngIf="
+            (supplierForm.get('productSupplied')?.touched || submitted) &&
+            supplierForm.get('productSupplied')?.errors &&
+            (supplierForm.get('productSupplied')?.errors)!['required']
+          "
+        >
+          Category Name is Required....!
+        </span>
         </mat-form-field>
       
         <button type="submit" mat-raised-button color="primary" class="form-button" [disabled]="isButtonDisable">{{saveButtonLabel}}</button>
@@ -140,7 +156,7 @@
             <button mat-icon-button color="warn" (click)="editData(element)" matTooltip="Edit">
               <mat-icon>edit</mat-icon>
             </button>
-            <button mat-icon-button color="warn" (click)="deleteData(element)" matTooltip="Delete">
+            <button mat-icon-button color="warn" (click)="confirmDelete(element)" matTooltip="Delete">
               <mat-icon>delete</mat-icon>
             </button>
           </td>

@@ -5,8 +5,16 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
 import { SupplierService } from 'src/app/services/registration/supplier.service';
+import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 const ELEMENT_DATA: any[] = [{ supplierName: '', companyName: '', businessAddress: '', nic:'', phoneNumber:'', email:'', productSupplied:''}];
+
+interface ItemCategory {
+  id:number;
+  name: string;
+  // selectedOption: string;
+}
 
 
 @Component({
@@ -35,7 +43,8 @@ export class SupplierComponent implements OnInit {
   constructor ( 
     private fb:FormBuilder,
     private supplierService: SupplierService,
-    private messageService:MessageServiceService
+    private messageService:MessageServiceService,
+    private _dialog: MatDialog,
   ) {
     this.supplierForm = this.fb.group ({
       supplierName: new FormControl('', [Validators.required]),
@@ -47,6 +56,19 @@ export class SupplierComponent implements OnInit {
       productSupplied: new FormControl('')
     });
   }
+
+  itemCategories: ItemCategory[] = [
+    {id:1, name:'Washing Equipments'},
+    {id:2, name:'Cleaning Chemicals'},
+    {id:3, name:'Cleaning Equipments'},
+    {id:4, name:'Drying Equipments'},
+    {id:5, name:'Spare Parts'},
+    {id:6, name:'Break Systems'},
+    {id:7, name:'Electrical'},
+    {id:8, name:'Lubricants & Oils'},
+    {id:9, name:'Filters'},
+    {id:10, name:'Other'},
+  ];
 
   ngOnInit(): void {
     console.log('oninit');
@@ -143,6 +165,18 @@ export class SupplierComponent implements OnInit {
     this.selectedData = data;
   }
 
+  public confirmDelete(data: any): void {
+      const dialogRef = this._dialog.open(ConfirmDialogComponent, {
+        data: 'Are you sure you want to delete this Supplier?',
+      });
+  
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.deleteData(data);
+        }
+      });
+    }
+
   public deleteData(data:any){
     try {
       const supplierId = data.supplierId;
@@ -174,6 +208,7 @@ export class SupplierComponent implements OnInit {
     this.supplierForm.setErrors = null!;
     this.supplierForm.updateValueAndValidity();
     this.submitted = false;
+    this.populateData();
   }
 
   public refreshData(){
