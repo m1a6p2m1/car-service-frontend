@@ -46,7 +46,7 @@ export class CustomerComponent implements OnInit{
       email: new FormControl('', [Validators.email]),
       gender: new FormControl(''),
       address: new FormControl(''),
-      contactNumber: new FormControl('', [Validators.pattern('^(\\+94|0)[1-9]{2}[0-9]{7}$|^(\\+94|0)?7[0-9]{8}$')]),//, [Validators.pattern('^(\+94|0)?[1-9]{2}[0-9]{7}$|^(\\+94|0)?7[0-9]{8}$')]
+      contactNumber: new FormControl('', [Validators.pattern('^(\\+94|0)?[1-9]{2}[0-9]{7}$|^(\\+94|0)?7[0-9]{8}$')]),//, [Validators.pattern('^(\+94|0)?[1-9]{2}[0-9]{7}$|^(\\+94|0)?7[0-9]{8}$')]
       licencePlate: new FormControl(''),
       vehicleType: new FormControl(''),
       vehicleModel: new FormControl(''),
@@ -118,6 +118,7 @@ export class CustomerComponent implements OnInit{
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         console.log('server response: ',response);
+        console.log('server response: ', response);
       },
       (error)=>{
         this.messageService.showError('Action Failed with Error :'+ error);
@@ -186,8 +187,9 @@ export class CustomerComponent implements OnInit{
           const dialogRef = this._dialog.open(CustomerLoginDetailsComponent, {
       data: {
         customerId: customer.cusId,
-        firstName: customer.firstName,
-        lastName: customer.lastName
+        firstName: customer.firstName?.split(' ')[0] ?? '',
+        lastName: customer.lastName?.split(' ')[1] ?? '',
+        loginCreated: customer.loginCreated
       }
       });
           dialogRef.afterClosed().subscribe({

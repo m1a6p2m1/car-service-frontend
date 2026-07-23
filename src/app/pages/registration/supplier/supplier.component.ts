@@ -211,6 +211,50 @@ export class SupplierComponent implements OnInit {
     this.populateData();
   }
 
+  checkPhoneNumber(): void{
+    const control  = this.supplierForm.get('phoneNumber');
+
+    if(!control || control.invalid || !control.value) {
+      return;
+    }
+
+    this.supplierService.checkPhoneNumber(control.value).subscribe((exists: boolean)  => {
+      // this.phoneExists = exists ;
+
+      const errors = { ...(control.errors || {}) };
+
+      if (exists) {
+        errors['phoneExists'] = true;
+      } else {
+        delete errors['phoneExists'];
+      }
+
+      control.setErrors(Object.keys(errors).length ? errors :null);
+    });
+  }
+
+  checkNicNumber():void {
+    const control  = this.supplierForm.get('nic');
+
+    if(!control || control.invalid || !control.value) {
+      return;
+    }
+
+    this.supplierService.checkNicNumber(control.value).subscribe((exists: boolean)  => {
+      // this.phoneExists = exists ;
+
+      const errors = { ...(control.errors || {}) };
+
+      if (exists) {
+        errors['nicExists'] = true;
+      } else {
+        delete errors['nicExists'];
+      }
+
+      control.setErrors(Object.keys(errors).length ? errors :null);
+    });
+  }
+
   public refreshData(){
     this.populateData();
   }

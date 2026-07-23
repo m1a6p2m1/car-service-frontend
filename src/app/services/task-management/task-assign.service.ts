@@ -281,5 +281,16 @@ export class TaskAssignService {
       responseType: 'text'
      });
   }
+
+  viewBill(id:number){
+
+    return this.http.get(
+      `http://localhost:8080/appointment/${id}/bill`,
+      {
+        responseType:'blob'
+      }
+    );
+
+  }
   
 }

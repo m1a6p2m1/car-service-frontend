@@ -49,10 +49,10 @@
         <td mat-cell *matCellDef="let element">{{ element.contactNumber }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="totalServicePrice">
+      <!-- <ng-container matColumnDef="totalServicePrice">
         <th mat-header-cell *matHeaderCellDef>Total Cost</th>
         <td mat-cell *matCellDef="let element">{{ element.totalServicePrice }}</td>
-      </ng-container>
+      </ng-container> -->
 
       <ng-container matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef>Action</th>
@@ -63,7 +63,7 @@
           <button mat-icon-button color="warn" [disabled]="!isActionAllowed(element.date)" (click)="confirmDelete(element)" matTooltip="Delete">
             <mat-icon>delete</mat-icon>
           </button>
-          <button type="submit" mat-raised-button color="primary" (click)="viewBill(element.id)">
+          <button *ngIf="element.billCreated" type="submit" mat-raised-button color="primary" (click)="viewBill(element.id)">
             View Bill
           </button><br>
         </td>

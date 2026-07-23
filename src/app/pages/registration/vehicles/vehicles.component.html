@@ -2,7 +2,7 @@
     <div class="form-section">
          <form [formGroup]="vehiclesForm" class="example-form" (ngSubmit)="onSubmit()">
 
-            <mat-form-field appearance="fill">
+            <mat-form-field appearance="fill" *ngIf="userRole === 'EMPLOYEE'">
                 <mat-label>Customer Name</mat-label>
                 <mat-select formControlName="customerId" (selectionChange)="onCustomerChange($event)">
                     <mat-form-field>
@@ -12,11 +12,17 @@
                     <!-- <mat-option>None</mat-option> -->
                     <mat-option *ngFor="let customer of selectedCustomers" [value]="customer.id">
                         {{
-                        customer.id + " " + customer.firstName + " " + customer.lastName
+                         customer.firstName + " " + customer.lastName
                         }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
+
+          <!--Customer Login-->
+          <mat-form-field appearance="fill" *ngIf="userRole === 'CUSTOMER'">
+            <mat-label>Customer Name</mat-label>
+            <input matInput formControlName="customerName" [readonly]="userRole === 'CUSTOMER'"/>
+          </mat-form-field>
 
           <div formArrayName="vehicles">
             <div class="vehicle-details-row" *ngFor="let vehicle of vehicles.controls; let i = index"  [formGroupName]="i"><!--*ngFor="let subTask of subTasks.controls; let i = index"  [formGroupName]="i"-->
