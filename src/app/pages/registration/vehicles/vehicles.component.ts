@@ -53,10 +53,19 @@ export class VehiclesComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.loadCustomerList();
+    this.userRole = localStorage.getItem('userRole');
+    
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    if(this.userRole === 'CUSTOMER'){
+      this.vehiclesForm.patchValue({
+        customerId: user.id,
+        customerName: user.firstName + ' ' + user.lastName
+      });
+    } else {
+      this.loadCustomerList();
+    }
     this.populateData();
     this.addVehicle(); // add first row automatically
-    this.userRole = localStorage.getItem('userRole');
   }
 
   onSubmit(){
@@ -206,6 +215,17 @@ export class VehiclesComponent implements OnInit{
         vehicleModel: [''] 
       });
 
+      this.vehicles.push(vehiclesGroup);
+    }
+
+    checkLicensePlate(): void{
+      const vehiclesGroup = this.fb.group({ 
+        id: [null], 
+        licencePlate: [''], 
+        vehicleType: [''], 
+        vehicleModel: [''] 
+      });
+
       vehiclesGroup.get('licencePlate')?.valueChanges
         .pipe(debounceTime(400)).subscribe(value => {
           const control = vehiclesGroup.get('licencePlate');
@@ -227,9 +247,7 @@ export class VehiclesComponent implements OnInit{
                 Object.keys(errors).length ? errors : null
               );
           })
-        })
-
-      this.vehicles.push(vehiclesGroup);
+        });
     }
 
     removeVehicle(index: number) {
@@ -268,8 +286,12 @@ export class VehiclesComponent implements OnInit{
     public editData(data: any):void{
       this.resetData();
       this.isEditMode = true; // ADD VEHICLE button doesn't Show when edit button click
+      const firstName = localStorage.getItem('firstName') || '';
+      const lastName = localStorage.getItem('lastName') || '';
+
       this.vehiclesForm.patchValue({
-        customerId: data.customerId
+        customerId: data.customerId,
+        customerName: `${firstName} ${lastName}`
       });
 
       const vehiclesArray = this.vehiclesForm.get('vehicles') as FormArray;

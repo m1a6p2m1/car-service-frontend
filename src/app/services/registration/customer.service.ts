@@ -76,7 +76,7 @@ export class CustomerService {
   }
 
   checkContactNumber(contactNumber: string): Observable<boolean>{
-      console.log('In the Service.................');
+      console.log('In the Service....contactNumber.............');
       const requestUrl = `${environment.baseUrl}/customer/check-contact`;
       
       let headers = {};
@@ -116,6 +116,30 @@ export class CustomerService {
         });
   
     }
+
+    //get customer credentials to the customer login details form
+    getCustomerLogin(customerId: number) {
+      console.log("get customer credentials to the customer login details form")
+      const requestUrl = environment.baseUrl + '/customer-login/get-credentials/' + customerId;
+      let headers = {};
+      if (this.httpService.getAuthToken() !== null) {
+        headers = {
+          Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+        };
+      }
+      return this.http.get(requestUrl, headers);
+    }
+
+  updateCustomerLogin(customerId: number, data: any) {
+    const requestUrl = environment.baseUrl + '/customer-login/edit-credentials/' + customerId;
+    let headers = {};
+    if (this.httpService.getAuthToken() !== null) {
+      headers = {
+        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+      };
+    }
+    return this.http.put(requestUrl, data, {headers: headers});
+  }
   
 }
 

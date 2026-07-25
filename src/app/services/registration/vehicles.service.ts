@@ -115,7 +115,7 @@ export class VehiclesService {
       return this.http.get<boolean>(requestUrl, {
         headers,
         params: {
-          licencePlate
+          licencePlate: licencePlate
         }
       });
   }

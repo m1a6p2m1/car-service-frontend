@@ -690,7 +690,7 @@ export class AppointmentServiceComponent implements OnInit{
     // const formValues = this.appointmentServiceForm.getRawValue();
 
     const login = localStorage.getItem('login') ?? undefined;
-    const booking: Appointment = {
+    const booking: Appointment & { additionalServices?: any[] } = {
       appointmentDate:this.formatDateLocal(this.selectedDate),
       timeSlot: this.selectedTime,
       price: this.totalCost,
@@ -698,7 +698,7 @@ export class AppointmentServiceComponent implements OnInit{
       taskId: taskId,
       role: roleToSave,
       login: login,
-
+      additionalServices: this.additionalServices
     };
 
     const payload = this.processObjects(booking);

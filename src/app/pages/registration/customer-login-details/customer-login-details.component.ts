@@ -49,6 +49,31 @@ export class CustomerLoginDetailsComponent {
           email: customer.email,
           contactNumber: customer.contactNumber
         });
+
+        if (this.data.loginCreated) {
+
+        this.customerService
+          .getCustomerLogin(this.selectedCustomerId)
+          .subscribe({
+
+            next: (res: any) => {
+
+              console.log("Customer Login:", res);
+
+              this.customerLoginDetailsForm.patchValue({
+                login: res.login,
+                password: ''
+              });
+
+            },
+
+            error: (err) => {
+              console.log(err);
+            }
+
+          });
+
+      }
       }
     });
       // this.customerLoginDetailsForm.patchValue({
@@ -63,7 +88,35 @@ export class CustomerLoginDetailsComponent {
 
     public createLogin(): void {
       try {
-        // if (this.employeeLoginDetailsForm?.valid) {
+
+        const request = {
+        customerId: this.selectedCustomerId,
+        firstName: this.customerLoginDetailsForm.getRawValue().firstName,
+        lastName: this.customerLoginDetailsForm.getRawValue().lastName,
+        login: this.customerLoginDetailsForm.value.login,
+        password: this.customerLoginDetailsForm.value.password,
+      };
+      // UPDATE LOGIN
+    if (this.data.loginCreated) {
+
+      this.customerService
+        .updateCustomerLogin(this.selectedCustomerId, request)
+        .subscribe({
+
+          next: (response: any) => {
+
+            this._dialogRef.close(true);
+
+          },
+
+          error: (err) => {
+            console.log(err);
+          }
+
+        });
+
+    } else{
+         // CREATE LOGIN
         const formData = this.customerLoginDetailsForm.getRawValue();
         this.httpService
           .request('POST', '/customer-register', {
@@ -81,7 +134,7 @@ export class CustomerLoginDetailsComponent {
             this._dialogRef.close(true);
             // this.router.navigate(['/authentication/login']);
           });
-      // }
+       }
       } catch (error) {
         console.log('create login error:',error);
       }

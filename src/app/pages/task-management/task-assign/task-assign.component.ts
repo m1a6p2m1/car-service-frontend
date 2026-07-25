@@ -34,6 +34,17 @@ interface Appointment {
   appointmentUniqueNo: string;
 }
 
+export interface TaskAssign {
+    id:number;
+    appointmentId:number;
+    appointmentUniqueNo:string;
+    customerName:string;
+    taskName:string;
+    serviceType:string;
+    status:string;
+    billCreated:boolean;
+}
+
 @Component({
   selector: 'app-task-assign',
   standalone: false,

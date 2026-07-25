@@ -197,12 +197,11 @@
             <button mat-icon-button color="warn" (click)="confirmDelete(element)" matTooltip="Delete">
               <mat-icon>delete</mat-icon>
             </button>
-            <button mat-icon-button matTooltip="Create Login" (click)="addLoginCredentials(element)">
-              <mat-icon>person_add</mat-icon>
-            </button>
-            <button mat-icon-button color="warn" matTooltip="Disable Login">
-              <mat-icon>person_off</mat-icon>
-            </button>
+            <button type="submit" mat-raised-button 
+            [ngClass]="element.loginCreated ? 'edit-btn' : 'create-btn'" 
+            (click)="addLoginCredentials(element)">
+            {{ element.loginCreated ? 'Edit Login' : 'Create Login' }}
+          </button>
           </td>
         </ng-container>
       

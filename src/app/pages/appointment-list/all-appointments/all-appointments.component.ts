@@ -8,6 +8,14 @@ import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.comp
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
+export interface Appointment {
+  id: number;
+  customerName: string;
+  date: string;
+  time: string;
+  billCreated: boolean;
+}
+
 @Component({
   selector: 'app-all-appointments',
   standalone:false,
@@ -16,7 +24,7 @@ import { Router } from '@angular/router';
 })
 export class AllAppointmentsComponent implements OnInit{
 
-  displayedColumns: string[] = ['customerName', 'appointmentDate', 'appointmentTime','serviceType', 'licencePlate', 'contactNumber', 'totalServicePrice', 'action'];
+  displayedColumns: string[] = ['customerName', 'appointmentDate', 'appointmentTime','serviceType', 'licencePlate', 'contactNumber', 'action'];
       dataSource!: MatTableDataSource<any>;
     
       @ViewChild(MatPaginator) paginator!: MatPaginator;

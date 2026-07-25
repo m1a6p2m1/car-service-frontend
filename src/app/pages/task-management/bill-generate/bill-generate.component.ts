@@ -83,4 +83,18 @@ export class BillGenerateComponent implements OnInit {
       this.messageService.showError('Action Failed!');
     }     
   }
+
+  viewBill(row: any) {
+    console.log("Task ID:", row.id);
+  console.log("Appointment ID:", row.appointmentId);
+    this.taskAssignService.viewBill(row.appointmentId).subscribe({
+      next: (blob: Blob) => {
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+      },
+      error: () => {
+        this.messageService.showError('Unable to open bill.');
+      }
+    });
+  }
 }

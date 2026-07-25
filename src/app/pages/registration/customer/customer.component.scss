@@ -23,3 +23,24 @@
 .refresh-button{
   margin: 1%;
 }
+.create-btn {
+    background-color: #3cbe09 !important;
+    color: rgb(20, 19, 19);
+    margin-bottom: 8px;
+}
+
+.edit-btn {
+    background-color:  #959798 !important;
+    color: rgb(16, 15, 15);
+    margin-bottom: 8px;
+    margin-right: 10px;
+    // width: 60px !important;
+}
+
+.create-btn:hover {
+    background-color: #43a047;
+}
+
+.edit-btn:hover {
+    background-color: #fb8c00;
+}

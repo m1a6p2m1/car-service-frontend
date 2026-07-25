@@ -28,13 +28,17 @@
       
         <mat-form-field class="full-width">
           <mat-label>Supplier Nic Number</mat-label>
-          <input matInput placeholder="Nic Number" formControlName="nic">
+          <input matInput placeholder="Nic Number" formControlName="nic" (blur)="checkNicNumber()">
           <span class="text-danger" *ngIf="
               (supplierForm.get('nic')?.touched || submitted) && 
               supplierForm.get('nic')?.errors && 
               supplierForm.get('nic')?.errors!['pattern']">
             Please Insert a Valid NIC Number
           </span>
+          <span class="text-danger" *ngIf="
+       (supplierForm.get('nic')?.touched || submitted) && supplierForm.get('nic')?.errors && supplierForm.get('nic')?.errors!['nicExists']">
+        NIC Number Already Exists
+      </span>
         </mat-form-field>
 
         <mat-form-field class="full-width">
@@ -51,12 +55,18 @@
         <mat-form-field class="full-width">
           <mat-label>Telephone</mat-label>
           <!-- <span matTextPrefix>+94 &nbsp;</span> -->
-          <input type="tel" matInput placeholder="+94 55-555-1234 OR 055-555-1234" formControlName="phoneNumber">
+          <input type="tel" matInput placeholder="+94 55-555-1234 OR 055-555-1234" formControlName="phoneNumber" (blur)="checkPhoneNumber()">
           <span class="text-danger" *ngIf="
               (supplierForm.get('phoneNumber')?.touched || submitted) && 
               supplierForm.get('phoneNumber')?.errors && 
               supplierForm.get('phoneNumber')?.errors!['pattern']">
             Please Insert a Valid Phone Number......
+          </span>
+          <span class="text-danger"
+                *ngIf="
+                  (supplierForm.get('phoneNumber')?.touched || submitted) && supplierForm.get('phoneNumber')?.errors && supplierForm.get('phoneNumber')?.errors!['phoneExists']">
+
+            Phone number already exists.
           </span>
           <mat-icon matSuffix>phone</mat-icon>
         </mat-form-field>               

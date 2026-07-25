@@ -17,7 +17,7 @@ export class BillGenerateDetailsComponent implements OnInit{
   taskBillDetails: any;
   totalCost = 0;
   isButtonDisable = false;
-  billGeneratedButtonLabel = 'Bill Generate';
+  billGeneratedButtonLabel = 'Confirm Bill Generate';
   constructor(
     private fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data:any,
