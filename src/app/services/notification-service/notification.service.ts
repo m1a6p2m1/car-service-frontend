@@ -45,6 +45,8 @@ export class NotificationService {
   private toastNotifications = new BehaviorSubject<Notification[]>([]);
   public toastNotifications$ = this.toastNotifications.asObservable();
 
+  private eventSource?: EventSource;
+
   constructor(private httpService: HttpService, private http: HttpClient) {}
 
   addNotification(
@@ -73,12 +75,19 @@ export class NotificationService {
     this.addNotificationToDb(notificationtemp).subscribe({
       next: (response: any) => {
         console.log(response);
-        this.addNotificationToBell([notificationtemp]);
+
+        const userId = this.httpService.getUserId();
+        if (userId && response.targetUser === +userId) {
+          this.addNotificationToBell([notificationtemp]);
+        }
       },
       // Displaying error message
       error: (error) => {
         console.log(error);
-        this.addNotificationToBell([notificationtemp]);
+        const userId = this.httpService.getUserId();
+        if (userId && notificationtemp.targetUser === +userId) {
+          this.addNotificationToBell([notificationtemp]);
+        }
       },
     });
   }
@@ -173,4 +182,21 @@ export class NotificationService {
     // sending POST request to the server
     return this.http.post(requestUrl, notification, { headers: headers });
   }
+
+  public connectToNotificationStream(): void {
+    const userId = this.httpService.getUserId();
+    const token = this.httpService.getAuthToken();
+    // EventSource can't send headers — token goes in the query string (see note below)
+    const url = `${environment.baseUrl}/notification/stream/${userId}?token=${token}`;
+
+    this.eventSource = new EventSource(url);
+    this.eventSource.addEventListener('notification', (event: MessageEvent) => {
+    const notification = JSON.parse(event.data);
+    this.addNotificationToBell([notification]); // your existing method updates both subjects
+    });
+  }
+
+public disconnectStream(): void {
+  this.eventSource?.close();
+}
 }

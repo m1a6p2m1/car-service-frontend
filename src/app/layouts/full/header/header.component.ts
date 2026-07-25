@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { UserProfileComponent } from 'src/app/pages/user-profile/user-profile.component';
@@ -25,7 +25,7 @@ export interface Notification {
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
-export class AppHeaderComponent implements OnInit {
+export class AppHeaderComponent implements OnInit, OnDestroy {
   selectedImageUrl!: SafeUrl | null;
   showDropdown = false;
   notifications: Notification[] = [];
@@ -54,6 +54,8 @@ export class AppHeaderComponent implements OnInit {
       },
     });
 
+    this.notificationService.connectToNotificationStream();
+
     this.notificationService.notifications$.subscribe((notifications) => {
       this.notifications = notifications;
       this.unreadCount = notifications.filter((n) => !n.readStatus).length;
@@ -69,6 +71,11 @@ export class AppHeaderComponent implements OnInit {
       }
     });
   }
+
+  ngOnDestroy(): void {
+    this.notificationService.disconnectStream();
+  }
+
 
   public logOutUser(): void {
     this.cacheService.clear(this.httpService.getUserId()!);

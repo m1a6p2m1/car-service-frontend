@@ -1012,14 +1012,14 @@ export class TaskAssignComponent implements OnInit {
 
   
 
-  public addNotification(details?: any): void {
-    this.notificationService.addNotification(
-      'Employee Added Successfully',
-      'success',
-      1,
-      'd.mendisat@gmail.com'
-    );
-  }
+  // public addNotification(details?: any): void {
+  //   this.notificationService.addNotification(
+  //     'Employee Added Successfully',
+  //     'success',
+  //      71,
+  //     'd.mendisat@gmail.com'
+  //   );
+  // }
 
 
     // Load Active Employees

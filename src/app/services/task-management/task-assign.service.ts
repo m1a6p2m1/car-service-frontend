@@ -203,6 +203,21 @@ export class TaskAssignService {
               
     }
 
+    getTaskByNo(uniqueNo:string): Observable<Task>{
+      console.log('In the service getTaskbyid');
+      const requestUrl = environment.baseUrl + '/task-assign/get-by-no/'+ uniqueNo;
+      let headers = {};
+          
+      if (this.httpService.getAuthToken() !== null) {
+        headers = {
+          Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+        };
+      }
+  
+      return this.http.get<Task>(requestUrl, headers );    
+              
+    }
+
   getAssingeSubTaskData(id: any) {
     // console.log('In the Service');
     const requestUrl = environment.baseUrl + '/sub-task-assign/' + id.toString();

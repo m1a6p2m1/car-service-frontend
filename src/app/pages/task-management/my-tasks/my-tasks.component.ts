@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { FormDemoServiceService } from 'src/app/services/form-demo/form-demo-service.service';
 import { HttpService } from 'src/app/services/http.service';
 import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
+import { NotificationService } from 'src/app/services/notification-service/notification.service';
 import { TaskAssignService } from 'src/app/services/task-management/task-assign.service';
 
 export type TodoStatus = 'pending' | 'processing' | 'done';
@@ -47,7 +48,8 @@ export class MyTasksComponent implements OnInit{
         private demoService: FormDemoServiceService,
         private messageService: MessageServiceService,
         private taskAssignService: TaskAssignService,
-        private httpService: HttpService
+        private httpService: HttpService,
+        private notificationService: NotificationService
       ){
       }
   ngOnInit(): void {
@@ -139,6 +141,7 @@ public changeSubTaskStatus(dataRow: any): void {
       this.taskAssignService.changeSubTaskStatus(updatedData).subscribe({
         next: (response: any) => {
           this.messageService.showSuccess("Sub Task status successfully updated!");
+          this.sendNotificationToCustomer(dataRow);
         },
         error: (error: any) => {
           this.messageService.showError("Error Occurred. Please try again!");
@@ -148,4 +151,21 @@ public changeSubTaskStatus(dataRow: any): void {
   }
 
   public setCustomerNameToDatasource(): void {}
+
+  /* send notification like this */
+  public sendNotificationToCustomer(dataRow: any): void {
+    let customerId;
+    this.taskAssignService.getTaskByNo(dataRow.mainUniqueTaskNo).subscribe((response: any) => {
+      customerId = response.customerId;
+
+      if (customerId != null) {
+        this.notificationService.addNotification(
+        `Your task ${dataRow.description} done by ${dataRow?.assignUserName}! Status updated to ${dataRow.status}`,
+        'success',
+        customerId,
+        ''
+        );
+      }
+    });
+  }
 }
