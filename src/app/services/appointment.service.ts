@@ -198,6 +198,23 @@ export class AppointmentService {
     );
 
   }
+
+  updatePaymentStatus(id: number){
+    const requestUrl = environment.baseUrl + `/all-appointments/payment-done/${id}`;            // POST /appointments
+
+    let headers = {};
+    if (this.httpService.getAuthToken() !== null) {
+      headers = {
+        Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+      };
+    }
+
+    return this.http.put(requestUrl,
+                            {}, 
+                            { headers: headers,
+                              responseType: 'text'
+                             });
+  }
   
 
 }

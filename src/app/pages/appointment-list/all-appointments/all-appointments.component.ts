@@ -7,6 +7,7 @@ import { MessageServiceService } from 'src/app/services/message-service/message-
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { ConfirmStatusComponent } from '../../registration/confirm-status/confirm-status.component';
 
 export interface Appointment {
   id: number;
@@ -173,8 +174,8 @@ export class AllAppointmentsComponent implements OnInit{
 //disable edit and delete button date before today
 isActionAllowed(appointmentDate: string |Date): boolean {
 
-  console.log('appointmentDate:', appointmentDate);
-  console.log('converted:', new Date(appointmentDate));
+  // console.log('appointmentDate:', appointmentDate);
+  // console.log('converted:', new Date(appointmentDate));
 
   const today = new Date();
   today.setHours(0,0,0,0);
@@ -204,5 +205,30 @@ viewBill(id: number) {
     });
 
 }
+
+public confirmMakePayment(data: any): void {
+    const dialogRef = this._dialog.open(ConfirmStatusComponent, {
+      data: 'Do You Want to Confirm the Payment?',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.MakePayment(data);
+      }
+    });
+  }
+
+MakePayment(appointment: any): void{
+  this.appointmentService.updatePaymentStatus(appointment.id).subscribe({
+    next: (response: any) => {
+      this.messageService.showSuccess("Payment Completed Successfully");
+    },
+    error: (error: any) => {
+      console.log(error);
+      this.messageService.showError("Payment Update Failed...!");
+    }
+  });
+}
+
 
 }

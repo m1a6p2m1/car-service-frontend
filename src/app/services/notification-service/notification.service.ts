@@ -109,7 +109,7 @@ export class NotificationService {
 
   public getNotifications() {
     const userId = this.httpService.getUserId();
-
+    console.log("Logged in user ID:", this.httpService.getUserId());
     const requestUrl = environment.baseUrl + '/notification/' + userId; // http://localhost:8080/employee
 
     let headers = {};
@@ -184,16 +184,35 @@ export class NotificationService {
   }
 
   public connectToNotificationStream(): void {
+    // close previous user connection
+    this.disconnectStream();
+
+    // remove previous notifications
+    this.clearNotifications();
+
     const userId = this.httpService.getUserId();
     const token = this.httpService.getAuthToken();
+
+    console.log(
+      "Opening notification stream for:",
+      userId
+    );
+
     // EventSource can't send headers — token goes in the query string (see note below)
     const url = `${environment.baseUrl}/notification/stream/${userId}?token=${token}`;
+
+    console.log("SSE connected for user:", userId);
 
     this.eventSource = new EventSource(url);
     this.eventSource.addEventListener('notification', (event: MessageEvent) => {
     const notification = JSON.parse(event.data);
     this.addNotificationToBell([notification]); // your existing method updates both subjects
     });
+  }
+
+  public clearNotifications(): void {
+    this.notifications.next([]);
+    this.toastNotifications.next([]);
   }
 
 public disconnectStream(): void {

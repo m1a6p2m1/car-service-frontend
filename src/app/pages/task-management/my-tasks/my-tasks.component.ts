@@ -141,6 +141,7 @@ public changeSubTaskStatus(dataRow: any): void {
       this.taskAssignService.changeSubTaskStatus(updatedData).subscribe({
         next: (response: any) => {
           this.messageService.showSuccess("Sub Task status successfully updated!");
+          dataRow.status = updatedData.status;
           this.sendNotificationToCustomer(dataRow);
         },
         error: (error: any) => {
@@ -156,6 +157,9 @@ public changeSubTaskStatus(dataRow: any): void {
   public sendNotificationToCustomer(dataRow: any): void {
     let customerId;
     this.taskAssignService.getTaskByNo(dataRow.mainUniqueTaskNo).subscribe((response: any) => {
+      console.log("Task No:", dataRow.mainUniqueTaskNo);
+      console.log("Customer ID:", response.customerId);
+    
       customerId = response.customerId;
 
       if (customerId != null) {
