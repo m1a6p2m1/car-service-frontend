@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, FormArray } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MessageServiceService } from 'src/app/services/message-service/message-service.service';
+import { NotificationService } from 'src/app/services/notification-service/notification.service';
 import { AdditionalServicesService } from 'src/app/services/task-management/additional-services.service';
 import { TaskAssignService } from 'src/app/services/task-management/task-assign.service';
 import { TaskIntroduceService } from 'src/app/services/task-management/task-introduce.service';
@@ -25,6 +26,7 @@ export class BillGenerateDetailsComponent implements OnInit{
     private additionalServicesService: AdditionalServicesService,
     private taskAssignService: TaskAssignService,
     private messageService: MessageServiceService,
+    private notificationService: NotificationService
   ){
     this.billGeneratedetailsForm = this.fb.group({
       taskName: [''],
@@ -171,6 +173,8 @@ export class BillGenerateDetailsComponent implements OnInit{
           next: (response) => {
             console.log("Step 2: Bill generated", response);
             this.messageService.showSuccess("Bill Generated and Saves Successfully..");
+            // Send notification
+            this.sendBillGeneratedNotification();
             this.afterSave();
             
           },
@@ -202,5 +206,26 @@ export class BillGenerateDetailsComponent implements OnInit{
     this.billGeneratedetailsForm.disable(); 
     this.isButtonDisable = true;
     this.billGeneratedButtonLabel = 'Bill Generated';
+  }
+
+  public sendBillGeneratedNotification(): void {
+    console.log("Sending bill notification...");
+    this.taskAssignService.getTaskByNo(this.data.uniqueTaskNo).subscribe({
+      next: (response: any)=>{
+        console.log("Task response:", response);
+
+        const customerId = response.customerId;
+        console.log("Customer ID:", customerId);
+        
+        if(customerId != null){
+          this.notificationService.addNotification(
+            `Your ${this.data.taskName} service for vehicle ${this.data.licencePlate} has been completed and the bill is now available.`,
+            'success',
+           this.data.customerId,
+            ''
+          );
+        }
+      }
+    });
   }
 }

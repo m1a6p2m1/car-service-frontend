@@ -33,6 +33,7 @@ export class MyTasksComponent implements OnInit{
     displayedColumns: string[] = ['mainUniqueTaskNo','uniqueSubTaskNo', 'customer', 'assignUserName', 'description', 'status', 'action'];
     dataSource!: MatTableDataSource<any>;
     updatedDataList: UpdatedData[] = [];
+    selectedDate: Date | null = null;
 
   statusOptions: TodoStatusOption[] = [
     { value: 'pending', label: 'Pending', color: '#ff9800' },
@@ -67,6 +68,7 @@ export class MyTasksComponent implements OnInit{
   }
 
   public refreshData(): void{
+    this.selectedDate = null;   // Reset the date picker
     this.populateData();
   }
 
@@ -117,6 +119,7 @@ export class MyTasksComponent implements OnInit{
   }
 
 onDateChange(selectedDate: Date | null) {
+  this.selectedDate = selectedDate;
     if(!selectedDate){
       this.dataSource.filter = '';
       return;

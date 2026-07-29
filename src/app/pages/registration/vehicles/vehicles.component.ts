@@ -216,15 +216,6 @@ export class VehiclesComponent implements OnInit{
       });
 
       this.vehicles.push(vehiclesGroup);
-    }
-
-    checkLicensePlate(): void{
-      const vehiclesGroup = this.fb.group({ 
-        id: [null], 
-        licencePlate: [''], 
-        vehicleType: [''], 
-        vehicleModel: [''] 
-      });
 
       vehiclesGroup.get('licencePlate')?.valueChanges
         .pipe(debounceTime(400)).subscribe(value => {
@@ -249,6 +240,38 @@ export class VehiclesComponent implements OnInit{
           })
         });
     }
+
+    // checkLicensePlate(): void{
+    //   const vehiclesGroup = this.fb.group({ 
+    //     id: [null], 
+    //     licencePlate: [''], 
+    //     vehicleType: [''], 
+    //     vehicleModel: [''] 
+    //   });
+
+    //   vehiclesGroup.get('licencePlate')?.valueChanges
+    //     .pipe(debounceTime(400)).subscribe(value => {
+    //       const control = vehiclesGroup.get('licencePlate');
+
+    //       if(!control || control.invalid || !value) {
+    //         return;
+    //       }
+
+    //       this.vehiclesService.checkLicencePlate(value).subscribe((exists: any) => {
+    //         const errors = { ...(control.errors || {}) };
+
+    //           if (exists) {
+    //             errors['plateExists'] = true;
+    //           } else {
+    //             delete errors['plateExists'];
+    //           }
+
+    //           control.setErrors(
+    //             Object.keys(errors).length ? errors : null
+    //           );
+    //       })
+    //     });
+    // }
 
     removeVehicle(index: number) {
       this.vehicles.removeAt(index);

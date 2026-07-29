@@ -774,6 +774,8 @@ export class TaskAssignComponent implements OnInit {
   public resetData() {
     this.taskAssignForm.reset();
     this.taskAssignForm.enable();
+    // Clear selected additional services
+    this.selectedOptions = [];
     const subTasksFormArray = this.subTasks;
     subTasksFormArray.clear();
     this.resetFormManually();

@@ -27,6 +27,7 @@ export class AllAppointmentsComponent implements OnInit{
 
   displayedColumns: string[] = ['customerName', 'appointmentDate', 'appointmentTime','serviceType', 'licencePlate', 'contactNumber', 'action'];
       dataSource!: MatTableDataSource<any>;
+      userRole: string = '';
     
       @ViewChild(MatPaginator) paginator!: MatPaginator;
       @ViewChild(MatSort) sort!: MatSort;
@@ -40,6 +41,8 @@ export class AllAppointmentsComponent implements OnInit{
 
   ngOnInit(): void{
     // console.log('oninit')
+    this.userRole = localStorage.getItem('userRole') || '';
+    console.log('User Role:', this.userRole);
     this.populateData();
   }
 

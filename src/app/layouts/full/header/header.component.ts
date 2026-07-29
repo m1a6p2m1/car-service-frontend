@@ -86,11 +86,12 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   loadUserProfile(): void {
     let userImage = this.localStorage.getItem('image');
     let userImageType = this.localStorage.getItem('imageType');
-    if (userImage && userImageType) {
+    let userRole = this.localStorage.getItem('userRole')
+    if (userImage && userImageType && userRole === 'EMPLOYEE') {
       const unsafeUrl = `data:${userImageType};base64,${userImage}`;
       this.selectedImageUrl = this.sanitizer.bypassSecurityTrustUrl(unsafeUrl);
     } else {
-      this.selectedImageUrl = 'assets/images/item/men_logo.png';
+      this.selectedImageUrl = 'assets/images/item/men_logo.jpg';
     }
   }
 

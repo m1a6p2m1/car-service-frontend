@@ -66,7 +66,7 @@
           <button *ngIf="element.billCreated" type="submit" mat-raised-button color="primary" (click)="viewBill(element.id)">
             View Bill
           </button><br>
-          <button *ngIf="element.billCreated && element.billStatus !== 'Payment Done'" type="submit" mat-raised-button color="accent" (click)="confirmMakePayment(element)">
+          <button *ngIf="element.billCreated && element.billStatus !== 'Payment Done' && userRole === 'EMPLOYEE'" type="submit" mat-raised-button color="accent" (click)="confirmMakePayment(element)">
             Make Payment
           </button><br>
         </td>

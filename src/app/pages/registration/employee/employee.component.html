@@ -227,7 +227,7 @@
           <button type="submit" mat-raised-button 
             [ngClass]="element.loginCreated ? 'edit-btn' : 'create-btn'" 
             (click)="addLoginCredentials(element)" 
-            [disabled]="element.employeeStatus === 'Inactive'">
+            [disabled]="element.employeeStatus === 'Inactive' || element.jobTitle === 'Driver' || element.jobTitle === 'Technician' ">
             {{ element.loginCreated ? 'Edit Login' : 'Create Login' }}
           </button>
 
