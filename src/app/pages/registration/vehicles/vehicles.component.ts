@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -126,7 +126,7 @@ export class VehiclesComponent implements OnInit{
       }
       
       this.isButtonDisable = true;
-      this.vehiclesForm.disable();
+      this.vehiclesForm.disable({ emitEvent: false });
 
       
     }
@@ -212,36 +212,35 @@ export class VehiclesComponent implements OnInit{
     }
 
     addVehicle() {
-      const vehiclesGroup = this.fb.group({ 
-        id: [null], 
-        licencePlate: [''], 
-        vehicleType: [''], 
-        vehicleModel: [''] 
+      const vehiclesGroup = this.fb.group({
+        id: [null],
+        licencePlate: [''],
+        vehicleType: [''],
+        vehicleModel: ['']
       });
 
       this.vehicles.push(vehiclesGroup);
 
-      vehiclesGroup.get('licencePlate')?.valueChanges
-        .pipe(debounceTime(400)).subscribe(value => {
-          const control = vehiclesGroup.get('licencePlate');
+      const plateControl = vehiclesGroup.get('licencePlate');
+      plateControl?.valueChanges.subscribe(() => {
+        this.checkDuplicatePlates();
+      });
 
-          if(!control || control.invalid || !value) {
+      plateControl?.valueChanges
+        .pipe(debounceTime(400))
+        .subscribe(value => {
+          if (!plateControl || !value) {
+            this.setControlError(plateControl, 'plateExists', false);
+            return;
+          }
+
+          if (plateControl.hasError('duplicatePlate')) {
             return;
           }
 
           this.vehiclesService.checkLicencePlate(value).subscribe((exists: any) => {
-            const errors = { ...(control.errors || {}) };
-
-              if (exists) {
-                errors['plateExists'] = true;
-              } else {
-                delete errors['plateExists'];
-              }
-
-              control.setErrors(
-                Object.keys(errors).length ? errors : null
-              );
-          })
+            this.setControlError(plateControl, 'plateExists', !!exists);
+          });
         });
     }
 
@@ -279,6 +278,43 @@ export class VehiclesComponent implements OnInit{
 
     removeVehicle(index: number) {
       this.vehicles.removeAt(index);
+      this.checkDuplicatePlates();
+    }
+
+    private checkDuplicatePlates(): void {
+      const controls = this.vehicles.controls;
+      const normalized = controls.map(c =>
+        (c.get('licencePlate')?.value || '').toString().trim().toLowerCase()
+      );
+    
+      controls.forEach((c, i) => {
+        const plateControl = c.get('licencePlate');
+        const value = normalized[i];
+      
+        if (!value) {
+          // empty rows are never duplicates
+          this.setControlError(plateControl, 'duplicatePlate', false);
+          return;
+        }
+      
+        const isDuplicate = normalized.some((other, j) => j !== i && other === value);
+        this.setControlError(plateControl, 'duplicatePlate', isDuplicate);
+      });
+    }
+
+    private setControlError(control: AbstractControl | null, key: string, hasError: boolean): void {
+        if (!control) {
+          return;
+        }
+        const errors = { ...(control.errors || {}) };
+      
+        if (hasError) {
+          errors[key] = true;
+        } else {
+          delete errors[key];
+        }
+      
+        control.setErrors(Object.keys(errors).length ? errors : null);
     }
 
     public refreshData(): void{
@@ -320,7 +356,7 @@ export class VehiclesComponent implements OnInit{
     }
 
     public enableFormManually() {
-      this.vehiclesForm.get('customerId')?.enable();
+      this.vehiclesForm.get('customerId')?.enable({ emitEvent: false });
     }
 
     public editData(data: any):void{

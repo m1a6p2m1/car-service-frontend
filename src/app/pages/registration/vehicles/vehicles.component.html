@@ -38,6 +38,11 @@
                 >
                 License Plate Already Exists
                 </span>
+                <span class="text-danger"
+                  *ngIf="(vehicle.get('licencePlate')?.touched || vehicle.get('licencePlate')?.dirty) &&
+                          vehicle.get('licencePlate')?.hasError('duplicatePlate')">
+                  Duplicate License Plate in the form
+                </span>
               </mat-form-field>
 
               <mat-form-field class="vehicle-details">
