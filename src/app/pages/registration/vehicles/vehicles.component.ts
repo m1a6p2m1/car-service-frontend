@@ -72,6 +72,10 @@ export class VehiclesComponent implements OnInit{
       // console.log('form submitted');
       // console.log(this.customerForm.value);
       try {
+        if (!this.vehiclesForm.valid) {
+            console.log('Form is not valid');
+            return;
+        }
         let formData = this.vehiclesForm.getRawValue();
         this.submitted = true;
         if (this.mode === 'add') {
@@ -294,6 +298,19 @@ export class VehiclesComponent implements OnInit{
       this.enableFormManually();
       this.addVehicle(); // add first row automatically
       this.isEditMode = false; // ADD Vehicle button Show when reset button click
+      this.patchUserData();
+    }
+
+    public patchUserData(): void {
+      this.userRole = localStorage.getItem('userRole');
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      if(this.userRole === 'CUSTOMER'){
+        this.vehiclesForm.patchValue({
+          customerId: user.id,
+          customerName: user.firstName + ' ' + user.lastName
+        });
+        this.vehiclesForm.updateValueAndValidity();
+      }
     }
 
     public resetFormManually() {

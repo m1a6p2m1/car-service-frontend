@@ -83,7 +83,7 @@
             <button type="submit" mat-raised-button color="primary" class="btnSave"
                 [disabled]="isButtonDisable">{{saveButtonLabel}}
             </button>
-            <button type="reset" mat-raised-button color="secondary" class="btnReset" (click)="resetData()">Reset</button>
+            <button type="button" mat-raised-button color="secondary" class="btnReset" (click)="resetData()">Reset</button>
             <button *ngIf="userRole === 'CUSTOMER'" class="btnBack" type="button" (click)="goBack()">
               <mat-icon>arrow_back</mat-icon>
               <span>Back</span>
