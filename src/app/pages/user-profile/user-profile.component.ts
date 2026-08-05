@@ -26,6 +26,8 @@ export class UserProfileComponent implements OnInit{
   fileButtonDisable = false;
   selectedData!: { id: number };
 
+  userRole: string | null = '';
+
   constructor(
     private fb: FormBuilder,
     private sanitizer: DomSanitizer,
@@ -40,7 +42,7 @@ export class UserProfileComponent implements OnInit{
       lastName: new FormControl('', [Validators.required]),
       // login: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.email]),
-      phoneNumber: new FormControl('', [Validators.pattern('^(\\+94|0)[1-9]{2}[0-9]{7}$|^(\\+94|0)?7[0-9]{8}$')]),
+      contactNumber: new FormControl('', [Validators.pattern('^(\\+94|0)[1-9]{2}[0-9]{7}$|^(\\+94|0)?7[0-9]{8}$')]),
       image: new FormControl('', [Validators.required]),
       imageName: new FormControl(''),
       imageType: new FormControl(''),
@@ -48,8 +50,8 @@ export class UserProfileComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    // this.populateData();
-
+    // this.populatefData();
+    this.userRole = localStorage.getItem('userRole') || '';
     this.loadUserProfile();
 
   
@@ -142,11 +144,11 @@ export class UserProfileComponent implements OnInit{
           firstName: user.firstName,
           lastName: user.lastName,
           email: user.email,
-          phoneNumber: user.phoneNumber
+          contactNumber: user.contactNumber
         });
         console.log("Form ID:", this.userProfileForm.get('id')?.value);
         console.log("Form Email:", this.userProfileForm.get('email')?.value);
-        console.log("Form PN:", this.userProfileForm.get('phoneNumber')?.value);
+        console.log("Form PN:", this.userProfileForm.get('contactNumber')?.value);
         // this.selectedData = response;
   
         // Load and show user image from local storage or API

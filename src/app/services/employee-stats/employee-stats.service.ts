@@ -54,4 +54,31 @@ export class EmployeeStatService {
 
     return this.http.get(requestUrl, {headers: headers});
   }
+
+  // customer feed back Report
+  public customerFeedbackRates() {
+    const requestUrl = environment.baseUrl + '/customer-feedback/customer-feedbacks-rates';
+    let headers = {};
+        
+    if (this.httpService.getAuthToken() !== null) {
+          headers = {
+            Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+          };
+    }
+
+    return this.http.get(requestUrl, {headers: headers});
+  }
+  // service types count report
+  public getServiceTypeCount() {
+    const requestUrl = environment.baseUrl + '/appointment/get-service-type-count';
+    let headers = {};
+        
+    if (this.httpService.getAuthToken() !== null) {
+          headers = {
+            Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+          };
+    }
+
+    return this.http.get(requestUrl, {headers: headers});
+  }
 }

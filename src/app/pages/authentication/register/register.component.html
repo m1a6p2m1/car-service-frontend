@@ -82,6 +82,13 @@
               First name is required
             </span>
 
+            <span class="text-danger"
+              *ngIf="(formControl['firstName'].touched || submitted) &&
+                    formControl['firstName'].hasError('pattern')">
+
+              Name Field is Doen't Allow Numbers And Symbols 
+            </span>
+
             <mat-label
               for="lastName"
               class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 m-t-12 d-block"
@@ -105,6 +112,13 @@
               "
             >
               Last name is required
+            </span>
+
+            <span class="text-danger"
+              *ngIf="(formControl['lastName'].touched || submitted) &&
+                    formControl['lastName'].hasError('pattern')">
+
+              Name Field is Doen't Allow Numbers And Symbols 
             </span>
 
             <mat-label for="nic" class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 m-t-12 d-block">NIC Number</mat-label>

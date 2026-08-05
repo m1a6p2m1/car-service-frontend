@@ -11,6 +11,13 @@
               customerForm.get('firstName')?.errors!['required']">
             First Name Is Required......
           </span>
+
+          <span class="text-danger"
+              *ngIf="(customerForm.get('firstName')?.touched || submitted) &&
+                    customerForm.get('firstName')?.hasError('pattern')">
+
+              Name Field is Doen't Allow Numbers And Symbols 
+            </span>
         </mat-form-field>
       
         <mat-form-field class="full-width">
@@ -22,6 +29,13 @@
               customerForm.get('lastName')?.errors!['required']">
             Last Name Is Required......
           </span>
+
+          <span class="text-danger"
+              *ngIf="(customerForm.get('lastName')?.touched || submitted) &&
+                    customerForm.get('lastName')?.hasError('pattern')">
+
+              Name Field is Doen't Allow Numbers And Symbols 
+            </span>
         </mat-form-field>
       
         <mat-form-field class="full-width">

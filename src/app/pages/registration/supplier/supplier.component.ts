@@ -47,11 +47,11 @@ export class SupplierComponent implements OnInit {
     private _dialog: MatDialog,
   ) {
     this.supplierForm = this.fb.group ({
-      supplierName: new FormControl('', [Validators.required]),
+      supplierName: new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]),
       companyName: new FormControl('', [Validators.required]),
       businessAddress: new FormControl('', [Validators.required]),
       nic: new FormControl('', [Validators.pattern('^([0-9]{9}[x|X|v|V]|[0-9]{12})$')]),
-      phoneNumber: new FormControl('', [Validators.pattern('^(\\+94|0)[1-9]{2}[0-9]{7}$|^(\\+94|0)7[0-9]{8}$')]),
+      phoneNumber: new FormControl('', [Validators.required, Validators.pattern('^(\\+94|0)[1-9]{2}[0-9]{7}$|^(\\+94|0)7[0-9]{8}$')]),
       email: new FormControl('', [Validators.email]),
       productSupplied: new FormControl('')
     });

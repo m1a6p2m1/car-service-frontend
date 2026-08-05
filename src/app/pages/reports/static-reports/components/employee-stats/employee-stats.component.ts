@@ -10,25 +10,25 @@ import { EmployeeStatService } from 'src/app/services/employee-stats/employee-st
 export class EmployeeStatsComponent {
 
   volumeChartOptions: any = {};
-  commonTaskGroupChartOptions: any = {};
+  // commonTaskGroupChartOptions: any = {};
 
   constructor(private employeeStatService: EmployeeStatService) {}
 
   ngOnInit(): void {
-    this.populateCommonServiceStats();
+    // this.populateCommonServiceStats();
     this.populateEmployeeCountByJobRole();
   }
 
-  public populateCommonServiceStats(): void {
-    this.employeeStatService.commonCustomerUseServices().subscribe({
-      next: (response: any) => {
-        this.updateCommonServiceStats(response);
-      },
-      error: (error: any) => {
-        console.log(error);
-      }
-    })
-  }
+  // public populateCommonServiceStats(): void {
+  //   this.employeeStatService.commonCustomerUseServices().subscribe({
+  //     next: (response: any) => {
+  //       this.updateCommonServiceStats(response);
+  //     },
+  //     error: (error: any) => {
+  //       console.log(error);
+  //     }
+  //   })
+  // }
 
   public populateEmployeeCountByJobRole(): void {
     this.employeeStatService.getEmployeeCountByJobRole().subscribe({
@@ -90,62 +90,62 @@ export class EmployeeStatsComponent {
       plotOptions: {
         bar: {
           borderRadius: 4,
-          columnWidth: '60%'
+          columnWidth: '50%'
         }
       },
       grid: {
         borderColor: '#e5e7eb'
       },
-      title: {
-        text: 'Employee Count By Type',
-        align: 'center',
-        style: {
-          color: '#1f2937',
-          fontSize: '16px'
-        }
-      }
+      // title: {
+      //   text: 'Employee Count By Type',
+      //   align: 'center',
+      //   style: {
+      //     color: '#1f2937',
+      //     fontSize: '16px'
+      //   }
+      // }
     };
   }
 
-  private  updateCommonServiceStats(dataSet: any): void {
+  // private  updateCommonServiceStats(dataSet: any): void {
 
-    const data = dataSet.map((item: any) => item.cnt);
-    const labels = dataSet.map((item: any) => item.name);
+  //   const data = dataSet.map((item: any) => item.cnt);
+  //   const labels = dataSet.map((item: any) => item.name);
 
-    this.commonTaskGroupChartOptions = {
-      series: data,
-      chart: {
-        type: 'pie',
-        height: 350,
-        animations: {
-          enabled: true,
-          easing: 'easeinout',
-          speed: 800
-        }
-      },
-      labels: labels,
-      colors: ['#3b82f6', '#10b981', '#f97316', '#8b5cf6', '#ef4444', '#06b6d4'],
-      legend: {
-        position: 'bottom',
-        labels: {
-          colors: '#6b7280'
-        }
-      },
-      plotOptions: {
-        pie: {
-          donut: {
-            size: '60%'
-          }
-        }
-      },
-      title: {
-        text: 'Customer Used Services',
-        align: 'center',
-        style: {
-          color: '#1f2937',
-          fontSize: '16px'
-        }
-      }
-    };
-  }
+  //   this.commonTaskGroupChartOptions = {
+  //     series: data,
+  //     chart: {
+  //       type: 'pie',
+  //       height: 350,
+  //       animations: {
+  //         enabled: true,
+  //         easing: 'easeinout',
+  //         speed: 800
+  //       }
+  //     },
+  //     labels: labels,
+  //     colors: ['#3b82f6', '#10b981', '#f97316', '#8b5cf6', '#ef4444', '#06b6d4'],
+  //     legend: {
+  //       position: 'bottom',
+  //       labels: {
+  //         colors: '#6b7280'
+  //       }
+  //     },
+  //     plotOptions: {
+  //       pie: {
+  //         donut: {
+  //           size: '60%'
+  //         }
+  //       }
+  //     },
+  //     title: {
+  //       text: 'Customer Used Services',
+  //       align: 'center',
+  //       style: {
+  //         color: '#1f2937',
+  //         fontSize: '16px'
+  //       }
+  //     }
+  //   };
+  // }
 }

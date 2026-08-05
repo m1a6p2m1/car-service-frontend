@@ -34,18 +34,18 @@
         <mat-form-field class="full-width">
           <mat-label>Telephone</mat-label>
           <!-- <span matTextPrefix>+94 &nbsp;</span> -->
-          <input type="tel" matInput placeholder="+94 55-555-1234 OR 055-555-1234" formControlName="phoneNumber">
+          <input type="tel" matInput placeholder="+94 55-555-1234 OR 055-555-1234" formControlName="contactNumber">
           <span class="text-danger" *ngIf="
-                (userProfileForm.get('phoneNumber')?.touched || submitted) && 
-                userProfileForm.get('phoneNumber')?.errors && 
-                userProfileForm.get('phoneNumber')?.errors!['pattern']">
+                (userProfileForm.get('contactNumber')?.touched || submitted) && 
+                userProfileForm.get('contactNumber')?.errors && 
+                userProfileForm.get('contactNumber')?.errors!['pattern']">
               Please Insert a Valid Phone Number......
             </span>
           <mat-icon matSuffix>phone</mat-icon>
         </mat-form-field>
       
         
-        <div class="image-section">
+        <div class="image-section" *ngIf="userRole === 'EMPLOYEE'">
           <button [disabled]="fileButtonDisable" type="button" mat-raised-button (click)="fileInput.click()" class="mb-2">Choose File</button>
           <div>
             <img [src]="selectedImageUrl ? selectedImageUrl : 'assets/images/item/uploadicon.png'" width="100px" height="100px" />

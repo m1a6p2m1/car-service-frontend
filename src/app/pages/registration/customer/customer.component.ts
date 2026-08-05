@@ -40,8 +40,8 @@ export class CustomerComponent implements OnInit{
     private _dialog: MatDialog,
   ){
     this.customerForm = this.fb.group({
-      firstName: new FormControl('', Validators.required),
-      lastName: new FormControl('', Validators.required),
+      firstName: new FormControl('',[ Validators.required,Validators.pattern('^[a-zA-Z]+$')]),
+      lastName: new FormControl('', [Validators.required,Validators.pattern('^[a-zA-Z]+$')]),
       nic: new FormControl('', [Validators.pattern('^([0-9]{9}[x|X|v|V]|[0-9]{12})$')]),
       email: new FormControl('', [Validators.email]),
       gender: new FormControl(''),

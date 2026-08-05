@@ -78,8 +78,8 @@ export class EmployeeComponent implements OnInit {
     private _dialog: MatDialog,
   ) {
     this.employeeForm = this.fb.group({
-      fullName: new FormControl('', [Validators.required]),
-      callingName: new FormControl(''),
+      fullName: new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]),
+      callingName: new FormControl('', [Validators.pattern('^[a-zA-Z ]+$')]),
       nic: new FormControl('', [
         Validators.pattern('^([0-9]{9}[x|X|v|V]|[0-9]{12})$'),
       ]),

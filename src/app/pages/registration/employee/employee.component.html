@@ -10,11 +10,24 @@
        employeeForm.get('fullName')?.errors!['required']">
         Full Name is Required....!
       </span>
+      <span class="text-danger"
+        *ngIf="(employeeForm.get('fullName')?.touched || submitted) &&
+                employeeForm.get('fullName')?.hasError('pattern')">
+
+        Name Field is Doen't Allow Numbers And Symbols 
+      </span>
       </mat-form-field>
     
       <mat-form-field class="full-width">
         <mat-label>Calling Name</mat-label>
         <input matInput placeholder="Calling Name" formControlName="callingName">
+
+        <span class="text-danger"
+        *ngIf="(employeeForm.get('callingName')?.touched || submitted) &&
+                employeeForm.get('callingName')?.hasError('pattern')">
+
+        Name Field is Doen't Allow Numbers And Symbols 
+      </span>
       </mat-form-field>
     
       <mat-form-field class="full-width">

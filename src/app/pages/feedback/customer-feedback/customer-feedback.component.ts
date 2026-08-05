@@ -38,6 +38,8 @@ export class CustomerFeedbackComponent implements OnInit{
   selectedData!: { id: number; };
   isButtonDisable = false;
 
+  userRole: string | null = '';
+
   ratingLabels: { [key: number]: string } = {
     1: 'Very Poor',
     2: 'Poor',
@@ -374,13 +376,25 @@ export class CustomerFeedbackComponent implements OnInit{
     this.customerFeedbackForm.enable();
     this.customerFeedbackForm.get('userName')?.disable();
     this.customerFeedbackForm.setErrors = null!;
-    this.customerFeedbackForm.updateValueAndValidity();
+    // this.customerFeedbackForm.updateValueAndValidity();
     this.rating = 0;
     // this.ratingLabels = [];
     // this.customerFeedbackForm.get('serviceType')?.disable();
     // this.customerFeedbackForm.get('serviceDate')?.disable();
     
   }
+
+  public patchUserData(): void {
+      this.userRole = localStorage.getItem('userRole');
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      if(this.userRole === 'CUSTOMER'){
+        this.customerFeedbackForm.patchValue({
+          customerId: user.id,
+          customerName: user.firstName + ' ' + user.lastName
+        });
+        this.customerFeedbackForm.updateValueAndValidity();
+      }
+    }
 
   public confirmDelete(data: any): void {
       const dialogRef = this._dialog.open(ConfirmDialogComponent, {
