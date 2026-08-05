@@ -32,7 +32,7 @@ export class GrnComponent implements OnInit {
   editDisable: boolean = false;
   deleteDisable: boolean = false;
 
-  items: any;
+  items: String|any;
   innerColumns: string[] = ['item', 'qty', 'cost', 'actions'];
   dataSource = new MatTableDataSource<any>;
 
@@ -112,12 +112,12 @@ export class GrnComponent implements OnInit {
       grnno: new FormControl(''),
       itemID: new FormControl(''),
       item: new FormControl(''),
-      expdate: new FormControl('', Validators.required),
+      // expdate: new FormControl('', Validators.required),
       qty: new FormControl('', Validators.required),
       cost: new FormControl('', Validators.required),
       ucost: new FormControl(''),
-      avalqty: new FormControl(''), //this is disable field this value get from stock table
-      itemCategory: new FormControl(''), //this is disable field this value get from stock table
+      // avalqty: new FormControl(''), //this is disable field this value get from stock table
+      // itemCategory: new FormControl(''), //this is disable field this value get from stock table
     });
 
 
@@ -146,65 +146,115 @@ export class GrnComponent implements OnInit {
 
 
 
-  dataPopulate(): void {
+  // dataPopulate(): void {
 
-    try {
-      this.demoService.getData().subscribe((response: any) => {
-        console.log("get GRN all Server Response", response);
+  //   try {
+  //     this.demoService.getData().subscribe((response: any) => {
+  //       console.log("get GRN all Server Response", response);
 
-        
-        const temp: any[] = [];
-        response.forEach((res: any) => {
-          let supplierName = this.suppliers.find((sup: any) => sup.supplierId = res.supplier).supplierName;
-          let tableRecord = {
-            ...res,
-            supplierName: supplierName
-          };
-          console.log(tableRecord);
-          temp.push(tableRecord);
-        });
-        console.log(temp);
 
-        this.dataSourceOuter = new MatTableDataSource(temp);
-        this.dataSourceOuter.paginator = this.paginator; // Reassign paginator
-        this.dataSourceOuter.sort = this.sort; // Reassign sort
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  //       const temp: any[] = [];
+  //       response.forEach((res: any) => {
+  //         let supplierName = this.suppliers.find((sup: any) => sup.supplierId = res.supplier).supplierName;
+  //         let tableRecord = {
+  //           ...res,
+  //           supplierName: supplierName
+  //         };
+  //         console.log(tableRecord);
+  //         temp.push(tableRecord);
+  //       });
+  //       console.log(temp);
+
+  //       this.dataSourceOuter = new MatTableDataSource(temp);
+  //       this.dataSourceOuter.paginator = this.paginator; // Reassign paginator
+  //       this.dataSourceOuter.sort = this.sort; // Reassign sort
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
   // <mat-select formControlName="item" (selectionChange)="onItemChange($event.value)">
   //this one get the value of changed option and get quantity from stock table of that item
-  onItemChange(selectedItem: any): void {
+  // onItemChange(selectedItem: any): void {
 
-    console.log(selectedItem);
+  //   console.log(selectedItem);
 
-    const newItem = this.items.find((item: { id: any; }) => item.id === selectedItem);
-    if (selectedItem) {
-      // Patch the itemName to the form control
-      this.innerForm.patchValue({ item: newItem?.name });
-      this.innerForm.patchValue({itemCategory : newItem.category})
-      console.log(newItem?.name);
 
-    }
 
-    if (selectedItem) {
+  // //   const newItem = this.items.find((item: { id: any; }) => item.id === selectedItem);
+  // //   if (newItem) {
+  // //     // Patch the itemName to the form control
+  // //     this.innerForm.patchValue({ item: newItem?.id });
+  // //     // this.innerForm.patchValue({itemCategory : newItem.category})
+  // //     console.log(newItem?.id);
+  // //   } else {
+  // //   console.warn('Item not found for ID:', selectedItem);
+  // // }
 
-      this.demoService.getQty(selectedItem).subscribe({
-        next: (response: any) => {
-          console.log("this is item aval qty = " + JSON.stringify(response));
-          //patch value to avalqty from responses qty - response is stock object
-          this.innerForm.patchValue({ avalqty: response.qty });
-        },
-        error: (error) => {
-          console.log(error);
-        }
+  //   if (selectedItem) {
+
+  //     // this.demoService.getQty(selectedItem).subscribe({
+  //     //   next: (response: any) => {
+  //     //     console.log("this is item aval qty = " + JSON.stringify(response));
+  //     //     //patch value to avalqty from responses qty - response is stock object
+  //     //     this.innerForm.patchValue({ avalqty: response.qty });
+  //     //   },
+  //     //   error: (error) => {
+  //     //     console.log(error);
+  //     //   }
+  //     // });
+  //   } else {
+  //     console.log('No item selected or item ID is undefined');
+  //   }
+  // }
+
+dataPopulate(): void {
+  // Debug check: Verify this.suppliers is populated before mapping
+  console.log('Current suppliers array:', this.suppliers);
+
+  this.demoService.getData().subscribe({
+    next: (response: any) => {
+      console.log('get GRN all Server Response', response);
+
+      const dataArray: any[] = Array.isArray(response) ? response : [];
+
+      const temp = dataArray.map((res: any) => {
+        // String conversion handles number vs string mismatch
+        const supplier = this.suppliers?.find(
+          (sup: any) => String(sup.supplierId) === String(res.supplier)
+        );
+
+        const supplierName = supplier?.supplierName ?? 'Unknown Supplier';
+
+        return {
+          ...res,
+          supplierName
+        };
       });
-    } else {
-      console.log('No item selected or item ID is undefined');
+
+      console.log('Transformed table data:', temp);
+
+      this.dataSourceOuter = new MatTableDataSource(temp);
+      this.dataSourceOuter.paginator = this.paginator;
+      this.dataSourceOuter.sort = this.sort;
+    },
+    error: (error: any) => {
+      console.error('Error fetching GRN data:', error);
     }
+  });
+}
+onItemChange(selectedItemId: string | number): void {
+  const newItem = this.items.find(
+    (item: any) => String(item.itemId) === String(selectedItemId)
+  );
+
+  if (newItem) {
+    this.innerForm.patchValue({
+      item: newItem.itemName,
+    });
   }
+}
 
   onSupplierChange(selectedItem: any) {}
 
@@ -505,42 +555,79 @@ export class GrnComponent implements OnInit {
   }
 
 
+  // resetData(formDirective: FormGroupDirective) {
+  //   this.demoForm.enable();
+  //   formDirective.resetForm();
+  //   this.demoForm.reset();
+  //   this.saveBtnLabel = 'Save';
+  //   this.mode = 'Save';
+  //   this.isButtonDisabled = true;
+  //   this.selectedRow = null;
+  //   this.innerformDirectiveRef?.resetForm();
+
+  //   setTimeout(() => {
+  //     this.getGrn();
+  //     this.getInnerGRN();
+  //     this.getItems();
+  //     this.demoForm.patchValue({ addedDate: new Date() })
+  //     this.demoForm.patchValue({ addedUser: localStorage.getItem('user_name') })
+  //     this.editDisable = false;
+  //     this.deleteDisable = false;
+  //     this.allOuterBtnDisabled = false;
+
+  //   }, 500);
+  // }
+
+
+  // resetInner(innerformDirective: FormGroupDirective) {
+
+  //   innerformDirective.resetForm();
+  //   this.innerForm.reset();
+  //   this.innermode = 'inneradd';
+  //   this.addBtnLabel = 'Add';
+  //   this.innerForm.enable();
+
+  //   setTimeout(() => {
+  //     this.innerselectedRow = null;
+  //   }, 500);
+
+  // }
+
   resetData(formDirective: FormGroupDirective) {
-    this.demoForm.enable();
-    formDirective.resetForm();
-    this.demoForm.reset();
-    this.saveBtnLabel = 'Save';
-    this.mode = 'Save';
-    this.isButtonDisabled = true;
-    this.selectedRow = null;
-    this.innerformDirectiveRef?.resetForm();
+  this.demoForm.enable();
+  formDirective.resetForm(); // Note: resetForm() automatically resets demoForm and clears validation errors
 
-    setTimeout(() => {
-      this.getGrn();
-      this.getInnerGRN();
-      this.getItems();
-      this.demoForm.patchValue({ addedDate: new Date() })
-      this.demoForm.patchValue({ addedUser: localStorage.getItem('user_name') })
-      this.editDisable = false;
-      this.deleteDisable = false;
-      this.allOuterBtnDisabled = false;
-    }, 500);
+  this.saveBtnLabel = 'Save';
+  this.mode = 'Save';
+  this.isButtonDisabled = true;
+  this.selectedRow = null;
+
+  // Call inner reset if reference exists
+  if (this.innerformDirectiveRef) {
+    this.resetInner(this.innerformDirectiveRef);
   }
 
+  setTimeout(() => {
+    this.getGrn();
+    this.getInnerGRN();
+    this.getItems();
+    this.demoForm.patchValue({
+      addedDate: new Date(),
+      addedUser: localStorage.getItem('user_name')
+    });
+    this.editDisable = false;
+    this.deleteDisable = false;
+    this.allOuterBtnDisabled = false;
+  }, 500);
+}
 
-  resetInner(innerformDirective: FormGroupDirective) {
-
-    innerformDirective.resetForm();
-    this.innerForm.reset();
-    this.innermode = 'inneradd';
-    this.addBtnLabel = 'Add';
-    this.innerForm.enable();
-
-    setTimeout(() => {
-      this.innerselectedRow = null;
-    }, 500);
-
-  }
+resetInner(innerformDirective: FormGroupDirective) {
+  innerformDirective?.resetForm(); // Safer with optional chaining
+  this.innermode = 'inneradd';
+  this.addBtnLabel = 'Add';
+  this.innerForm.enable();
+  this.innerselectedRow = null;
+}
 
   //get items to the select option drop down
   getItems(): void {

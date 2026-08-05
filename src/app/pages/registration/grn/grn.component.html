@@ -30,12 +30,17 @@
           <mat-label>Item</mat-label>
           <mat-select formControlName="itemID" (selectionChange)="onItemChange($event.value)">
             @for (item of items; track item) {
-            <mat-option [value]="item.itemId">{{ item.itemCode + ' ' + item.itemName }}</mat-option>
+            <mat-option [value]="item.itemId">{{item.itemCode}}</mat-option>
             }
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field  class="example-quarter-width">
+        <mat-form-field class="example-full-width">
+          <mat-label>Item Name</mat-label>
+          <input matInput formControlName="item" readonly="">
+        </mat-form-field>
+
+        <!-- <mat-form-field  class="example-quarter-width">
           <mat-label>Aval. Qty</mat-label>
           <input matInput formControlName="avalqty" readonly="">
         </mat-form-field>
@@ -43,7 +48,9 @@
         <mat-form-field  class="example-quarter-width">
           <mat-label>Category</mat-label>
           <input matInput formControlName="itemCategory" readonly="">
-        </mat-form-field>
+        </mat-form-field> -->
+
+
 
         <mat-form-field class="example-full-width">
           <mat-label>Item Total Cost</mat-label>
@@ -72,15 +79,15 @@
           </div>
         </mat-form-field>
 
-
+        <!--
         <mat-form-field class="example-full-width">
           <mat-label>Expire Date</mat-label>
           <input matInput [matDatepicker]="picker1" formControlName="expdate">
           <mat-hint>MM/DD/YYYY</mat-hint>
           <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
           <mat-datepicker #picker1></mat-datepicker>
-        </mat-form-field>
-
+        </mat-form-field> -->
+        <br>
         <button type="submit" class="btn btn-dark" [disabled]="isInnerButtonDisabled"
           [disabled]="!innerForm.valid">{{addBtnLabel}}</button>
 
@@ -159,8 +166,9 @@
         </mat-select> -->
 
         <mat-select formControlName="supplier" (selectionChange)="onSupplierChange($event.value)">
-            @for (supplier of suppliers; track supplier) {
-          <mat-option [value]="supplier.supplierId">{{ supplier.supplierName + ' ' + supplier.companyName }}</mat-option> }
+          @for (supplier of suppliers; track supplier) {
+          <mat-option [value]="supplier.supplierId">{{ supplier.supplierName + ' ' + supplier.companyName
+            }}</mat-option> }
         </mat-select>
 
       </mat-form-field>
