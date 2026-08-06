@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HttpService } from './http.service';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { environment } from '../environments/environment';
 import { Appointment, TimeSlot } from '../models/appointment.model';
 
@@ -11,6 +11,7 @@ import { Appointment, TimeSlot } from '../models/appointment.model';
 })
 export class AppointmentService {
   private baseUrl = environment.baseUrl + '/appointment-service';
+  private useMock = false;
 
   constructor(private http: HttpClient, private httpService: HttpService) { }
 
@@ -216,5 +217,29 @@ export class AppointmentService {
                              });
   }
   
+  /* APPOINTMENT REPORT BY DATE SECTION */
+public getCountsByType(from: string, to: string) {
+  if (this.useMock) {
+    return of([
+      { appointmentType: 'Remote Service', count: 42 },
+      { appointmentType: 'Express Wash', count: 27 },
+      { appointmentType: 'Full Service', count: 15 },
+      { appointmentType: 'Interior Detailing', count: 9 },
+      { appointmentType: 'Tire Rotation', count: 20 }
+    ]);
+  }
 
+  const requestUrl = environment.baseUrl + '/appointment-service/get-counts-by-type';
+
+  let headers = {};
+  if (this.httpService.getAuthToken() !== null) {
+    headers = {
+      Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+    };
+  }
+
+  const params = { from, to };
+
+  return this.http.get(requestUrl, { headers: headers, params: params });
+}
 }

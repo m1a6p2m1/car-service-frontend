@@ -14,6 +14,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { CustomerFeedbacksComponent } from './static-reports/components/customer-feedbacks/customer-feedbacks.component';
 import { ServiceTypesComponent } from './static-reports/components/service-types/service-types.component';
 import { TaskStatsComponent } from './static-reports/components/task-stats/task-stats.component';
+import { ServiceTypeByDateComponent } from './static-reports/components/service-type-by-date/service-type-by-date.component';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { TaskStatsComponent } from './static-reports/components/task-stats/task-
     CustomerFeedbacksComponent,
     ServiceTypesComponent,
     TaskStatsComponent,
+    ServiceTypeByDateComponent
   ],
   imports: [
     CommonModule,
