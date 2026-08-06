@@ -789,6 +789,33 @@ export class AppointmentServiceComponent implements OnInit{
     }
   }
 
+  // isPastSlot(slotTime: string): boolean {
+
+  //   if (!this.selectedDate) {
+  //     return false;
+  //   }
+
+  //   const now = new Date();
+
+  //   // Check whether selected date is today
+  //   const selectedDate = new Date(this.selectedDate);
+  //   selectedDate.setHours(0, 0, 0, 0);
+
+  //   const today = new Date();
+  //   today.setHours(0, 0, 0, 0);
+
+  //   if (selectedDate.getTime() !== today.getTime()) {
+  //     return false; // future dates are allowed
+  //   }
+
+  //   const [hours, minutes] = slotTime.split(':').map(Number);
+
+  //   const slotDateTime = new Date();
+  //   slotDateTime.setHours(hours, minutes, 0, 0);
+
+  //   return slotDateTime < now;
+  // }
+
   public onVehicleTypeChange(vehicle: any): void {
       if (this.selectedVehicle) {
         if(this.selectedVehicle == 'Car') {

@@ -30,6 +30,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   showDropdown = false;
   notifications: Notification[] = [];
   unreadCount = 0;
+  userRole: string | null = '';
 
   constructor(
     private httpService: HttpService,
@@ -42,6 +43,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.userRole = localStorage.getItem('userRole') || '';
     this.loadUserProfile();
 
     this.notificationService.getNotifications().subscribe({

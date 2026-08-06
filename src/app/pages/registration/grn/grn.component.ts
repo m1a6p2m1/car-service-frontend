@@ -83,7 +83,7 @@ export class GrnComponent implements OnInit {
 
   processedResponse: any;
 
-
+  submitted = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -113,8 +113,8 @@ export class GrnComponent implements OnInit {
       itemID: new FormControl(''),
       item: new FormControl(''),
       // expdate: new FormControl('', Validators.required),
-      qty: new FormControl('', Validators.required),
-      cost: new FormControl('', Validators.required),
+      qty: new FormControl('', Validators.required), //Validators.min(1)
+      cost: new FormControl('', [Validators.required]), //Validators.min(1)
       ucost: new FormControl(''),
       // avalqty: new FormControl(''), //this is disable field this value get from stock table
       // itemCategory: new FormControl(''), //this is disable field this value get from stock table
@@ -768,7 +768,8 @@ resetInner(innerformDirective: FormGroupDirective) {
     const itemList = this.allItems;
 
     const ttcost = itemList?.length ? itemList.reduce((sum: any, item: { cost: any; }) => sum + item.cost, 0) : 0;
-    this.demoForm.patchValue({ tcost: ttcost });
+    this.demoForm.patchValue({ 
+      tcost: ttcost });// tcost: Math.max(0, ttcost)
   }
 
   deleteInnerData(data: any) {

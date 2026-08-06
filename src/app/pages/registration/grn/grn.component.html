@@ -59,6 +59,18 @@
             *ngIf="demoForm.get('cost')?.hasError('cost') && (demoForm.get('cost')?.touched || demoForm.get('cost')?.dirty)">
             *Please Enter Valid Cost
           </div>
+          <span class="text-danger"
+              *ngIf="(innerForm.get('cost')?.touched || submitted) &&
+                    innerForm.get('cost')?.hasError('required')">
+
+              Total Cost is Required.
+            </span>
+            <span class="text-danger"
+              *ngIf="(innerForm.get('cost')?.touched || submitted) &&
+                    innerForm.get('cost')?.hasError('min')">
+
+              Total Cost cannot be negative.
+            </span>
         </mat-form-field>
 
         <mat-form-field class="example-full-width">

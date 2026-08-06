@@ -192,7 +192,7 @@
     </td>
   </ng-container>
 
-  <!-- Action Column -->
+  <!-- Action Column || isPastSlot(slot.time) -->
   <ng-container matColumnDef="action">
     <th mat-header-cell *matHeaderCellDef> Action </th>
     <td mat-cell *matCellDef="let slot">
@@ -200,7 +200,8 @@
               (click)="selectSlot(slot.time, slot)"
               [disabled]="slot.bookedCount >= 3 
                           || isSelectButtonDisable 
-                          || isOriginalRow(slot.time)"
+                          || isOriginalRow(slot.time)
+                             " 
               [ngClass]="{ 
                 'orginal-slot': originalSelectedTime === slot.time,
                 'new-slot': selectedTime === slot.time 
@@ -213,9 +214,10 @@
     </td>
   </ng-container>
 
-  <!-- Header and Row Definitions -->
+  <!-- Header and Row Definitions  [class.past-slot]="isPastSlot(row.time)"-->
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;" 
+  
   [ngClass]="{
     'current-appointment-row': isOriginalRow(row.time),
     'new-selected-row':  row.time === selectedTime ||
