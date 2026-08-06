@@ -22,3 +22,8 @@ export interface Task {
   completed: boolean;
   subtasks?: Task[];
 }
+
+export interface AppointmentTypeCount {
+  appointmentType: string;
+  count: number;
+}

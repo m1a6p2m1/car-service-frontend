@@ -1,0 +1,34 @@
+<div class="progress-charts">
+    <div class="header">
+        <h2>Appointment Count Stat</h2>
+        <p>Namal Car Service</p>
+    </div>
+
+    <div class="filters">
+        <label>
+            From
+            <input type="date" [(ngModel)]="fromDate" />
+        </label>
+
+        <label>
+            To
+            <input type="date" [(ngModel)]="toDate" />
+        </label>
+
+        <button (click)="fetchData()" [disabled]="loading">
+            {{ loading ? 'Loading...' : 'Fetch Data' }}
+        </button>
+    </div>
+
+    <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
+
+    <div class="charts-grid">
+        <div class="chart-card" *ngIf="volumeChartOptions.series">
+            <h3>Appointment Count By Type</h3>
+            <apx-chart [series]="volumeChartOptions.series" [chart]="volumeChartOptions.chart"
+                [xaxis]="volumeChartOptions.xaxis" [yaxis]="volumeChartOptions.yaxis"
+                [colors]="volumeChartOptions.colors" [plotOptions]="volumeChartOptions.plotOptions"
+                [grid]="volumeChartOptions.grid"></apx-chart>
+        </div>
+    </div>
+</div>

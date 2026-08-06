@@ -621,6 +621,15 @@ const MENUITEMS: Menu[] = [
       icon: 'check_circle',
       isVisible: false,
       auth: authenticationEnum.Employee_List_Report,
+    },
+    {
+      state: 'reports',
+      childState: 'service-type-by-date',
+      name: 'Service by Date',
+      type: 'link',
+      icon: 'check_circle',
+      isVisible: false,
+      auth: authenticationEnum.Employee_List_Report,
     }
   ]
 },
