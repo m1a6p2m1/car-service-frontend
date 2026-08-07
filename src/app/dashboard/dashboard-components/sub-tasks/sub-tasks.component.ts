@@ -17,6 +17,19 @@ export class SubTasksComponent implements OnInit {
   imageArray: string[] | undefined;
   imagePath: string = '../../../../assets/images/car/car2.jpg'
 
+  private serviceImages: string[] = [
+    'assets/images/services/service1.jpg',
+    'assets/images/services/service2.jpg',
+    'assets/images/services/service3.jpg',
+    'assets/images/services/service4.jpg',
+    'assets/images/services/service5.jpg',
+    'assets/images/services/service6.jpg',
+    'assets/images/services/service7.jpg',
+    'assets/images/services/service8.jpg',
+  ];
+
+  fallbackImage = 'assets/images/logo/vehicle-service-logo.jpg';
+
   constructor(
     private taskIntroduceService: TaskIntroduceService,
     private router: Router,
@@ -31,6 +44,14 @@ export class SubTasksComponent implements OnInit {
     }); 
 
     this.setImageArray();
+  }
+
+  getImage(index: number): string {
+    return this.serviceImages[index % this.serviceImages.length];
+  }
+
+  onImageError(event: Event): void {
+    (event.target as HTMLImageElement).src = this.fallbackImage;
   }
 
   public setImageArray(): void {
