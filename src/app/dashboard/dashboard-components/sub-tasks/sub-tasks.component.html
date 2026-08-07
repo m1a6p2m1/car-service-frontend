@@ -1,8 +1,8 @@
 <div class="services-grid">
-<div *ngFor="let task of tasks">
+<div *ngFor="let task of tasks; let i = index">
   <div class="service-card" >
     <div class="card-header">
-        <img src="./assets/images/logo/vehicle-service-logo.jpg" [alt]="" class="service-image">
+        <img [src]="getImage(i)" [alt]="task.taskName" (error)="onImageError($event)" class="service-image">
     </div>
     <div class="card-content"> 
       <div class="service-info">
