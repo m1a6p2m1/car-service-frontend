@@ -1,7 +1,13 @@
 .services-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 32px;
+}
+
+.service-grid > * {
+  flex: 0 1 350px;
+  max-width: 350px;
 }
 
 .tasks-row {
@@ -52,6 +58,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  width: 380px
 }
 
 .service-card:hover {
