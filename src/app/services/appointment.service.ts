@@ -242,4 +242,29 @@ public getCountsByType(from: string, to: string) {
 
   return this.http.get(requestUrl, { headers: headers, params: params });
 }
+
+public getCountsByVehicleType(from: string, to: string) {
+  // if (this.useMock) {
+  //   return of([
+  //     { appointmentType: 'Remote Service', count: 42 },
+  //     { appointmentType: 'Express Wash', count: 27 },
+  //     { appointmentType: 'Full Service', count: 15 },
+  //     { appointmentType: 'Interior Detailing', count: 9 },
+  //     { appointmentType: 'Tire Rotation', count: 20 }
+  //   ]);
+  // }
+
+  const requestUrl = environment.baseUrl + '/appointment-service/get-counts-by-vehicle-type';
+
+  let headers = {};
+  if (this.httpService.getAuthToken() !== null) {
+    headers = {
+      Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+    };
+  }
+
+  const params = { from, to };
+
+  return this.http.get(requestUrl, { headers: headers, params: params });
+}
 }

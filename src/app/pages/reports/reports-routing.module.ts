@@ -5,11 +5,17 @@ import { CustomerFeedbacksComponent } from './static-reports/components/customer
 import { ServiceTypesComponent } from './static-reports/components/service-types/service-types.component';
 import { TaskStatsComponent } from './static-reports/components/task-stats/task-stats.component';
 import { ServiceTypeByDateComponent } from './static-reports/components/service-type-by-date/service-type-by-date.component';
+import { VehicleTypeByDateComponent } from './static-reports/components/vehicle-type-by-date/vehicle-type-by-date.component';
+import { CustomerListComponent } from './static-reports/components/customer-list/customer-list.component';
 
 export const ReportRoutes: Routes = [
   {
     path: 'employee-list',
     component: EmployeeListComponent
+  },
+  {
+    path: 'customer-list',
+    component: CustomerListComponent
   },
   {
     path: 'employee-stats',
@@ -20,15 +26,19 @@ export const ReportRoutes: Routes = [
     component: TaskStatsComponent
   },
   {
-    path: 'customer-feedbacks',
-    component: CustomerFeedbacksComponent
-  },
-  {
     path: 'service-types',
     component: ServiceTypesComponent
   },
   {
+    path: 'customer-feedbacks',
+    component: CustomerFeedbacksComponent
+  },
+  {
     path: 'service-type-by-date',
     component: ServiceTypeByDateComponent
+  },
+  {
+    path: 'vehicle-type-by-date',
+    component: VehicleTypeByDateComponent
   }
 ];

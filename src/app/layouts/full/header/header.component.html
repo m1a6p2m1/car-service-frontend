@@ -107,7 +107,7 @@
 </button>
 <mat-menu #profile="matMenu" class="mymegamenu" style="width: 150px;">
   <!-- <button mat-menu-item><mat-icon>settings</mat-icon> Settings</button> -->
-  <button mat-menu-item (click)="openUserProfile()" *ngIf="userRole === 'CUSTOMER'">
+  <button mat-menu-item (click)="openUserProfile()">
     <mat-icon>account_box</mat-icon> Profile</button
   ><!--(click)="openUserProfile()"-->
   <!-- <button mat-menu-item>

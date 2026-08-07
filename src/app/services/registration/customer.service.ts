@@ -140,6 +140,23 @@ export class CustomerService {
     }
     return this.http.put(requestUrl, data, {headers: headers});
   }
+
+  //customer-list report
+  getAllCustomer(){
+    // console.log('In the Service');
+    const requestUrl = environment.baseUrl + '/users/all-customers';
+    
+         let headers = {};
+    
+        if (this.httpService.getAuthToken() !== null) {
+          headers = {
+            Authorization: 'Bearer ' + this.httpService.getAuthToken(),
+          };
+        }
+    
+        // return this.http.get(requestUrl, headers );
+        return this.http.get(requestUrl, { headers: headers });
+  }
   
 }
 

@@ -1,0 +1,38 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+}
+.form-section {
+    flex: 1;
+    padding: 50px;
+    border-right: 1px solid #ccc;
+}
+.table-section {
+    flex: 2;
+}
+.full-width {
+    width: 100%;
+    margin-right: 5px;
+}
+
+.form-button {
+    margin-right: 20px;
+}
+.gender-label {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.refresh-button-filter-section {
+    display: flex;
+    flex-direction: row;
+}
+
+.refresh-button {
+    margin: 1%;
+}
+.action-button {
+    background-color: #f2a71b;
+    color: #011f26;
+}
